@@ -19,9 +19,6 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         body: Column(
             children:[headline()],
-
-            crossAxisAlignment: CrossAxisAlignment.center,
-            //mainAxisAlignment: MainAxisAlignment.start, //y axis
           ),
 
         

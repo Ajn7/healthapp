@@ -10,7 +10,13 @@ class Startup extends StatelessWidget {
           body: Column(
             children: [
               headline(),
-              Image.asset('assets/images/startup.png'),
+              Image.asset(
+                'assets/images/startup.png',
+                    height: 300,
+                    width: 300,
+                  //color: Colors.red,
+                    colorBlendMode: BlendMode.darken,
+              ),
               Align(
                 alignment: Alignment.center,
                 child: Padding(
@@ -20,12 +26,10 @@ class Startup extends StatelessWidget {
                       textStyle: const TextStyle(fontSize: 25),
                     ),
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
                     },
-                    child: const Text("Welcome ",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold)),
-                  ),
+                    child: SizedBox(height: 20,),
+                   ),
                 ),
               ),
               Align(
@@ -40,7 +44,7 @@ class Startup extends StatelessWidget {
                       color: Color(0xFFB80075),
                       splashColor: Colors.grey,
                       onPressed: () {
-                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
+                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
                       },
                     ),
                   )),

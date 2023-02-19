@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:healthapp/login.dart';
 import './constants/headline.dart';
+import 'package:flutter/services.dart';
+
 
 class Startup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
           backgroundColor: Colors.white,
-          body: Column(
+          body: SafeArea(
+            child:Column(
             children: [
               headline(),
               Image.asset(
@@ -50,6 +53,7 @@ class Startup extends StatelessWidget {
                   )),
             ],
           ),
-        );
+        )
+    );
   }
 }

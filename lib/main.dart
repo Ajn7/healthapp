@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import './constants/headline.dart';
 import 'startup.dart';
 
+
 void main() {
+ 
+   // to hide only status bar
   runApp(const MyApp());
 }
 
@@ -16,8 +18,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.purple,
-          primaryColor: Color.fromRGBO(184, 0, 117, 1),
+        primarySwatch: Colors.blue,
+        primaryColor: Colors.black
         ),
         home: Startup()
     );

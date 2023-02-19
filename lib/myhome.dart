@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:healthapp/editinfo.dart';
+import 'package:healthapp/login.dart';
+
 
 class MyHome extends StatefulWidget {
 
@@ -144,7 +147,9 @@ class _MyHomeState extends State<MyHome> {
               children : [ 
                 Row(
                 children:[
+                  SizedBox(width: 20,),
                   Text("SPO2"),
+                  SizedBox(width: 20,),
                   ElevatedButton(onPressed: () { }, child: Text('Measure')),
                 ]
               ),
@@ -153,14 +158,23 @@ class _MyHomeState extends State<MyHome> {
               ),
               Row(
                 children:[
+                  SizedBox(width: 20,),
                   Text('BP'),
+                  SizedBox(width: 30,),
                   ElevatedButton(onPressed: () { }, child: Text('Measure')),
                 ]
               ),
               ],
             ),
             color:Colors.grey.shade100,
-           )
+           ),
+            Container(
+            padding: EdgeInsets.all(100.0),
+            width: MediaQuery.of(context).size.width,
+            height:423.4,
+            child: Text('Msg'),
+            color: Colors.grey.shade200,
+            )
           ],
         ),
       ),
@@ -178,7 +192,9 @@ class _MyHomeState extends State<MyHome> {
               IconButton(
               icon: const Icon(Icons.edit),
               color:Colors.white,
-              onPressed: () { },
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditInfo()));
+               },
               ),
             ],
           currentAccountPicture:CircleAvatar(
@@ -188,56 +204,63 @@ class _MyHomeState extends State<MyHome> {
           ListTile(
             leading: Icon(Icons.person_outline),
             title: Text("Age :"),
-            onTap: () { },
+            //onTap: () { },
           ),
           ListTile(
             leading: Icon(Icons.expand),
             title: Text("Height :"),
-            onTap: () { },
+            //onTap: () { },
           ),
           ListTile(
             leading: Icon(Icons.local_florist),
             title: Text("weight :"),
-            onTap: () { },
+            //onTap: () { },
           ),
           ListTile(
             leading: Icon(Icons.volunteer_activism),
             title: Text("Blood Group :"),
-            onTap: () { },
+            //onTap: () { },
           ),
           ListTile(
             leading: Icon(Icons.emoji_emotions),
             title: Text("Gender :"),
-            onTap: () { },
+            //onTap: () { },
           ),
           ListTile(
             leading: Icon(Icons.insights),
             title: Text("Cholestrol level :"),
-            onTap: () { },
+            //onTap: () { },
           ),
           ListTile(
             leading: Icon(Icons.query_stats),
             title: Text("Sugar Level :"),
-            onTap: () { },
+            //onTap: () { },
           ),
            ListTile(
             leading: Icon(Icons.phone),
             title: Text("Phone :"),
-            onTap: () { },
+           // onTap: () { },
           ),
           Divider(
-            height:18,
+            height:10,
             color:Colors.black45
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text("Log Out"),
+            leading: Icon(Icons.password),
+            title: Text("Change Password"),
             onTap: () { },
           ),
+          // ListTile(
+          //   leading: Icon(Icons.info),
+          //   title: Text("Info"),
+          //   onTap: () { },
+          // ),
           ListTile(
-            leading: Icon(Icons.info),
-            title: Text("Info"),
-            onTap: () { },
+            leading: Icon(Icons.exit_to_app),
+            title: Text("Log Out"),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+             },
           ),
           ],
         )

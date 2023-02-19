@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthapp/constants/msgline.dart';
 import 'package:healthapp/login.dart';
+import 'package:healthapp/myhome.dart';
 
 
 
@@ -42,7 +43,7 @@ class _SignupScreen extends State<SignupScreen>{
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.verified_user),
                         hintText: "Enter Name Here",
-                        hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFFB80075)),
+                        hintStyle: TextStyle(fontSize: 20.0, ),
                         labelText: "Name",
                         labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
                                   ),
@@ -55,7 +56,7 @@ class _SignupScreen extends State<SignupScreen>{
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.email),
                         hintText: "Enter Email Here",
-                        hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFFB80075)),
+                        hintStyle: TextStyle(fontSize: 20.0, ), //color: Color(0xFFB80075)
                         labelText: "Email",
                         labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
                                   ),
@@ -68,7 +69,7 @@ class _SignupScreen extends State<SignupScreen>{
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.password),
                           hintText: "Enter Password Here",
-                          hintStyle: TextStyle(fontSize: 20.0, color:Color(0xFFB80075)),
+                          hintStyle: TextStyle(fontSize: 20.0,),
                           labelText: "Password",
                           labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
                           
@@ -82,7 +83,7 @@ class _SignupScreen extends State<SignupScreen>{
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.password),
                           hintText: "Please Conform Password",
-                          hintStyle: TextStyle(fontSize: 20.0, color:Color(0xFFB80075)),
+                          hintStyle: TextStyle(fontSize: 20.0,),
                           labelText: "Conform Password",
                           labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
                           
@@ -95,7 +96,7 @@ class _SignupScreen extends State<SignupScreen>{
                 children: [
                   TextButton(onPressed:(){
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
-                  }, child: Text("Login",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:Color(0xFFB80075))),
+                  }, child: Text("Login",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,)),
                   ),
                   ElevatedButton(onPressed:(){
       
@@ -108,6 +109,10 @@ class _SignupScreen extends State<SignupScreen>{
                     print("Email:"+_email);
                     print("password1:"+_password1);
                     print("password2:"+_password2);
+
+                    var email=_emailTEC.text;
+                    var password=_password1TEC.text;
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyHome(email: email, password:password)));
                   },
                    child: Text(" Create ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),),
                   SizedBox(width: 20,),

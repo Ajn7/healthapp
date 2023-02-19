@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthapp/constants/msgline.dart';
 import 'package:healthapp/forgott.dart';
-import 'package:healthapp/homepage.dart';
+import 'package:healthapp/myhome.dart';
 import 'package:healthapp/signup.dart';
 //import './startup.dart';
 
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen>{
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.email),
                         hintText: "Enter Email Here",
-                        hintStyle: TextStyle(fontSize: 20.0, color: Color(0xFFB80075)),
+                        hintStyle: TextStyle(fontSize: 20.0, ),
                         labelText: "Email",
                         labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
                                   ),
@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen>{
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.lock),
                           hintText: "Enter Password Here",
-                          hintStyle: TextStyle(fontSize: 20.0, color:Color(0xFFB80075)),
+                          hintStyle: TextStyle(fontSize: 20.0, ),
                           labelText: "Password",
                           labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
                           
@@ -77,10 +77,7 @@ class _LoginScreenState extends State<LoginScreen>{
                     
                     var email=_emailTEC.text;
                     var password=_passwordTEC.text;
-
-                   
-
-                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>homepage(email: email, password:password)));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyHome(email: email, password:password)));
                   },
                    child: Text(" Login ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),),
                   SizedBox(width: 20,),
@@ -88,10 +85,9 @@ class _LoginScreenState extends State<LoginScreen>{
                   
                 ],
               ),
-              SizedBox(height: 10),
               TextButton(onPressed:(){
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgottScreen()));
-              }, child: Text("forgott password",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color:Colors.red)),),
+              }, child: Text("forgot your password?",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color:Colors.red.shade400, decoration: TextDecoration.underline),),),
 
               ],
             ),

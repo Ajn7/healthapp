@@ -26,6 +26,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// void _navigateToNextScreen(BuildContext context) {
-  
-// }
+

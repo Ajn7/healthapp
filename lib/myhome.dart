@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:healthapp/constants/msgline.dart';
 import 'package:healthapp/editinfo.dart';
 import 'package:healthapp/login.dart';
 
@@ -7,7 +8,7 @@ import 'package:healthapp/login.dart';
 class MyHome extends StatefulWidget {
 
   String email,password;
-   MyHome({Key? key,required this.email,required this.password}) : super(key: key);
+  MyHome({Key? key,required this.email,required this.password}) : super(key: key);
 
   @override
   _MyHomeState createState() => _MyHomeState();
@@ -18,7 +19,7 @@ class _MyHomeState extends State<MyHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
+      appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
       ),
       actions: <Widget>[
          DropdownButtonHideUnderline(
@@ -56,6 +57,7 @@ class _MyHomeState extends State<MyHome> {
                         DropdownMenuItem<MenuItem>(
                           value: item,
                           child: MenuItems.buildItem(item),
+                           
                         ),
               ),
             ],
@@ -79,100 +81,98 @@ class _MyHomeState extends State<MyHome> {
       backgroundColor: Colors.blue,),
       body: Container(
         padding: EdgeInsets.only(top:7.0),
-        //height: 152,
+        //height: (MediaQuery.of(context).size.height)*0.7,
         color:Colors.white,
         child:Column(
           children:<Widget>[
             ListTile(
-              title:Text(
+              title:const Text(
                 'Previous BP Level',
               style: TextStyle(
                 fontSize: 20.0,
               ),
               ),
-             subtitle: Text('150',style: TextStyle(
+             subtitle: const Text('150',style: TextStyle(
                 fontSize: 20.0,
               ),
               ),
              leading: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Container(
-                  child:CircleAvatar(
+                 SizedBox(
+                  height: (MediaQuery.of(context).size.height)*0.2,
+                  child:const CircleAvatar(
                     radius: 20.0,
+                    backgroundColor: Colors.white60,
                     child:Icon(
                       Icons.bloodtype,
                       color:Colors.red,
                       size: 30.0,
                     ),
-                    backgroundColor: Colors.white60,
                   )
-                ),
+                               ),
               ],
              ),
             ),
 
            ListTile(
-              title:Text(
+              title:const Text(
                 'Previous SPO2 Level',
               style: TextStyle(
                 fontSize: 20.0,
               ),
               ),
-             subtitle: Text('100',style: TextStyle(
+             subtitle: const Text('100',style: TextStyle(
                 fontSize: 20.0,
               ),
               ),
              leading: Row(
               mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  child:CircleAvatar(
-                    radius: 20.0,
-                    child:Icon(
-                      Icons.devices,
-                      color:Colors.blue,
-                      size: 20.0,
-                    ),
-                    backgroundColor: Colors.white60,
-                  )
+              children: const <Widget>[
+                CircleAvatar(
+                  radius: 20.0,
+                  backgroundColor: Colors.white60,
+                  child:Icon(
+                    Icons.devices,
+                    color:Colors.blue,
+                    size: 20.0,
+                  ),
                 ),
               ],
              ),
             ) ,
            Container(
-            padding: EdgeInsets.only(top:7.0),
+            //height: (MediaQuery.of(context).size.height)*0.4,
+            padding: const EdgeInsets.only(top:7.0),
             width: MediaQuery.of(context).size.width,
+            color:Colors.grey.shade100,
             child: Column(
               children : [ 
                 Row(
                 children:[
-                  SizedBox(width: 20,),
-                  Text("SPO2"),
-                  SizedBox(width: 20,),
-                  ElevatedButton(onPressed: () { }, child: Text('Measure')),
+                  HorizontaSpace(20),
+                  const Text("SPO2"),
+                  HorizontaSpace(20),
+                  ElevatedButton(onPressed: () {  }, child: const Text('Measure')),
                 ]
               ),
-              SizedBox(
-                height: 20,
-              ),
+              VerticalSpace(30),
               Row(
                 children:[
-                  SizedBox(width: 20,),
-                  Text('BP'),
-                  SizedBox(width: 30,),
-                  ElevatedButton(onPressed: () { }, child: Text('Measure')),
+                  HorizontaSpace(20),
+                  const Text('BP'),
+                  HorizontaSpace(20),
+                  ElevatedButton(onPressed: () { }, child: const Text('Measure')),
                 ]
               ),
               ],
             ),
-            color:Colors.grey.shade100,
            ),
             Container(
-            padding: EdgeInsets.all(100.0),
+            padding: const EdgeInsets.all(100.0),
             width: MediaQuery.of(context).size.width,
-            height:423.4,
-            child: Text('Msg'),
+            height:400.4,
+            child:Text('Msg'),
             color: Colors.grey.shade200,
             )
           ],
@@ -182,12 +182,12 @@ class _MyHomeState extends State<MyHome> {
       drawer: Drawer(
         child:ListView(
           children: [
-            UserAccountsDrawerHeader(accountName: Text(' Albert Louis Jr',
+            UserAccountsDrawerHeader(accountName: const Text(' Albert Louis Jr',
             style:TextStyle(
               fontSize: 21.0,
             ),
             ), 
-            accountEmail: Text('louisjr37@gmail.com',),
+            accountEmail: const Text('louisjr37@gmail.com',),
             otherAccountsPictures: <Widget>[
               IconButton(
               icon: const Icon(Icons.edit),
@@ -197,67 +197,62 @@ class _MyHomeState extends State<MyHome> {
                },
               ),
             ],
-          currentAccountPicture:CircleAvatar(
+          currentAccountPicture:const CircleAvatar(
             backgroundImage: AssetImage('assets/images/profile.png'),
           ),
             ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.person_outline),
             title: Text("Age :"),
             //onTap: () { },
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.expand),
             title: Text("Height :"),
             //onTap: () { },
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.local_florist),
             title: Text("weight :"),
             //onTap: () { },
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.volunteer_activism),
             title: Text("Blood Group :"),
             //onTap: () { },
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.emoji_emotions),
             title: Text("Gender :"),
             //onTap: () { },
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.insights),
             title: Text("Cholestrol level :"),
             //onTap: () { },
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.query_stats),
             title: Text("Sugar Level :"),
             //onTap: () { },
           ),
-           ListTile(
+           const ListTile(
             leading: Icon(Icons.phone),
             title: Text("Phone :"),
            // onTap: () { },
           ),
-          Divider(
+          const Divider(
             height:10,
             color:Colors.black45
           ),
           ListTile(
-            leading: Icon(Icons.password),
-            title: Text("Change Password"),
+            leading: const Icon(Icons.password),
+            title: const Text("Change Password"),
             onTap: () { },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.info),
-          //   title: Text("Info"),
-          //   onTap: () { },
-          // ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text("Log Out"),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text("Log Out"),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
              },
@@ -294,10 +289,13 @@ class MenuItems {
   static Widget buildItem(MenuItem item) {
     return Row(
       children: [
-        Icon(
-                item.icon,
-                color: Colors.black,
-                size: 20
+        Padding(
+          padding: EdgeInsets.only(left: 5),
+          child: Icon(
+                  item.icon,
+                  color: Colors.black,
+                  size: 20
+          ),
         ),
         const SizedBox(
           width: 10,
@@ -325,7 +323,7 @@ class MenuItems {
       //Do something
         break;
       case MenuItems.logout:
-      //Do something
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen())); 
         break;
     }
   }

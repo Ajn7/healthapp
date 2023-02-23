@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthapp/constants/msgline.dart';
-import 'package:healthapp/login.dart';
-import 'package:healthapp/myhome.dart';
+import 'package:healthapp/screens/login.dart';
+import 'package:healthapp/screens/myhome.dart';
 
 
 
@@ -143,7 +143,7 @@ class _SignupScreen extends State<SignupScreen>{
                       _key.currentState!.save();
 
                       if(_password1TEC==_password2TEC){
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(email: email, password:password)));
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(email: email, token:password)));
                       }
                     },
                      child: const Text(" Create ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),),

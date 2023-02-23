@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:healthapp/login.dart';
-import './constants/headline.dart';
+import 'package:healthapp/main.dart';
+import 'package:healthapp/screens/login.dart';
+import 'package:healthapp/screens/myhome.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../constants/headline.dart';
 
 
 
-class Startup extends StatelessWidget {
+class Startup extends StatefulWidget {
   const Startup({super.key});
+  // @override
+  // void initState() {
+  // checkUserLogedin();
+  // }
 
+ 
+  @override
+  State<Startup> createState() => _StartupState();
+}
+
+class _StartupState extends State<Startup> {
+  
   @override
   Widget build(BuildContext context) {
+
+  Future<void> checkUserLogedin() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs =await SharedPreferences.getInstance();
+  var token=prefs.getString('$tokens');
+  print('Token of statup $token');
+  token==null?Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())):Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHome(email:email,token:token)));
+  
+  }
+   checkUserLogedin();
     return Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
@@ -57,5 +81,20 @@ class Startup extends StatelessWidget {
           ),
         )
     );
+    
   }
+
+  // Future<void> checkUserLogedin() async{
+  //  final _sharedpref = await SharedPreferences.getInstance();
+  //  final _userLoggedIn = _sharedpref.getBool(save_key_name);
+  //  if (_userLoggedIn ==null || _userLoggedIn==false) 
+  //  {
+  //   LoginScreen();
+  //  }
+  //  else {
+  //   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyHome(email: 'email', password:'phone')));
+  //  }
+  //  }
 }
+
+

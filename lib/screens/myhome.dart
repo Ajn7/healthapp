@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:healthapp/constants/msgline.dart';
-import 'package:healthapp/editinfo.dart';
-import 'package:healthapp/login.dart';
+import 'package:healthapp/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:healthapp/screens/editinfo.dart';
+import 'package:healthapp/screens/login.dart';
+
 
 
 class MyHome extends StatefulWidget {
 
-  String email,password;
-  MyHome({Key? key,required this.email,required this.password}) : super(key: key);
-
+  String email,token;
+  MyHome({Key? key,required this.email,required this.token}) : super(key: key);
   @override
   _MyHomeState createState() => _MyHomeState();
 }
 
 class _MyHomeState extends State<MyHome> {
+
+ 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +85,7 @@ class _MyHomeState extends State<MyHome> {
       ],
       backgroundColor: Colors.blue,),
       body: Container(
-        padding: EdgeInsets.only(top:7.0),
+        padding:const EdgeInsets.only(top:7.0),
         //height: (MediaQuery.of(context).size.height)*0.7,
         color:Colors.white,
         child:Column(
@@ -178,7 +183,6 @@ class _MyHomeState extends State<MyHome> {
           ],
         ),
       ),
-      
       drawer: Drawer(
         child:ListView(
           children: [
@@ -187,7 +191,7 @@ class _MyHomeState extends State<MyHome> {
               fontSize: 21.0,
             ),
             ), 
-            accountEmail: const Text('louisjr37@gmail.com',),
+            accountEmail: Text('albert@gmail.com'),
             otherAccountsPictures: <Widget>[
               IconButton(
               icon: const Icon(Icons.edit),
@@ -253,8 +257,10 @@ class _MyHomeState extends State<MyHome> {
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text("Log Out"),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+            onTap: () async {
+              SharedPreferences pref = await SharedPreferences.getInstance();
+              pref.remove(tokens);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
              },
           ),
           ],
@@ -290,7 +296,7 @@ class MenuItems {
     return Row(
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 5),
+          padding: const EdgeInsets.only(left: 5),
           child: Icon(
                   item.icon,
                   color: Colors.black,
@@ -311,7 +317,7 @@ class MenuItems {
     );
   }
 
-  static onChanged(BuildContext context, MenuItem item) {
+  static onChanged(BuildContext context, MenuItem item) async {
     switch (item) {
       //case MenuItems.home:
       //Do something
@@ -322,9 +328,12 @@ class MenuItems {
       case MenuItems.share:
       //Do something
         break;
-      case MenuItems.logout:
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen())); 
+      case MenuItems.logout:{   
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.remove(tokens);        
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen())); 
         break;
+      }
     }
   }
 }

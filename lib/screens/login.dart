@@ -1,27 +1,57 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:healthapp/constants/msgline.dart';
-import 'package:healthapp/forgott.dart';
-import 'package:healthapp/myhome.dart';
-import 'package:healthapp/signup.dart';
-//import './startup.dart';
-
-
+import 'package:healthapp/main.dart';
+import 'package:healthapp/screens/myhome.dart';
+import 'package:http/http.dart' as http;
+import 'package:healthapp/screens/forgott.dart';
+import 'package:healthapp/screens/signup.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class LoginScreen extends StatefulWidget{
   const LoginScreen({super.key});
 
   @override
   _LoginScreenState createState()=>_LoginScreenState();
 }
-
-
-
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _key = GlobalKey();
-  //bool _autoValidate = false;
   TextEditingController _emailTEC=TextEditingController();
   TextEditingController _passwordTEC=TextEditingController();
+  
+  Future login(String email, String password,BuildContext context) async {
+  final response = await http.post(
+    Uri.parse('http://192.168.1.23:8000/accounts/login/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'email': email,
+      'password': password,
+    }),
+  );
 
+  //decode
+  Map<String, dynamic> data = jsonDecode(response.body);
    
+  if (response.statusCode == 200) {
+
+    // Login successful
+     var token = data["token"];
+     email = data["email"];
+     print('token of login: $token');
+
+     SharedPreferences pref =await SharedPreferences.getInstance();
+     await pref.setString(tokens,token);
+     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(email: token, token:email)));
+    
+  } else {
+    var res=data["response"];
+    ScaffoldMessenger.of(context).showSnackBar (SnackBar(content: Text(res)));
+    
+   }
+}
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,23 +138,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment:MainAxisAlignment.center,
         
                   children: [
-                    TextButton( onPressed: () {
+                    TextButton( 
+                      onPressed: () {
                     
                       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SignupScreen()));
-                    },
-                     child: const Text("Sign Up",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:Color(0xFFB80075))),),
-                    ElevatedButton(onPressed:(){
-                      var email=_emailTEC.text;
-                      var password=_passwordTEC.text;
+                      },
+                     child: const Text("Sign Up",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:Color(0xFFB80075))),
+                     ),
+                    ElevatedButton(
+                    onPressed:(){
                       final isValid = _key.currentState!.validate();
                       if (!isValid) {
                            return ;
                        }
-                      _key.currentState!.save();
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(email: email, password:password)));
-                     
+                      login(_emailTEC.text,_passwordTEC.text,context);
                     },
-                     child: const Text(" Login ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),),
+                    child: const Text(" Login ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),),
                     const SizedBox(width: 20,),
                     
                     

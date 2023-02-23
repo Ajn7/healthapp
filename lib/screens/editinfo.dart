@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthapp/constants/msgline.dart';
-import 'package:healthapp/myhome.dart';
-
+import 'package:healthapp/screens/myhome.dart';
 
 
 
@@ -286,7 +285,7 @@ class _EditInfo extends State<EditInfo>{
                        }
                       _key.currentState!.save();
                      // ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Updating...')));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyHome(email: email, password:phone)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyHome(email: email, token:phone)));
                     },
                      child:const Text(" Submit ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                      ),

@@ -39,6 +39,8 @@ dependencies:
   dropdown_button2: ^1.9.2
   http: ^0.13.5
   shared_preferences: ^2.0.17
+  fl_chart: ^0.61.0
+  chart_sparkline: ^1.0.13
   
 
 dev_dependencies:

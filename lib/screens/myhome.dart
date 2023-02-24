@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:healthapp/constants/msgline.dart';
 import 'package:healthapp/main.dart';
+import 'package:healthapp/screens/graphs.dart';
+import 'package:healthapp/screens/spark.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:healthapp/screens/editinfo.dart';
 import 'package:healthapp/screens/login.dart';
@@ -10,8 +12,8 @@ import 'package:healthapp/screens/login.dart';
 
 class MyHome extends StatefulWidget {
 
-  String email,token;
-  MyHome({Key? key,required this.email,required this.token}) : super(key: key);
+  String token;
+  MyHome({Key? key,required this.token}) : super(key: key);
   @override
   _MyHomeState createState() => _MyHomeState();
 }
@@ -158,7 +160,10 @@ class _MyHomeState extends State<MyHome> {
                   HorizontaSpace(20),
                   const Text("SPO2"),
                   HorizontaSpace(20),
-                  ElevatedButton(onPressed: () {  }, child: const Text('Measure')),
+                  ElevatedButton(child: const Text('Measure'),
+                  onPressed: () { 
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const Graphscreen()));
+                   }, ),
                 ]
               ),
               VerticalSpace(30),
@@ -167,20 +172,18 @@ class _MyHomeState extends State<MyHome> {
                   HorizontaSpace(20),
                   const Text('BP'),
                   HorizontaSpace(20),
-                  ElevatedButton(onPressed: () { }, child: const Text('Measure')),
+                  ElevatedButton(
+                    child: const Text('Measure'),
+                    onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Sparklinescreen()));
+                   }, ),
                 ]
               ),
               ],
             ),
            ),
-            Container(
-            padding: const EdgeInsets.all(100.0),
-            width: MediaQuery.of(context).size.width,
-            height:400.4,
-            child:Text('Msg'),
-            color: Colors.grey.shade200,
-            )
           ],
+
         ),
       ),
       drawer: Drawer(
@@ -191,13 +194,13 @@ class _MyHomeState extends State<MyHome> {
               fontSize: 21.0,
             ),
             ), 
-            accountEmail: Text('albert@gmail.com'),
+            accountEmail:const Text('albert@gmail.com'),
             otherAccountsPictures: <Widget>[
               IconButton(
               icon: const Icon(Icons.edit),
               color:Colors.white,
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditInfo()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EditInfo()));
                },
               ),
             ],
@@ -260,7 +263,7 @@ class _MyHomeState extends State<MyHome> {
             onTap: () async {
               SharedPreferences pref = await SharedPreferences.getInstance();
               pref.remove(tokens);
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const LoginScreen()));
              },
           ),
           ],
@@ -331,7 +334,7 @@ class MenuItems {
       case MenuItems.logout:{   
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.remove(tokens);        
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen())); 
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())); 
         break;
       }
     }

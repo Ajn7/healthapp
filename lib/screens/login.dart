@@ -38,11 +38,11 @@ class _LoginScreenState extends State<LoginScreen> {
     // Login successful
      var token = data["token"];
      email = data["email"];
-     print('token of login: $token');
+     //print('token of login: $token');
 
      SharedPreferences pref =await SharedPreferences.getInstance();
      await pref.setString(tokens,token);
-     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(email: token, token:email)));
+     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:email)));
     
   } else {
     var res=data["response"];

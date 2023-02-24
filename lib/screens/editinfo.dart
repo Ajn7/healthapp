@@ -285,7 +285,7 @@ class _EditInfo extends State<EditInfo>{
                        }
                       _key.currentState!.save();
                      // ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Updating...')));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyHome(email: email, token:phone)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyHome(token:phone)));
                     },
                      child:const Text(" Submit ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                      ),

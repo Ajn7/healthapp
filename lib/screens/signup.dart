@@ -18,6 +18,7 @@ class SignupScreen extends StatefulWidget{
 class _SignupScreen extends State<SignupScreen>{
   final GlobalKey<FormState> _key = GlobalKey();
   final TextEditingController _nameTEC=TextEditingController();
+  final TextEditingController _lastnameTEC=TextEditingController();
   final TextEditingController _emailTEC=TextEditingController();
   final TextEditingController _password1TEC=TextEditingController();
   final TextEditingController _password2TEC=TextEditingController();
@@ -40,20 +41,45 @@ class _SignupScreen extends State<SignupScreen>{
                     radius: 100,
                     backgroundImage: AssetImage('assets/images/create.png'),
                   ),
-                const SizedBox(height: 20,),
+                HorizontaSpace(20),
                  TextFormField(
                  controller:_nameTEC,
                  keyboardType: TextInputType.emailAddress,
                  decoration: const InputDecoration( 
                           border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.verified_user),
+                          prefixIcon: Icon(Icons.drive_file_rename_outline),
                           hintText: "Enter Name Here",
                           hintStyle: TextStyle(fontSize: 20.0, ),
                           labelText: "Name",
                           labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
                                     ),
+                                    validator: (value) {
+                          if (value!.isEmpty) {
+                          return 'Enter a name!';
+                          }
+                          return null;
+                          },
                 ),
-                const SizedBox(height: 20,),
+                HorizontaSpace(20),
+                 TextFormField(
+                 controller:_lastnameTEC,
+                 keyboardType: TextInputType.emailAddress,
+                 decoration: const InputDecoration( 
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.drive_file_rename_outline),
+                          hintText: "Enter Last Name Here",
+                          hintStyle: TextStyle(fontSize: 20.0, ),
+                          labelText: "Last Name",
+                          labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
+                                    ),
+                                    validator: (value) {
+                          if (value!.isEmpty) {
+                          return 'Enter a last name!';
+                          }
+                          return null;
+                          },
+                ),
+                HorizontaSpace(20),
                  TextFormField(
                  controller:_emailTEC,
                  keyboardType: TextInputType.emailAddress,
@@ -72,7 +98,7 @@ class _SignupScreen extends State<SignupScreen>{
                             return null;
                 },
                 ),
-                const SizedBox(height: 20,),
+                HorizontaSpace(20),
                 TextFormField(
                             controller: _password1TEC,
                             obscureText: true,
@@ -92,7 +118,7 @@ class _SignupScreen extends State<SignupScreen>{
                           return null;
                           },
                           ),
-                const SizedBox(height: 20,),
+                HorizontaSpace(20),
                 TextFormField(
                             controller: _password2TEC,
                             obscureText: true,
@@ -118,23 +144,21 @@ class _SignupScreen extends State<SignupScreen>{
                   
                   children: [
                     TextButton(onPressed:(){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
                     }, child: const Text("Login",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,)),
                     ),
                     ElevatedButton(onPressed:(){
                   
                       var name=_nameTEC.text;
-                      var email0=_emailTEC.text;
+                      var email=_emailTEC.text;
+                      var last=_lastnameTEC.text;
                       var password1=_password1TEC.text;
                       var password2=_password2TEC.text;
                       
                       print("Name:"+name);
-                      print("Email:"+email0);
+                      print("Email:"+email);
                       print("password1:"+password1);
                       print("password2:"+password2);
-            
-                      var email=_emailTEC.text;
-                      var password=_password1TEC.text;
                       final isValid = _key.currentState!.validate();
                       if (!isValid) {
                         return;
@@ -143,7 +167,7 @@ class _SignupScreen extends State<SignupScreen>{
                       _key.currentState!.save();
 
                       if(_password1TEC==_password2TEC){
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(email: email, token:password)));
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:password1)));
                       }
                     },
                      child: const Text(" Create ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),),

@@ -3,8 +3,7 @@ import 'screens/startup.dart';
 
 
 var tokens='';
-var email='';
-//dynamic save_key_name = 'save_key_name';
+
 void main() {
  
    // to hide only status bar
@@ -22,11 +21,13 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
         title: 'Flutter Demo',
+        // Remove the debug banner
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: Colors.black,
         ),
-        home: Startup()
+        home: const Startup()
     );
   }
 }

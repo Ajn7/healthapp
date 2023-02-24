@@ -9,11 +9,6 @@ import '../constants/headline.dart';
 
 class Startup extends StatefulWidget {
   const Startup({super.key});
-  // @override
-  // void initState() {
-  // checkUserLogedin();
-  // }
-
  
   @override
   State<Startup> createState() => _StartupState();
@@ -28,11 +23,10 @@ class _StartupState extends State<Startup> {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs =await SharedPreferences.getInstance();
   var token=prefs.getString('$tokens');
-  print('Token of statup $token');
-  token==null?Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())):Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHome(email:email,token:token)));
-  
+  //print('Token of statup $token');
+  token==null?Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())):Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHome(token:token)));
   }
-   checkUserLogedin();
+  checkUserLogedin();
     return Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
@@ -55,7 +49,7 @@ class _StartupState extends State<Startup> {
                       textStyle: const TextStyle(fontSize: 25),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen()));
                     },
                     child: const SizedBox(height: 20,),
                    ),
@@ -83,18 +77,6 @@ class _StartupState extends State<Startup> {
     );
     
   }
-
-  // Future<void> checkUserLogedin() async{
-  //  final _sharedpref = await SharedPreferences.getInstance();
-  //  final _userLoggedIn = _sharedpref.getBool(save_key_name);
-  //  if (_userLoggedIn ==null || _userLoggedIn==false) 
-  //  {
-  //   LoginScreen();
-  //  }
-  //  else {
-  //   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyHome(email: 'email', password:'phone')));
-  //  }
-  //  }
 }
 
 

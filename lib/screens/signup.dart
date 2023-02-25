@@ -42,102 +42,117 @@ class _SignupScreen extends State<SignupScreen>{
                     backgroundImage: AssetImage('assets/images/create.png'),
                   ),
                 HorizontaSpace(20),
-                 TextFormField(
-                 controller:_nameTEC,
-                 keyboardType: TextInputType.emailAddress,
-                 decoration: const InputDecoration( 
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.drive_file_rename_outline),
-                          hintText: "Enter Name Here",
-                          hintStyle: TextStyle(fontSize: 20.0, ),
-                          labelText: "Name",
-                          labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
-                                    ),
-                                    validator: (value) {
-                          if (value!.isEmpty) {
-                          return 'Enter a name!';
-                          }
-                          return null;
-                          },
-                ),
-                HorizontaSpace(20),
-                 TextFormField(
-                 controller:_lastnameTEC,
-                 keyboardType: TextInputType.emailAddress,
-                 decoration: const InputDecoration( 
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.drive_file_rename_outline),
-                          hintText: "Enter Last Name Here",
-                          hintStyle: TextStyle(fontSize: 20.0, ),
-                          labelText: "Last Name",
-                          labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
-                                    ),
-                                    validator: (value) {
-                          if (value!.isEmpty) {
-                          return 'Enter a last name!';
-                          }
-                          return null;
-                          },
-                ),
-                HorizontaSpace(20),
-                 TextFormField(
-                 controller:_emailTEC,
-                 keyboardType: TextInputType.emailAddress,
-                 decoration: const InputDecoration( 
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.email),
-                          hintText: "Enter Email Here",
-                          hintStyle: TextStyle(fontSize: 20.0, ), 
-                          labelText: "Email",
-                          labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
-                                    ),
-                          validator: (value) {
-                          if (value!.isEmpty || !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
-                              return 'Enter a valid email!';
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: TextFormField(
+                   controller:_nameTEC,
+                   keyboardType: TextInputType.emailAddress,
+                   decoration: const InputDecoration( 
+                            border: OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.drive_file_rename_outline),
+                            hintText: "Enter Name Here",
+                            hintStyle: TextStyle(fontSize: 20.0, ),
+                            labelText: "Name",
+                            labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
+                                      ),
+                                      validator: (value) {
+                            if (value!.isEmpty) {
+                            return 'Enter a name!';
                             }
                             return null;
-                },
+                            },
+                                 ),
+                 ),
+                HorizontaSpace(20),
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: TextFormField(
+                   controller:_lastnameTEC,
+                   keyboardType: TextInputType.emailAddress,
+                   decoration: const InputDecoration( 
+                            border: OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.drive_file_rename_outline),
+                            hintText: "Enter Last Name Here",
+                            hintStyle: TextStyle(fontSize: 20.0, ),
+                            labelText: "Last Name",
+                            labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
+                                      ),
+                                      validator: (value) {
+                            if (value!.isEmpty) {
+                            return 'Enter a last name!';
+                            }
+                            return null;
+                            },
+                                 ),
+                 ),
+                HorizontaSpace(20),
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: TextFormField(
+                   controller:_emailTEC,
+                   keyboardType: TextInputType.emailAddress,
+                   decoration: const InputDecoration( 
+                            border: OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.email),
+                            hintText: "Enter Email Here",
+                            hintStyle: TextStyle(fontSize: 20.0, ), 
+                            labelText: "Email",
+                            labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
+                                      ),
+                            validator: (value) {
+                            if (value!.isEmpty || !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+                                return 'Enter a valid email!';
+                              }
+                              return null;
+                                 },
+                                 ),
+                 ),
+                HorizontaSpace(20),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                              controller: _password1TEC,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.password),
+                              hintText: "Enter Password Here",
+                              hintStyle: TextStyle(fontSize: 20.0,),
+                              labelText: "Password",
+                              labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
+                              
+                                  ),
+                            validator: (value) {
+                            if (value!.isEmpty) {
+                            return 'Enter a valid password!';
+                            }
+                            return null;
+                            },
+                            ),
                 ),
                 HorizontaSpace(20),
-                TextFormField(
-                            controller: _password1TEC,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.password),
-                            hintText: "Enter Password Here",
-                            hintStyle: TextStyle(fontSize: 20.0,),
-                            labelText: "Password",
-                            labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
-                            
-                                ),
-                          validator: (value) {
-                          if (value!.isEmpty) {
-                          return 'Enter a valid password!';
-                          }
-                          return null;
-                          },
-                          ),
-                HorizontaSpace(20),
-                TextFormField(
-                            controller: _password2TEC,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.password),
-                            hintText: "Please Conform Password",
-                            hintStyle: TextStyle(fontSize: 20.0,),
-                            labelText: "Conform Password",
-                            labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
-                            
-                                ),
-                                validator: (value) {
-                          if (value!.isEmpty) {
-                          return 'Enter a valid password!';
-                          }
-                          return null;
-                          },
-                          ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                              controller: _password2TEC,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.password),
+                              hintText: "Please Conform Password",
+                              hintStyle: TextStyle(fontSize: 20.0,),
+                              labelText: "Conform Password",
+                              labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
+                              
+                                  ),
+                                  validator: (value) {
+                            if (value!.isEmpty) {
+                            return 'Enter a valid password!';
+                            }
+                            return null;
+                            },
+                            ),
+                ),
                 Row(
                   mainAxisSize:MainAxisSize.max,
                   mainAxisAlignment:MainAxisAlignment.center,
@@ -165,7 +180,7 @@ class _SignupScreen extends State<SignupScreen>{
                       }
                       
                       _key.currentState!.save();
-
+        
                       if(_password1TEC==_password2TEC){
                           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:password1)));
                       }

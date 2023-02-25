@@ -7,7 +7,7 @@ import 'package:healthapp/screens/spark.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:healthapp/screens/editinfo.dart';
 import 'package:healthapp/screens/login.dart';
-
+import 'package:chart_sparkline/chart_sparkline.dart';
 
 
 class MyHome extends StatefulWidget {
@@ -160,6 +160,20 @@ class _MyHomeState extends State<MyHome> {
                   HorizontaSpace(20),
                   const Text("SPO2"),
                   HorizontaSpace(20),
+                  SizedBox(
+                height: 70,
+                width:70,
+                child: Sparkline(
+                     data: val,
+                      lineWidth: 7.0,
+                      lineGradient: const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.purple,Colors.red]
+                      ),
+                ),
+              ),
+             
                   ElevatedButton(child: const Text('Measure'),
                   onPressed: () { 
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const Graphscreen()));

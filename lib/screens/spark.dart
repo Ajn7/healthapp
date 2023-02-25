@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import '../constants/headline.dart';
 import 'package:chart_sparkline/chart_sparkline.dart';
 
+  //decode
+  List<double> val = [1,2,3,4];
+  
 
 class Sparklinescreen extends StatefulWidget {
   Sparklinescreen({super.key});
-  List<double> data = [0.0, 1.0, 1.5, 2.0, 1.0, 0.5, 1.5, 2.0];
   @override
   State<Sparklinescreen> createState() => _SparklinescreenState();
 }
@@ -22,11 +24,17 @@ class _SparklinescreenState extends State<Sparklinescreen> {
             children: [
               headline(),
               Container(
+                height: 100,
+                width:100,
                 child: Sparkline(
-                     data: [1,2,3,3,5,2,1,3,4,4,2,1,7,4],
-                     lineWidth: 5.0,
-                     lineColor: Colors.purple,
+                     data: val,
+                      lineWidth: 7.0,
+                      lineGradient: const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.purple,Colors.red]
                       ),
+                ),
               )
              
             ],

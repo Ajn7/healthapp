@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/constants/msgline.dart';
+import 'package:healthapp/main.dart';
 import 'package:healthapp/screens/login.dart';
 import 'package:healthapp/screens/myhome.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -16,12 +21,65 @@ class SignupScreen extends StatefulWidget{
 
 
 class _SignupScreen extends State<SignupScreen>{
+  String _password='empty';
   final GlobalKey<FormState> _key = GlobalKey();
   final TextEditingController _nameTEC=TextEditingController();
   final TextEditingController _lastnameTEC=TextEditingController();
   final TextEditingController _emailTEC=TextEditingController();
   final TextEditingController _password1TEC=TextEditingController();
   final TextEditingController _password2TEC=TextEditingController();
+  
+  // Initially password is obscure
+  bool _obscureText = true;
+
+  Future signup({required String email,
+  required String password1,
+  required String password2,
+  required String name,
+  required String last_name,
+  required BuildContext context}) 
+  async {
+  final response = await http.post(
+    Uri.parse('http://192.168.53.129:8000/accounts/register/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'first_name':name,
+      'last_name':last_name,
+      'email':email,
+      'password': password1,
+      'password2':password2
+    }),
+  );
+
+  //decode
+  Map<String, dynamic> data = jsonDecode(response.body);
+   
+  if (response.statusCode == 200) {
+
+    // Login successful
+     var token = data["token"];
+     email = data["email"];
+     //print('token of login: $token');
+
+     SharedPreferences pref =await SharedPreferences.getInstance();
+     await pref.setString(tokens,token);
+     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:token)));
+    
+  } else {
+    var res=data["response"];
+    ScaffoldMessenger.of(context).showSnackBar (SnackBar(content: Text(res)));
+    
+   }
+}
+  // Toggles the password show status
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +99,7 @@ class _SignupScreen extends State<SignupScreen>{
                     radius: 100,
                     backgroundImage: AssetImage('assets/images/create.png'),
                   ),
-                HorizontaSpace(20),
+                horizontaSpace(20),
                  Padding(
                    padding: const EdgeInsets.all(8.0),
                    child: TextFormField(
@@ -63,7 +121,7 @@ class _SignupScreen extends State<SignupScreen>{
                             },
                                  ),
                  ),
-                HorizontaSpace(20),
+                horizontaSpace(20),
                  Padding(
                    padding: const EdgeInsets.all(8.0),
                    child: TextFormField(
@@ -85,7 +143,7 @@ class _SignupScreen extends State<SignupScreen>{
                             },
                                  ),
                  ),
-                HorizontaSpace(20),
+                horizontaSpace(20),
                  Padding(
                    padding: const EdgeInsets.all(8.0),
                    child: TextFormField(
@@ -107,7 +165,7 @@ class _SignupScreen extends State<SignupScreen>{
                                  },
                                  ),
                  ),
-                HorizontaSpace(20),
+                horizontaSpace(20),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
@@ -130,12 +188,12 @@ class _SignupScreen extends State<SignupScreen>{
                             },
                             ),
                 ),
-                HorizontaSpace(20),
+                horizontaSpace(20),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                               controller: _password2TEC,
-                              obscureText: true,
+                              obscureText: _obscureText,
                               decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.password),
@@ -144,15 +202,21 @@ class _SignupScreen extends State<SignupScreen>{
                               labelText: "Conform Password",
                               labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
                               
+                              
                                   ),
+
                                   validator: (value) {
                             if (value!.isEmpty) {
                             return 'Enter a valid password!';
                             }
                             return null;
                             },
+                           onSaved: (value) => _password = value!,
                             ),
                 ),
+                TextButton(
+                onPressed: _toggle,
+                child: Text(_obscureText ? "Show Password" : "Hide")),
                 Row(
                   mainAxisSize:MainAxisSize.max,
                   mainAxisAlignment:MainAxisAlignment.center,
@@ -170,23 +234,20 @@ class _SignupScreen extends State<SignupScreen>{
                       var password1=_password1TEC.text;
                       var password2=_password2TEC.text;
                       
-                      print("Name:"+name);
-                      print("Email:"+email);
-                      print("password1:"+password1);
-                      print("password2:"+password2);
                       final isValid = _key.currentState!.validate();
                       if (!isValid) {
                         return;
                       }
                       
-                      _key.currentState!.save();
+                      signup(name:name,email:email,last_name:last,password1:password1,password2:password2,context:context);
         
                       if(_password1TEC==_password2TEC){
                           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:password1)));
                       }
                     },
-                     child: const Text(" Create ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),),
-                    const SizedBox(width: 20,),
+                     child: const Text(" Create ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                     ),
+                    horizontaSpace(20),
                     
                     
                   ],

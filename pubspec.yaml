@@ -41,6 +41,8 @@ dependencies:
   shared_preferences: ^2.0.17
   fl_chart: ^0.61.0
   chart_sparkline: ^1.0.13
+  syncfusion_flutter_charts: ^20.4.51
+  calendar_timeline: ^1.1.1
   
 
 dev_dependencies:

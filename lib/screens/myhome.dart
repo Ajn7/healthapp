@@ -1,29 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:healthapp/constants/msgline.dart';
+import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/main.dart';
+import 'package:healthapp/screens/Sample.dart';
 import 'package:healthapp/screens/graphs.dart';
 import 'package:healthapp/screens/spark.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:healthapp/screens/editinfo.dart';
 import 'package:healthapp/screens/login.dart';
-import 'package:chart_sparkline/chart_sparkline.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 
+
+ 
 class MyHome extends StatefulWidget {
 
   String token;
   MyHome({Key? key,required this.token}) : super(key: key);
   @override
   _MyHomeState createState() => _MyHomeState();
+
+  
 }
 
 class _MyHomeState extends State<MyHome> {
-
- 
-
+  late TooltipBehavior _tooltipBehavior;
+@override
+    void initState(){
+      _tooltipBehavior =  TooltipBehavior(enable: true);
+      super.initState(); 
+    }
+  
+  Widget MeasureButton({
+    required String buttonText,
+    required void Function() buttonAction,
+  })
+  {
+    return ElevatedButton(
+                      onPressed:buttonAction,
+                      child:Text(buttonText),
+                  ); 
+  }
   @override
   Widget build(BuildContext context) {
+    //print(widget.token);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
@@ -155,44 +175,85 @@ class _MyHomeState extends State<MyHome> {
             color:Colors.grey.shade100,
             child: Column(
               children : [ 
-                Row(
-                children:[
-                  HorizontaSpace(20),
-                  const Text("SPO2"),
-                  HorizontaSpace(20),
-                  SizedBox(
-                height: 70,
-                width:70,
-                child: Sparkline(
-                     data: val,
-                      lineWidth: 7.0,
-                      lineGradient: const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.purple,Colors.red]
-                      ),
+
+                  horizontaSpace(20),
+                  const Text("SPO2",style: TextStyle(fontSize: 25,color: Colors.green),),
+                  horizontaSpace(20),
+               
+              verticalSpace(20),
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 200,
+                        width: 200,
+                    child: SfCartesianChart(
+                        // Initialize category axis
+                        primaryXAxis: CategoryAxis(),
+                        series: <ChartSeries>[
+                            // Initialize line series
+                            LineSeries<ChartData, String>(
+                                dataSource: [
+                                    // Bind data source
+                                    ChartData('Jan 1', 35),
+                                    ChartData('Jan 2', 28),
+                                    ChartData('Jan 3', 34),
+                                    ChartData('Jan 4', 32),
+                                    ChartData('Jan 5', 40)
+                                ],
+                                xValueMapper: (ChartData data, _) => data.x,
+                                yValueMapper: (ChartData data, _) => data.y
+                            )
+                        ]
+                    )
                 ),
-              ),
-             
-                  ElevatedButton(child: const Text('Measure'),
-                  onPressed: () { 
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const Graphscreen()));
-                   }, ),
-                ]
-              ),
-              VerticalSpace(30),
-              Row(
-                children:[
-                  HorizontaSpace(20),
-                  const Text('BP'),
-                  HorizontaSpace(20),
-                  ElevatedButton(
-                    child: const Text('Measure'),
-                    onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Sparklinescreen()));
-                   }, ),
-                ]
-              ),
+                horizontaSpace(20),
+                MeasureButton(buttonText: 'Measure', buttonAction: () { 
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const Graphscreen()));
+                      }),
+                    ],
+                  ),
+               horizontaSpace(20),
+                  const Text("BP",style: TextStyle(fontSize: 25,color: Colors.green),),
+                  horizontaSpace(20),
+               
+              verticalSpace(20),
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 200,
+                        width: 200,
+                    child: SfCartesianChart(
+                      // Enables the legend
+                       // legend: Legend(isVisible: true),
+                      //title: ChartTitle(text: ' analysis'),
+                        // Initialize category axis
+                        tooltipBehavior: _tooltipBehavior,
+                        primaryXAxis: CategoryAxis(),
+                        series: <ChartSeries>[
+                            // Initialize line series
+                            LineSeries<ChartData, String>(
+                                dataSource: [
+                                    // Bind data source
+                                    ChartData('Jan 1', 35),
+                                    ChartData('Jan 2', 28),
+                                    ChartData('Jan 3', 34),
+                                    ChartData('Jan 4', 32),
+                                    ChartData('Jan 5', 40)
+                                ],
+                                xValueMapper: (ChartData data, _) => data.x,
+                                yValueMapper: (ChartData data, _) => data.y,
+                                // Render the data label
+                                dataLabelSettings:const DataLabelSettings(isVisible : true)
+                            )
+                        ]
+                    )
+                ),
+                horizontaSpace(20),
+                MeasureButton(buttonText: 'Measure', buttonAction: () { 
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => BPScreen()));
+                      }),
+                    ],
+                  ),
               ],
             ),
            ),
@@ -343,7 +404,7 @@ class MenuItems {
       //Do something
        break;
       case MenuItems.share:
-      //Do something
+        //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  Sample()));
         break;
       case MenuItems.logout:{   
         SharedPreferences pref = await SharedPreferences.getInstance();
@@ -354,3 +415,9 @@ class MenuItems {
     }
   }
 }
+
+class ChartData {
+        ChartData(this.x, this.y);
+        final String x;
+        final double? y;
+    }

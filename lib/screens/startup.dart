@@ -18,15 +18,18 @@ class _StartupState extends State<Startup> {
   
   @override
   Widget build(BuildContext context) {
-
   Future<void> checkUserLogedin() async{
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs =await SharedPreferences.getInstance();
-  var token=prefs.getString('$tokens');
+  var token=prefs.getString(tokens);
   //print('Token of statup $token');
   token==null?Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())):Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHome(token:token)));
   }
-  checkUserLogedin();
+  Future.delayed(const Duration(seconds: 3), (){
+      checkUserLogedin();
+});
+  
+  
     return Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
@@ -55,22 +58,14 @@ class _StartupState extends State<Startup> {
                    ),
                 ),
               ),
-              Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.logout,
-                      ),
-                      iconSize: 50,
-                      color:const Color(0xFFB80075),
-                      splashColor: Colors.grey,
-                      onPressed: () {
-                       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
-                      },
-                    ),
-                  )),
+              const CircularProgressIndicator(
+
+              valueColor: AlwaysStoppedAnimation<Color>(
+
+                  Colors.purple),
+
+                  ),
+              
             ],
           ),
         )
@@ -78,5 +73,7 @@ class _StartupState extends State<Startup> {
     
   }
 }
+
+
 
 

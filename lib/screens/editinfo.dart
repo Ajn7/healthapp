@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/constants/msgline.dart';
 import 'package:healthapp/screens/myhome.dart';
 
@@ -95,7 +96,7 @@ class _EditInfo extends State<EditInfo>{
                        ),
                     ],
                   ),
-                  VerticalSpace(20),
+                  verticalSpace(20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [ 
@@ -120,7 +121,7 @@ class _EditInfo extends State<EditInfo>{
                           ),
                       ),
                     ),
-                    HorizontaSpace(10),
+                    horizontaSpace(10),
                     const Text('Blood Group:',style: TextStyle(fontWeight: FontWeight.bold),),
                     Container(
                       width:110,
@@ -143,7 +144,7 @@ class _EditInfo extends State<EditInfo>{
                     ),
                     ],
                   ),
-                  VerticalSpace(20),
+                  verticalSpace(20),
                   Row(
                     children: [
                       const SizedBox(height:20),
@@ -164,7 +165,7 @@ class _EditInfo extends State<EditInfo>{
                                               },
                                   ),
                        ),
-                       HorizontaSpace(20),
+                       horizontaSpace(20),
                    const Text('Sugar Level: ',style: TextStyle(fontWeight: FontWeight.bold),),
                    SizedBox(
                     width: 50,
@@ -184,10 +185,10 @@ class _EditInfo extends State<EditInfo>{
                    ),
                     ],
                   ),
-                   VerticalSpace(20),
+                   verticalSpace(20),
                   Row(
                     children: [
-                     HorizontaSpace(10),
+                     horizontaSpace(10),
                       const Text("Age :",style: TextStyle(fontWeight: FontWeight.bold),),
                                   SizedBox(
                     width: 50,
@@ -205,7 +206,7 @@ class _EditInfo extends State<EditInfo>{
                                               },
                                   ),
                    ),
-                      HorizontaSpace(10),
+                      horizontaSpace(10),
                       const Text("Height :",style: TextStyle(fontWeight: FontWeight.bold),),
                                 SizedBox(
                                   width: 70,
@@ -223,7 +224,7 @@ class _EditInfo extends State<EditInfo>{
                                               },
                                   ),
                    ),
-                      HorizontaSpace(10),
+                      horizontaSpace(10),
                       const Text("Weight :",style: TextStyle(fontWeight: FontWeight.bold),),
                                   SizedBox(
                                   width: 60,
@@ -243,7 +244,7 @@ class _EditInfo extends State<EditInfo>{
                    ),
                     ],
                   ),
-                  VerticalSpace(20),
+                  verticalSpace(20),
                   Row(
                     children: [
                       const Text('Phone Number :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
@@ -267,7 +268,7 @@ class _EditInfo extends State<EditInfo>{
                        ),
                     ],
                   ),
-                  VerticalSpace(20),
+                  verticalSpace(20),
                   SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child:ElevatedButton(onPressed:(){

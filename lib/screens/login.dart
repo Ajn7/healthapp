@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/constants/msgline.dart';
 import 'package:healthapp/main.dart';
 import 'package:healthapp/screens/myhome.dart';
@@ -15,12 +16,12 @@ class LoginScreen extends StatefulWidget{
 }
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _key = GlobalKey();
-  TextEditingController _emailTEC=TextEditingController();
-  TextEditingController _passwordTEC=TextEditingController();
+  final TextEditingController _emailTEC=TextEditingController();
+  final TextEditingController _passwordTEC=TextEditingController();
   
   Future login(String email, String password,BuildContext context) async {
   final response = await http.post(
-    Uri.parse('http://192.168.1.23:8000/accounts/login/'),
+    Uri.parse('http://192.168.53.129:8000/accounts/login/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -42,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
      SharedPreferences pref =await SharedPreferences.getInstance();
      await pref.setString(tokens,token);
-     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:email)));
+     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:token)));
     
   } else {
     var res=data["response"];
@@ -94,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                 },
                 ),
-                const SizedBox(height: 20,),
+                verticalSpace(20),
                 TextFormField(
                             controller: _passwordTEC,
                             obscureText: true,
@@ -132,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                  return null;
                                   },
                           ),
-                const SizedBox(height: 20,),
+                verticalSpace(20),
                 Row(
                   mainAxisSize:MainAxisSize.max,
                   mainAxisAlignment:MainAxisAlignment.center,

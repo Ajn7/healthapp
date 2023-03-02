@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthapp/API/model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 class Graphscreen extends StatefulWidget {
    const Graphscreen({super.key});
@@ -8,7 +9,9 @@ class Graphscreen extends StatefulWidget {
 
 class _GraphscreenState extends State<Graphscreen> {
   
- //Map<int,int> Spo={1:2,6:5,3:5};
+  //api call
+  
+
  
 
   
@@ -16,7 +19,13 @@ class _GraphscreenState extends State<Graphscreen> {
 
     @override
     void initState(){
-      _tooltipBehavior =  TooltipBehavior(enable: true);
+        //getReading();
+      _tooltipBehavior =  TooltipBehavior(
+        header: "",
+        enable: true,
+        format: 'point.x : point.y%',
+        canShowMarker: false,
+      );
       super.initState(); 
     }
 
@@ -30,9 +39,9 @@ class _GraphscreenState extends State<Graphscreen> {
             child:Column(
             children: [
               //headline(),
-            const Text('Previo Reading :'),
+            const Text('Previous Reading :'),
              SizedBox(
-              width: 300,
+              width: 500,
               height: 300,
                child: ListView(
                  physics:const BouncingScrollPhysics(),
@@ -58,6 +67,21 @@ class _GraphscreenState extends State<Graphscreen> {
                              // Enables the tooltip for all the series in chart
                             tooltipBehavior: _tooltipBehavior,
                             primaryXAxis: CategoryAxis(),
+                            primaryYAxis: NumericAxis(                 
+                              minimum: 50, 
+                              maximum: 120, 
+                              interval: 5,
+                              // title: AxisTitle(
+                              //   text: 'SPO2%',
+                              //   textStyle:const TextStyle(
+                              //       color: Colors.deepOrange,
+                              //       fontFamily: 'Roboto',
+                              //       fontSize: 16,
+                              //       fontStyle: FontStyle.italic,
+                              //       fontWeight: FontWeight.w300
+                              //   ),
+                              // ),
+                            ),
                             series: <ChartSeries>[
                                 getData()
                             ]
@@ -65,7 +89,7 @@ class _GraphscreenState extends State<Graphscreen> {
                     ),
                  ],
                ),
-             )
+             ),
             ],
     ),
    ),
@@ -79,10 +103,24 @@ LineSeries<ChartData, String> getData() {
   List<ChartData> spData=[];
 
     int i;
-    List<String>mnth=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
-    List<double>dt=[10,20,30,40,50,60,70,80,90,100,110,120];
-    for(i=0;i<dt.length;i++){
-      spData.add(ChartData(mnth[i],dt[i]));
+    //List<String>mnth=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+    //List<double>dt=[80,90,92,95,92,85,91,94,93,87,88,95];
+    // List<String>dte=[
+    // '01:00', 
+    // '01:15', 
+    // '01:20', 
+    // '01:25',
+    // '01:30',
+    // '01:35',
+    // '01:40',
+    // '01:45',
+    // '01:50',
+    // '01:55',
+    // '01:57',
+    // '01:60'];
+
+    for(i=0;i<dte.length;i++){
+      spData.add(ChartData(dte[i].toString(),dt[i].toDouble()));
     }
 
   return LineSeries<ChartData, String>(

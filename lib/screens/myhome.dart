@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/main.dart';
 import 'package:healthapp/screens/Sample.dart';
 import 'package:healthapp/screens/graphs.dart';
-import 'package:healthapp/screens/spark.dart';
+import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:healthapp/screens/editinfo.dart';
 import 'package:healthapp/screens/login.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-
-
- 
 class MyHome extends StatefulWidget {
 
   String token;
@@ -25,22 +23,16 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> {
   late TooltipBehavior _tooltipBehavior;
+ 
+
 @override
     void initState(){
+      getReading();
       _tooltipBehavior =  TooltipBehavior(enable: true);
       super.initState(); 
     }
   
-  Widget MeasureButton({
-    required String buttonText,
-    required void Function() buttonAction,
-  })
-  {
-    return ElevatedButton(
-                      onPressed:buttonAction,
-                      child:Text(buttonText),
-                  ); 
-  }
+ 
   @override
   Widget build(BuildContext context) {
     //print(widget.token);
@@ -208,6 +200,7 @@ class _MyHomeState extends State<MyHome> {
                 ),
                 horizontaSpace(20),
                 MeasureButton(buttonText: 'Measure', buttonAction: () { 
+                        getData();
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const Graphscreen()));
                       }),
                     ],

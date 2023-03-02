@@ -154,7 +154,8 @@ class _LoginScreenState extends State<LoginScreen> {
                        }
                       login(_emailTEC.text,_passwordTEC.text,context);
                     },
-                    child: const Text(" Login ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),),
+                    child: const Text(" Login ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                    ),
                     const SizedBox(width: 20,),
                     
                     

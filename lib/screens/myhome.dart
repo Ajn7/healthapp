@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:healthapp/API/apicalls.dart';
+import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/main.dart';
 import 'package:healthapp/screens/bpgraph.dart';
@@ -10,7 +13,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:healthapp/screens/editinfo.dart';
 import 'package:healthapp/screens/login.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
 class MyHome extends StatefulWidget {
 
   String token;
@@ -23,19 +25,21 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> {
   late TooltipBehavior _tooltipBehavior;
- 
+
 
 @override
     void initState(){
       getReading();
+      getUserData();
       _tooltipBehavior =  TooltipBehavior(enable: true);
       super.initState(); 
     }
   
- 
+  
   @override
   Widget build(BuildContext context) {
-    //print(widget.token);
+    //print("inside my home $token");
+    print('em:$email');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
@@ -257,12 +261,13 @@ class _MyHomeState extends State<MyHome> {
       drawer: Drawer(
         child:ListView(
           children: [
-            UserAccountsDrawerHeader(accountName: const Text(' Albert Louis Jr',
-            style:TextStyle(
+            UserAccountsDrawerHeader(
+            accountName: Text(name,
+            style:const TextStyle(
               fontSize: 21.0,
             ),
             ), 
-            accountEmail:const Text('albert@gmail.com'),
+            accountEmail:Text(email),
             otherAccountsPictures: <Widget>[
               IconButton(
               icon: const Icon(Icons.edit),
@@ -272,9 +277,9 @@ class _MyHomeState extends State<MyHome> {
                },
               ),
             ],
-          currentAccountPicture:const CircleAvatar(
+                    currentAccountPicture:const CircleAvatar(
             backgroundImage: AssetImage('assets/images/profile.png'),
-          ),
+                    ),
             ),
           const ListTile(
             leading: Icon(Icons.person_outline),

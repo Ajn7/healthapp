@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   
   Future login(String email, String password,BuildContext context) async {
   final response = await http.post(
-    Uri.parse('http://192.168.53.129:8000/accounts/login/'),
+    Uri.parse('http://192.168.1.23:8000/accounts/login/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -39,10 +39,11 @@ class _LoginScreenState extends State<LoginScreen> {
     // Login successful
      var token = data["token"];
      email = data["email"];
-     //print('token of login: $token');
+     print('token of login: $token');
 
      SharedPreferences pref =await SharedPreferences.getInstance();
      await pref.setString(tokens,token);
+     print("after shared pref token : ${token}");
      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:token)));
     
   } else {

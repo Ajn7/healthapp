@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/headline.dart';
 
 
+var token;
 
 class Startup extends StatefulWidget {
   const Startup({super.key});
@@ -21,7 +22,7 @@ class _StartupState extends State<Startup> {
   Future<void> checkUserLogedin() async{
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs =await SharedPreferences.getInstance();
-  var token=prefs.getString(tokens);
+  token=prefs.getString(tokens);
   //print('Token of statup $token');
   token==null?Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())):Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHome(token:token)));
   }

@@ -1,2 +1,3 @@
-List<dynamic>dt=[10];
-List<dynamic>dte=['10'];
+List<dynamic>dta=[ ]; //dt
+List<dynamic>tme=[' ']; //dte
+dynamic prev=0;

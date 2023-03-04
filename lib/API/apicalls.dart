@@ -13,12 +13,13 @@ import 'package:http/http.dart' as http;
 
   //decode
   Map<String, dynamic> data = jsonDecode(response.body);
+  
    
   if (response.statusCode == 200) {
 
-    dte=data['time'];
-    dt=data['reading'];
-    print(dt);
+    tme=data['time'];
+    dta=data['reading'];
+    print(dta);
 
   } else {
     var res="response";

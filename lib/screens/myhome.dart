@@ -3,8 +3,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/main.dart';
-import 'package:healthapp/screens/Sample.dart';
-import 'package:healthapp/screens/graphs.dart';
+import 'package:healthapp/screens/bpgraph.dart';
+import 'package:healthapp/screens/spgraph.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:healthapp/screens/editinfo.dart';
@@ -201,7 +201,7 @@ class _MyHomeState extends State<MyHome> {
                 horizontaSpace(20),
                 MeasureButton(buttonText: 'Measure', buttonAction: () { 
                         getData();
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const Graphscreen()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const SpoGraphscreen()));
                       }),
                     ],
                   ),

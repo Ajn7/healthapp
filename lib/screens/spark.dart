@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthapp/constants/divider.dart';
-import 'package:healthapp/screens/Sample.dart';
+import 'package:healthapp/screens/bpgraph.dart';
 //import 'package:chart_sparkline/chart_sparkline.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 

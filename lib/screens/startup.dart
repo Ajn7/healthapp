@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:healthapp/main.dart';
+import 'package:healthapp/constants/sharedpref.dart';
+//import 'package:healthapp/main.dart';
 import 'package:healthapp/screens/login.dart';
 import 'package:healthapp/screens/myhome.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/headline.dart';
-
-
-var token;
 
 class Startup extends StatefulWidget {
   const Startup({super.key});
@@ -16,19 +14,29 @@ class Startup extends StatefulWidget {
 }
 
 class _StartupState extends State<Startup> {
-  
   @override
-  Widget build(BuildContext context) {
-  Future<void> checkUserLogedin() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs =await SharedPreferences.getInstance();
-  token=prefs.getString(tokens);
+    void initState(){
+      Future<void> checkUserLogedin() async{
+  //shared preferences
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SharedPreferences prefs =await SharedPreferences.getInstance();
+  // token=prefs.getString(tokens);
   //print('Token of statup $token');
-  token==null?Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())):Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHome(token:token)));
+  //bool keyRemoved = await myPrefs.remove('myKey');
+  MySharedPreferences myPrefs = MySharedPreferences();
+  await myPrefs.initPrefs();
+  String? myToken =myPrefs.getString('token');
+  print('Token of statup :$myToken');
+  myToken==null?Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())):Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHome(token:myToken)));
   }
   Future.delayed(const Duration(seconds: 3), (){
       checkUserLogedin();
 });
+      super.initState(); 
+    }
+  @override
+  Widget build(BuildContext context) {
+ 
   
   
     return Scaffold(

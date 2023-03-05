@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/constants/msgline.dart';
-import 'package:healthapp/main.dart';
+import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/screens/myhome.dart';
 import 'package:http/http.dart' as http;
 import 'package:healthapp/screens/forgott.dart';
 import 'package:healthapp/screens/signup.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 class LoginScreen extends StatefulWidget{
   const LoginScreen({super.key});
 
@@ -21,7 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   
   Future login(String email, String password,BuildContext context) async {
   final response = await http.post(
-    Uri.parse('http://192.168.1.23:8000/accounts/login/'),
+  
+    Uri.parse('$baseurl/accounts/login/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -37,14 +38,21 @@ class _LoginScreenState extends State<LoginScreen> {
   if (response.statusCode == 200) {
 
     // Login successful
-     var token = data["token"];
+     var logintoken = data["token"];
      email = data["email"];
-     print('token of login: $token');
+     print('token of login: $logintoken');
 
-     SharedPreferences pref =await SharedPreferences.getInstance();
-     await pref.setString(tokens,token);
-     print("after shared pref token : ${token}");
-     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:token)));
+    //  SharedPreferences pref =await SharedPreferences.getInstance();
+    //  await pref.setString(tokens,token);
+    //VariableUtilities().token=token;
+  MySharedPreferences myPrefs = MySharedPreferences();
+  await myPrefs.initPrefs();
+  await myPrefs.setString('token', '$logintoken');
+  String? myToken = myPrefs.getString('token');
+  //bool keyExists = myPrefs.containsKey('myKey');
+  //bool keyRemoved = await myPrefs.remove('myKey');
+  print("after shared pref token : ${myToken}");
+  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:logintoken)));
     
   } else {
     var res=data["response"];

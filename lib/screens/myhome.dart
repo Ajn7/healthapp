@@ -1,18 +1,16 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/divider.dart';
-import 'package:healthapp/main.dart';
+import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/screens/bpgraph.dart';
 import 'package:healthapp/screens/spgraph.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:healthapp/screens/editinfo.dart';
 import 'package:healthapp/screens/login.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
 class MyHome extends StatefulWidget {
 
   String token;
@@ -29,8 +27,8 @@ class _MyHomeState extends State<MyHome> {
 
 @override
     void initState(){
-      getReading();
       getUserData();
+      getReading();
       _tooltipBehavior =  TooltipBehavior(enable: true);
       super.initState(); 
     }
@@ -39,7 +37,7 @@ class _MyHomeState extends State<MyHome> {
   @override
   Widget build(BuildContext context) {
     //print("inside my home $token");
-    print('em:$email');
+    print('Myhomepage email:$email');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
@@ -110,7 +108,7 @@ class _MyHomeState extends State<MyHome> {
           children:<Widget>[
             ListTile(
               title:const Text(
-                'Previous BP Level',
+              'Previous BP Level',
               style: TextStyle(
                 fontSize: 20.0,
               ),
@@ -273,7 +271,7 @@ class _MyHomeState extends State<MyHome> {
               icon: const Icon(Icons.edit),
               color:Colors.white,
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EditInfo()));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const EditInfo()));
                },
               ),
             ],
@@ -334,8 +332,11 @@ class _MyHomeState extends State<MyHome> {
             leading: const Icon(Icons.exit_to_app),
             title: const Text("Log Out"),
             onTap: () async {
-              SharedPreferences pref = await SharedPreferences.getInstance();
-              pref.remove(tokens);
+              //SharedPreferences pref = await SharedPreferences.getInstance();
+              //pref.remove(tokens);
+              MySharedPreferences myPrefs = MySharedPreferences();
+              await myPrefs.initPrefs();  
+              await myPrefs.remove('token');
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const LoginScreen()));
              },
           ),
@@ -405,10 +406,12 @@ class MenuItems {
         //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  Sample()));
         break;
       case MenuItems.logout:{   
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.remove(tokens);        
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())); 
-        break;
+        //SharedPreferences prefs= await SharedPreferences.getInstance();
+        // pref.remove(tokens);    
+       MySharedPreferences myPrefs = MySharedPreferences();
+       await myPrefs.initPrefs();  
+       await myPrefs.remove('token');
+       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const LoginScreen()));
       }
     }
   }

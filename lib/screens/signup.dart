@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:healthapp/API/model.dart';
+import 'package:healthapp/constants/sharedpref.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:healthapp/constants/divider.dart';
@@ -40,7 +42,8 @@ class _SignupScreen extends State<SignupScreen>{
   required BuildContext context}) 
   async {
   final response = await http.post(
-    Uri.parse('http://192.168.53.129:8000/accounts/register/'),
+   
+    Uri.parse('$baseurl/accounts/register/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -63,9 +66,11 @@ class _SignupScreen extends State<SignupScreen>{
      email = data["email"];
      //print('token of login: $token');
 
-     SharedPreferences pref =await SharedPreferences.getInstance();
-     await pref.setString(tokens,token);
-     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:token)));
+    MySharedPreferences myPrefs = MySharedPreferences();
+    await myPrefs.initPrefs();
+    await myPrefs.setString('token', '$token');
+    String? myToken = myPrefs.getString('token');
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:'$myToken')));
     
   } else {
     var res=data["response"];

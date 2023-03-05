@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Widget headline(){
-  return Align(
+  return const Align(
    alignment: Alignment.topCenter,
    child:Padding(
     padding: EdgeInsets.only(top:106),

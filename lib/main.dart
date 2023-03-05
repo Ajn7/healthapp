@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/startup.dart';
 
-
-var tokens='';
-
 void main() {
  
    // to hide only status bar

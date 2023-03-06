@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:healthapp/screens/login.dart';
+import 'package:healthapp/screens/myhome.dart';
+import 'core/navigator.dart';
 import 'screens/startup.dart';
 
 void main() {
@@ -17,6 +20,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
+        navigatorKey: navigatorKey,
+        routes:{
+          "loginscreen":(BuildContext ctx)=>const LoginScreen(),
+          "homescreen":(BuildContext ctx)=>const HomeScreen(),
+          "startup":(BuildContext ctx) => const Startup(),
+        },
+        initialRoute: "startup",
         title: 'Flutter Demo',
         // Remove the debug banner
         debugShowCheckedModeBanner: false,
@@ -24,7 +34,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         primaryColor: Colors.black,
         ),
-        home: const Startup()
+        //home: const Startup()
     );
   }
 }

@@ -24,20 +24,34 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> with API{
-  //  @override
-  //   void initState(){
-  //   super.initState();
-   
-  //   }
+   @override
+    void initState(){
+    super.initState();
+    getData();
+
+    }
+    getData()async{
+      MySharedPreferences myPrefs = MySharedPreferences();
+      await myPrefs.initPrefs();
+      setState(() {
+      name =myPrefs.getString('name').toString();
+      email =myPrefs.getString('email').toString();
+      });
+      
+    }
   @override
   Widget build(BuildContext context){
     //print("inside my home $token");
     //print('Myhomepage email:$email');
-      //getData().then;
-      if(name.isEmpty){
-        print('Check home :$name');
-        print('Is empty check of home-page--${name.isEmpty}');
-       
+      
+      if(name==''){
+      print('if of MyHome :part');
+      return const HomeScreen();
+   }
+    else
+      {
+      print('Check home :$name');
+      print('Is empty check of home-page--${name.isEmpty}');
       return ( FutureBuilder<dynamic>(
       future: getUserData(),
       initialData: const ['Loading...'],
@@ -60,12 +74,6 @@ class _MyHomeState extends State<MyHome> with API{
       },
     ));
     }
-    else
-    {
-       print('else');
-      return const HomeScreen();
-  }
- 
   }
 }
 

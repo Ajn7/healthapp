@@ -5,7 +5,7 @@ List<dynamic>dta=[ ]; //dt
 List<dynamic>tme=[' ']; //dte
 dynamic prev=0;
 String name='';
-String email='';
+String email='';//'a';
 String baseurl='http://192.168.1.23:8000';
 
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/sharedpref.dart';
 //import 'package:healthapp/main.dart';
 import 'package:healthapp/screens/login.dart';
@@ -26,11 +27,14 @@ class _StartupState extends State<Startup> {
   MySharedPreferences myPrefs = MySharedPreferences();
   await myPrefs.initPrefs();
   String? myToken =myPrefs.getString('token');
-  String? name =myPrefs.getString('name');
-  String? email =myPrefs.getString('email');
+  name =myPrefs.getString('name').toString();
+  email =myPrefs.getString('email').toString();
+  //dta=myPrefs.getList('readingList');
+  
   print('Token of statup(shpf) :$myToken');
   print('name at statup (shpf) :$name');
   print('email at statup (shpf):$email');
+  //print('email at statup (shpf):$dta');
   
   
   myToken==null?Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())):Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHome(token:myToken)));

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MySharedPreferences {
@@ -23,6 +25,31 @@ class MySharedPreferences {
   Future<bool> setString(String key, String value) {
     return _prefs?.setString(key, value) ?? Future.value(false);
   }
+
+//   Future<bool> setList(String key, List<dynamic> value) async {
+//   final prefs = await SharedPreferences.getInstance();
+//   try {
+//     final jsonString = json.encode(value);
+//     return prefs.setString(key, jsonString);
+//   } catch (e) {
+//     // Handle the error
+//     return false;
+//   }
+// }
+
+// Future<List<dynamic>> getList(String key) async {
+//   final prefs = await SharedPreferences.getInstance();
+//   final jsonString = prefs.getString(key);
+//   if (jsonString != null) {
+//     try {
+//       final list = json.decode(jsonString) as List<dynamic>;
+//       return list;
+//     } catch (e) {
+//       // Handle the error
+//     }
+//   }
+//   return [];
+// }
 
   bool containsKey(String key) {
     return _prefs?.containsKey(key) ?? false;

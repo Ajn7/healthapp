@@ -5,11 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/constants/msgline.dart';
-import 'package:healthapp/main.dart';
+//import 'package:healthapp/main.dart';
 import 'package:healthapp/screens/login.dart';
 import 'package:healthapp/screens/myhome.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+//import 'package:shared_preferences/shared_preferences.dart';
 
 
 

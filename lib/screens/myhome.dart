@@ -13,31 +13,81 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class MyHome extends StatefulWidget {
 
-  String token;
-  MyHome({Key? key,required this.token}) : super(key: key);
+  final dynamic token;
+  const MyHome({Key? key,required this.token}) : super(key: key);
+  
+  
   @override
   _MyHomeState createState() => _MyHomeState();
 
   
 }
 
-class _MyHomeState extends State<MyHome> {
+class _MyHomeState extends State<MyHome> with API{
+  //  @override
+  //   void initState(){
+  //   super.initState();
+   
+  //   }
+  @override
+  Widget build(BuildContext context){
+    //print("inside my home $token");
+    //print('Myhomepage email:$email');
+      //getData().then;
+      if(name.isEmpty){
+        print('Check home :$name');
+        print('Is empty check of home-page--${name.isEmpty}');
+       
+      return ( FutureBuilder<dynamic>(
+      future: getUserData(),
+      initialData: const ['Loading...'],
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container(
+            color:Colors.white,
+            child:const Center(
+              child:CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.purple),
+                        ),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return const HomeScreen();
+        }
+      },
+    ));
+    }
+    else
+    {
+       print('else');
+      return const HomeScreen();
+  }
+ 
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with API {
   late TooltipBehavior _tooltipBehavior;
 
-
-@override
+    @override
     void initState(){
-      getUserData();
-      getReading();
-      _tooltipBehavior =  TooltipBehavior(enable: true);
-      super.initState(); 
+    super.initState(); 
+    getReading();
+    _tooltipBehavior =  TooltipBehavior(enable: true);
+     
     }
-  
-  
   @override
   Widget build(BuildContext context) {
-    //print("inside my home $token");
-    print('Myhomepage email:$email');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
@@ -185,7 +235,7 @@ class _MyHomeState extends State<MyHome> {
                         primaryXAxis: CategoryAxis(),
                         series: <ChartSeries>[
                             // Initialize line series
-                            LineSeries<ChartData, String>(
+                            LineSeries<ChartData, dynamic>(
                                 dataSource: [
                                     // Bind data source
                                     ChartData('Jan 1', 35),
@@ -226,7 +276,7 @@ class _MyHomeState extends State<MyHome> {
                         primaryXAxis: CategoryAxis(),
                         series: <ChartSeries>[
                             // Initialize line series
-                            LineSeries<ChartData, String>(
+                            LineSeries<ChartData, dynamic>(
                                 dataSource: [
                                     // Bind data source
                                     ChartData('Jan 1', 35),
@@ -245,7 +295,7 @@ class _MyHomeState extends State<MyHome> {
                 ),
                 horizontaSpace(20),
                 MeasureButton(buttonText: 'Measure', buttonAction: () { 
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => BPScreen()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const BPScreen()));
                       }),
                     ],
                   ),
@@ -260,7 +310,7 @@ class _MyHomeState extends State<MyHome> {
         child:ListView(
           children: [
             UserAccountsDrawerHeader(
-            accountName: Text(name,
+            accountName: Text(name.toUpperCase(),
             style:const TextStyle(
               fontSize: 21.0,
             ),
@@ -337,6 +387,8 @@ class _MyHomeState extends State<MyHome> {
               MySharedPreferences myPrefs = MySharedPreferences();
               await myPrefs.initPrefs();  
               await myPrefs.remove('token');
+              await myPrefs.remove('name');
+              await myPrefs.remove('email');
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const LoginScreen()));
              },
           ),
@@ -347,9 +399,8 @@ class _MyHomeState extends State<MyHome> {
   }
 }
 
-
 class MenuItem {
-  final String text;
+  final dynamic text;
   final IconData icon;
 
   const MenuItem({
@@ -380,9 +431,7 @@ class MenuItems {
                   size: 20
           ),
         ),
-        const SizedBox(
-          width: 10,
-        ),
+        horizontaSpace(10),
         Text(
           item.text,
           style: const TextStyle(
@@ -411,6 +460,8 @@ class MenuItems {
        MySharedPreferences myPrefs = MySharedPreferences();
        await myPrefs.initPrefs();  
        await myPrefs.remove('token');
+       await myPrefs.remove('name');
+       await myPrefs.remove('email');
        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const LoginScreen()));
       }
     }
@@ -419,6 +470,6 @@ class MenuItems {
 
 class ChartData {
         ChartData(this.x, this.y);
-        final String x;
+        final dynamic x;
         final double? y;
     }

@@ -2,8 +2,8 @@
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/sharedpref.dart';
 import 'package:http/http.dart' as http;
- 
- 
+
+ mixin API {
  Future getReading() async {
   final response = await http.get(
 
@@ -33,6 +33,7 @@ import 'package:http/http.dart' as http;
  }
 
  Future getUserData() async {
+  
   MySharedPreferences myPrefs = MySharedPreferences();
   await myPrefs.initPrefs();
   String? myToken = myPrefs.getString('token');
@@ -48,21 +49,25 @@ import 'package:http/http.dart' as http;
 
   //decode
   Map<String, dynamic> data = jsonDecode(response.body);
-  print('Details Api response: ${response.body}');
+  print('Details Api response(FutureBuilder call): ${response.body}');
   
   //print(tokens);
   
   if (response.statusCode == 200) {
-  //MySharedPreferences myPrefs = MySharedPreferences();
-  //await myPrefs.initPrefs();
-  //await myPrefs.setString('email',data['email']);
-  //String? myToken = myPrefs.getString('email');
-
-   
-    firstname=data['first_name'];
-    lastname=data['last_name'];
-    email=myPrefs.getString('email').toString();                             //data['email'];
-    name='$firstname $lastname';
+  MySharedPreferences myPrefs = MySharedPreferences();
+  await myPrefs.initPrefs();
+  await myPrefs.setString('email',data['email']);
+  //String? email = myPrefs.getString('email');
+ 
+    
+  String firstname=data['first_name'];
+  String lastname=data['last_name'];
+  name='$firstname $lastname';
+  await myPrefs.setString('name',name);
+  email=myPrefs.getString('email').toString(); 
+  name=myPrefs.getString('name').toString();                            //data['email'];
+  print('Name at deatils api global variable :$name');
+  print('Email at deatils api global variable :$email');
     
   } else {
     var res=data['deatil'];
@@ -70,4 +75,5 @@ import 'package:http/http.dart' as http;
     //ScaffoldMessenger.of(context).showSnackBar (SnackBar(content: Text(res)));
     
    }
+ }
  }

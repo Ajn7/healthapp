@@ -133,12 +133,12 @@ class _MeasState extends State<Meas> {
                   height: 400,
                   width: 300,
                   child: ListView(
-                  physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  physics:const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Container(
+                    child:Container(
                       width: MediaQuery.of(context).size.width * 3,
                       child: SfCartesianChart(
                             // Initialize category axis
@@ -253,7 +253,7 @@ SplineSeries<ChartData, String> getDataSp() {
     // '01:57',
     // '01:60'];
 
-    for(i=0;i<tme.length;i++){
+    for(i=0;i<(tme).length;i++){
       spData.add(ChartData(tme[i].toString(),dta[i].toDouble()));
     }
 

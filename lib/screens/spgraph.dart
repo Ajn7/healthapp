@@ -12,7 +12,7 @@ List<dynamic>data=dta;
 List<dynamic>time=tme;
 
 class _SpoGraphscreenState extends State<SpoGraphscreen> {
-  DateTime date=DateTime(2023,3,3);
+  DateTime date=DateTime.now();
   //api call
 
   // late TooltipBehavior _tooltipBehavior;
@@ -34,7 +34,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
     //final TextEditingController _times=TextEditingController();
     final TextEditingController _value=TextEditingController();
     prev=data.last;
-    print(prev);
+    print('Previos reading data : $prev');
     return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),

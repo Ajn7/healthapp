@@ -26,8 +26,15 @@ class _StartupState extends State<Startup> {
   MySharedPreferences myPrefs = MySharedPreferences();
   await myPrefs.initPrefs();
   String? myToken =myPrefs.getString('token');
-  print('Token of statup :$myToken');
+  String? name =myPrefs.getString('name');
+  String? email =myPrefs.getString('email');
+  print('Token of statup(shpf) :$myToken');
+  print('name at statup (shpf) :$name');
+  print('email at statup (shpf):$email');
+  
+  
   myToken==null?Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())):Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHome(token:myToken)));
+  
   }
   Future.delayed(const Duration(seconds: 3), (){
       checkUserLogedin();

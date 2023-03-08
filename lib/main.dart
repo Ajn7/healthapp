@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         routes:{
           "loginscreen":(BuildContext ctx)=>const LoginScreen(),
-          "homescreen":(BuildContext ctx)=>const HomeScreen(),
+          "homescreen":(BuildContext ctx)=>MyHome(),
           "startup":(BuildContext ctx) => const Startup(),
           "edit":(BuildContext ctx) => const EditInfo(),
           "forgott":(BuildContext ctx) => const ForgottScreen(),

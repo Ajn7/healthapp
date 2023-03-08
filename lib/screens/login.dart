@@ -5,7 +5,6 @@ import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/constants/msgline.dart';
 import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/core/navigator.dart';
-import 'package:healthapp/screens/myhome.dart';
 import 'package:http/http.dart' as http;
 import 'package:healthapp/screens/forgott.dart';
 import 'package:healthapp/screens/signup.dart';
@@ -50,13 +49,16 @@ class _LoginScreenState extends State<LoginScreen> {
   MySharedPreferences myPrefs = MySharedPreferences();
   await myPrefs.initPrefs();
   await myPrefs.setString('token', '$logintoken');
+  await myPrefs.setString('email', email);
   await myPrefs.setInt('user_id', id);
   String? myToken = myPrefs.getString('token');
   int? ids = myPrefs.getInt('user_id');
+  var em=myPrefs.getString('email');
   //bool keyExists = myPrefs.containsKey('myKey');
   //bool keyRemoved = await myPrefs.remove('myKey');
-  print("after shared pref token : ${myToken}");
-  print("after shared pref id : ${ids}");
+  print("login  shared pref token : ${myToken}");
+  print("login shared pref id : ${ids}");
+  print("login shared pref email : ${em}");
   navigatorKey?.currentState?.pushReplacementNamed("homescreen");
   //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome()));
     

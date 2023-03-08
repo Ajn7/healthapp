@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/constants/msgline.dart';
+import 'package:healthapp/core/navigator.dart';
 import 'package:healthapp/screens/myhome.dart';
 
 
@@ -9,7 +10,7 @@ class EditInfo extends StatefulWidget{
   const EditInfo({super.key});
 
   @override
-  _EditInfo createState()=>_EditInfo();
+  State<EditInfo> createState()=>_EditInfo();
 }
 
 
@@ -52,50 +53,50 @@ class _EditInfo extends State<EditInfo>{
                 child: const Text('Change Photo')
                 ),
                 
-                  const SizedBox(height: 20,),
-                  Row(
-                    children: [
-                      const Text('Name :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                       SizedBox(
-                        width: 250,
-                         child: TextFormField(
-                         controller:_nameTEC,
-                         keyboardType: TextInputType.name,
-                         decoration: const InputDecoration( 
-                                  border: OutlineInputBorder(),
-                                            ),
-                          validator: (value) {
-                          if (value!.isEmpty ) {
-                          return 'Enter a valid name!';
-                          }
-                          return null;
-                          },
-                        ),
-                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 20,),
-                  Row(
-                    children: [
-                      const Text('Email :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                       SizedBox(
-                        width: 250,
-                         child: TextFormField(
-                         controller:_emailTEC,
-                         keyboardType: TextInputType.emailAddress,
-                         decoration: const InputDecoration( 
-                                  border: OutlineInputBorder(),
-                                            ),
-                          validator: (value) {
-                                       if (value!.isEmpty || !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
-                                        return 'Enter a valid email!';
-                                       }
-                                       return null;
-                                      },
-                                       ),
-                       ),
-                    ],
-                  ),
+                  //const SizedBox(height: 20,),
+                  // Row(
+                  //   children: [
+                  //     const Text('Name :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                  //      SizedBox(
+                  //       width: 250,
+                  //        child: TextFormField(
+                  //        controller:_nameTEC,
+                  //        keyboardType: TextInputType.name,
+                  //        decoration: const InputDecoration( 
+                  //                 border: OutlineInputBorder(),
+                  //                           ),
+                  //         validator: (value) {
+                  //         if (value!.isEmpty ) {
+                  //         return 'Enter a valid name!';
+                  //         }
+                  //         return null;
+                  //         },
+                  //       ),
+                  //      ),
+                  //   ],
+                  // ),
+                  // const SizedBox(height: 20,),
+                  // Row(
+                  //   children: [
+                  //     const Text('Email :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                  //      SizedBox(
+                  //       width: 250,
+                  //        child: TextFormField(
+                  //        controller:_emailTEC,
+                  //        keyboardType: TextInputType.emailAddress,
+                  //        decoration: const InputDecoration( 
+                  //                 border: OutlineInputBorder(),
+                  //                           ),
+                  //         validator: (value) {
+                  //                      if (value!.isEmpty || !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+                  //                       return 'Enter a valid email!';
+                  //                      }
+                  //                      return null;
+                  //                     },
+                  //                      ),
+                  //      ),
+                  //   ],
+                  // ),
                   verticalSpace(20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -126,7 +127,7 @@ class _EditInfo extends State<EditInfo>{
                     Container(
                       width:110,
                       height: 40,
-                      padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.black)
@@ -145,47 +146,47 @@ class _EditInfo extends State<EditInfo>{
                     ],
                   ),
                   verticalSpace(20),
-                  Row(
-                    children: [
-                      const SizedBox(height:20),
-                       const Text('Cholestrol Level:',style: TextStyle(fontWeight: FontWeight.bold),),
-                       SizedBox(
-                        width: 50,
-                        height: 30,
-                        child: TextFormField(  
-                                       keyboardType: TextInputType.number,
-                                       decoration:const InputDecoration( 
-                                       border: OutlineInputBorder(),
-                                            ),
-                                       validator: (value) {
-                                              if (value!.isEmpty ) {
-                                              ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Measure.')));
-                                              }
-                                              return null;
-                                              },
-                                  ),
-                       ),
-                       horizontaSpace(20),
-                   const Text('Sugar Level: ',style: TextStyle(fontWeight: FontWeight.bold),),
-                   SizedBox(
-                    width: 50,
-                    height:30,
-                    child: TextFormField(  
-                                       keyboardType: TextInputType.number,
-                                       decoration: const InputDecoration( 
-                                       border: OutlineInputBorder(),
-                                            ),
-                                        validator: (value) {
-                                              if (value!.isEmpty ) {
-                                              ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Measure.')));
-                                              }
-                                              return null;
-                                              },
-                                  ),
-                   ),
-                    ],
-                  ),
-                   verticalSpace(20),
+                  // Row(
+                  //   children: [
+                  //     const SizedBox(height:20),
+                  //      const Text('Cholestrol Level:',style: TextStyle(fontWeight: FontWeight.bold),),
+                  //      SizedBox(
+                  //       width: 50,
+                  //       height: 30,
+                  //       child: TextFormField(  
+                  //                      keyboardType: TextInputType.number,
+                  //                      decoration:const InputDecoration( 
+                  //                      border: OutlineInputBorder(),
+                  //                           ),
+                  //                      validator: (value) {
+                  //                             if (value!.isEmpty ) {
+                  //                             ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Measure.')));
+                  //                             }
+                  //                             return null;
+                  //                             },
+                  //                 ),
+                  //      ),
+                  //      horizontaSpace(20),
+                  //  const Text('Sugar Level: ',style: TextStyle(fontWeight: FontWeight.bold),),
+                  //  SizedBox(
+                  //   width: 50,
+                  //   height:30,
+                  //   child: TextFormField(  
+                  //                      keyboardType: TextInputType.number,
+                  //                      decoration: const InputDecoration( 
+                  //                      border: OutlineInputBorder(),
+                  //                           ),
+                  //                       validator: (value) {
+                  //                             if (value!.isEmpty ) {
+                  //                             ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Measure.')));
+                  //                             }
+                  //                             return null;
+                  //                             },
+                  //                 ),
+                  //  ),
+                  //   ],
+                  // ),
+                  //  verticalSpace(20),
                   Row(
                     children: [
                      horizontaSpace(10),
@@ -280,13 +281,16 @@ class _EditInfo extends State<EditInfo>{
                       print("Name:"+name);
                       print("Email:"+email);
                       print("phone:"+phone);
+                      print("bloodgroup"+value2.toString());
                       final isValid = _key.currentState!.validate();
                       if (!isValid) {
                            return ;
                        }
                       _key.currentState!.save();
                      // ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Updating...')));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyHome()));
+                      //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const MyHome()));
+                      navigatorKey?.currentState?.pushNamed("homescreen");
+                      
                     },
                      child:const Text(" Submit ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                      ),

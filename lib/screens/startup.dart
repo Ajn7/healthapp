@@ -30,11 +30,14 @@ class _StartupState extends State<Startup> {
   String? myToken =myPrefs.getString('token');
   name =myPrefs.getString('name').toString();
   email =myPrefs.getString('email').toString();
+  id =myPrefs.getInt('user_id');
+  
   //dta=myPrefs.getList('readingList');
   
   print('Token of statup(shpf) :$myToken');
   print('name at statup (shpf) :$name');
   print('email at statup (shpf):$email');
+  print('id at statup (shpf):$id');
   //print('email at statup (shpf):$dta');
   
   

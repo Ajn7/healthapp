@@ -34,8 +34,14 @@ class MySharedPreferences {
 Future<bool> setInt(String key, int value) {
   return _prefs?.setInt(key, value) ?? Future.value(false);
 }
+double? getFloat(String key) {
+  return _prefs?.getDouble(key);
+}
 
- 
+Future<bool> setFloat(String key, double value) {
+  return _prefs?.setDouble(key, value) ?? Future.value(false);
+}
+
 
 //   Future<bool> setList(String key, List<dynamic> value) async {
 //   final prefs = await SharedPreferences.getInstance();

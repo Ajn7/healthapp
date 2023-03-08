@@ -9,17 +9,16 @@ import 'package:healthapp/screens/bpgraph.dart';
 import 'package:healthapp/screens/spgraph.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:healthapp/screens/editinfo.dart';
-import 'package:healthapp/screens/login.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class MyHome extends StatefulWidget {
-
+    const MyHome({super.key});
   //final dynamic token;
   //const MyHome({Key? key,required this.token}) : super(key: key);
   
   
   @override
-  _MyHomeState createState() => _MyHomeState();
+  State<MyHome> createState() => _MyHomeState();
 
   
 }
@@ -42,17 +41,6 @@ class _MyHomeState extends State<MyHome> with API{
     }
   @override
   Widget build(BuildContext context){
-    //print("inside my home $token");
-    //print('Myhomepage email:$email');
-      
-      if(name==''){
-      print('if of MyHome :part');
-      return const HomeScreen();
-   }
-    else
-      {
-      print('Check home :$name');
-      print('Is empty check of home-page--${name.isEmpty}');
       return ( FutureBuilder<dynamic>(
       future: getUserData(),
       initialData: const ['Loading...'],
@@ -74,7 +62,8 @@ class _MyHomeState extends State<MyHome> with API{
         }
       },
     ));
-    }
+    
+      
   }
 }
 
@@ -338,24 +327,24 @@ class _HomeScreenState extends State<HomeScreen> with API {
             backgroundImage: AssetImage('assets/images/profile.png'),
                     ),
             ),
-          const ListTile(
-            leading: Icon(Icons.person_outline),
-            title: Text("Age :"),
+           ListTile(
+            leading:const Icon(Icons.person_outline),
+            title: Text("Age :$age"),
             //onTap: () { },
           ),
-          const ListTile(
-            leading: Icon(Icons.expand),
-            title: Text("Height :"),
+           ListTile(
+            leading:const Icon(Icons.expand),
+            title: Text("Height :$height"),
             //onTap: () { },
           ),
-          const ListTile(
-            leading: Icon(Icons.local_florist),
-            title: Text("weight :"),
+           ListTile(
+            leading:const Icon(Icons.local_florist),
+            title: Text("weight :$weight"),
             //onTap: () { },
           ),
-          const ListTile(
-            leading: Icon(Icons.volunteer_activism),
-            title: Text("Blood Group :"),
+           ListTile(
+            leading:const Icon(Icons.volunteer_activism),
+            title: Text("Blood Group :$bloodgroup"),
             //onTap: () { },
           ),
           // const ListTile(
@@ -363,19 +352,19 @@ class _HomeScreenState extends State<HomeScreen> with API {
           //   title: Text("Gender :"),
           //   //onTap: () { },
           // ),
-          const ListTile(
-            leading: Icon(Icons.insights),
-            title: Text("Cholestrol level :"),
-            //onTap: () { },
-          ),
-          const ListTile(
-            leading: Icon(Icons.query_stats),
-            title: Text("Sugar Level :"),
-            //onTap: () { },
-          ),
-           const ListTile(
-            leading: Icon(Icons.phone),
-            title: Text("Phone :"),
+          // const ListTile(
+          //   leading: Icon(Icons.insights),
+          //   title: Text("Cholestrol level :"),
+          //   //onTap: () { },
+          // ),
+          // const ListTile(
+          //   leading: Icon(Icons.query_stats),
+          //   title: Text("Sugar Level :"),
+          //   //onTap: () { },
+          // ),
+            ListTile(
+            leading:const Icon(Icons.phone),
+            title: Text("Phone :$phone"),
            // onTap: () { },
           ),
           const Divider(
@@ -398,6 +387,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
               await myPrefs.remove('token');
               await myPrefs.remove('name');
               await myPrefs.remove('email');
+              await myPrefs.remove('user_id');
               navigatorKey?.currentState?.pushReplacementNamed("loginscreen");
              },
           ),
@@ -471,6 +461,7 @@ class MenuItems {
        await myPrefs.remove('token');
        await myPrefs.remove('name');
        await myPrefs.remove('email');
+       await myPrefs.remove('user_id');
       navigatorKey?.currentState?.pushReplacementNamed("loginscreen");
       }
     }

@@ -5,6 +5,9 @@ import 'package:http/http.dart' as http;
 
  mixin API {
  Future getReading() async {
+  // MySharedPreferences myPrefs = MySharedPreferences();
+  // await myPrefs.initPrefs();
+  
   final response = await http.get(
 
     Uri.parse('$baseurl/reading/list/'),
@@ -37,6 +40,8 @@ import 'package:http/http.dart' as http;
   MySharedPreferences myPrefs = MySharedPreferences();
   await myPrefs.initPrefs();
   String? myToken = myPrefs.getString('token');
+  // int? id = myPrefs.getInt('user_id');
+  // print('api getUserData:$id');
   final response = await http.get(
     
     Uri.parse('$baseurl/accounts/details/'),

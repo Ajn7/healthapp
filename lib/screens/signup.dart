@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/sharedpref.dart';
+import 'package:healthapp/core/navigator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/constants/msgline.dart';
 //import 'package:healthapp/main.dart';
-import 'package:healthapp/screens/login.dart';
-import 'package:healthapp/screens/myhome.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -69,7 +68,7 @@ class _SignupScreen extends State<SignupScreen>{
     await myPrefs.initPrefs();
     await myPrefs.setString('token', '$token');
     String? myToken = myPrefs.getString('token');
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:'$myToken')));
+    navigatorKey?.currentState?.pushReplacementNamed("homescreen");
     
   } else {
     var res=data["response"];
@@ -227,7 +226,7 @@ class _SignupScreen extends State<SignupScreen>{
                   
                   children: [
                     TextButton(onPressed:(){
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+                      navigatorKey?.currentState?.pushReplacementNamed("loginscreen");
                     }, child: const Text("Login",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,)),
                     ),
                     ElevatedButton(onPressed:(){
@@ -246,7 +245,7 @@ class _SignupScreen extends State<SignupScreen>{
                       signup(name:name,email:email,last_name:last,password1:password1,password2:password2,context:context);
         
                       if(_password1TEC==_password2TEC){
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:password1)));
+                          navigatorKey?.currentState?.pushReplacementNamed("homescreen");
                       }
                     },
                      child: const Text(" Create ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),

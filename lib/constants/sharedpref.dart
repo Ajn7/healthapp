@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,6 +26,16 @@ class MySharedPreferences {
   Future<bool> setString(String key, String value) {
     return _prefs?.setString(key, value) ?? Future.value(false);
   }
+
+  int? getInt(String key) {
+  return _prefs?.getInt(key);
+}
+
+Future<bool> setInt(String key, int value) {
+  return _prefs?.setInt(key, value) ?? Future.value(false);
+}
+
+ 
 
 //   Future<bool> setList(String key, List<dynamic> value) async {
 //   final prefs = await SharedPreferences.getInstance();

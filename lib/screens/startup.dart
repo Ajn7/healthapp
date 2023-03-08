@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/sharedpref.dart';
+import 'package:healthapp/core/navigator.dart';
 //import 'package:healthapp/main.dart';
 import 'package:healthapp/screens/login.dart';
 import 'package:healthapp/screens/myhome.dart';
@@ -37,8 +38,8 @@ class _StartupState extends State<Startup> {
   //print('email at statup (shpf):$dta');
   
   
-  myToken==null?Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())):Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHome(token:myToken)));
-  
+  //myToken==null?Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen())):Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHome(token:myToken)));
+  myToken==null?navigatorKey?.currentState?.pushReplacementNamed("loginscreen"):navigatorKey?.currentState?.pushReplacementNamed("homescreen");
   }
   Future.delayed(const Duration(seconds: 3), (){
       checkUserLogedin();

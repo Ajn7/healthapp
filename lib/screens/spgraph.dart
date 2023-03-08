@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
+
 class SpoGraphscreen extends StatefulWidget {
    const SpoGraphscreen({super.key});
   @override
@@ -17,18 +19,12 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
 
   // late TooltipBehavior _tooltipBehavior;
 
-    // @override
-    // void initState(){
-    //     //getReading();
-    //   // _tooltipBehavior =  TooltipBehavior(
-    //   //   header: "",
-    //   //   enable: true,
-    //   //   format: 'point.x : point.y%',
-    //   //   canShowMarker: false,
-    //   // );
-    //   super.initState(); 
-    // }
-
+    @override
+    void initState(){
+      
+      super.initState(); 
+    }
+  
   @override
   Widget build(BuildContext bcontext) {
     //final TextEditingController _times=TextEditingController();
@@ -250,31 +246,36 @@ class _GScreenState extends State<GScreen>
     
   }
 }
+// Future<SplineSeries<ChartData, String>> getData() async {
+//   var connectivityResult = await Connectivity().checkConnectivity();
+//   if (connectivityResult == ConnectivityResult.none) {
+//     throw Exception('No internet connection');
+//   }
+
+//   List<ChartData> spData=[];
+
+//   int i;
+//   for(i=0;i<time.length;i++){
+//     spData.add(ChartData(time[i].toString(),data[i].toDouble()));
+//   }
+
+//   return SplineSeries<ChartData, String>(
+//     dataSource:spData,
+//     xValueMapper: (ChartData data, _) => data.x,
+//     yValueMapper: (ChartData data, _) => data.y,
+//     dataLabelSettings:const DataLabelSettings(isVisible : true)
+//   );
+// }
+
 SplineSeries<ChartData, String> getData() { //SplineSeries
 
   List<ChartData> spData=[];
 
     int i;
-    //List<String>mnth=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
-    // List<double>dt=[80,90,92,95,92,85,91,94,93,87,88,50];
-    // List<String>dte=[
-    // '01:00', 
-    // '01:15', 
-    // '01:20', 
-    // '01:25',
-    // '01:30',
-    // '01:35',
-    // '01:40',
-    // '01:45',
-    // '01:50',
-    // '01:55',
-    // '01:57',
-    // '01:60'];
-
     for(i=0;i<time.length;i++){
       spData.add(ChartData(time[i].toString(),data[i].toDouble()));
     }
-
+    
   return SplineSeries<ChartData, String>(
     
     // Create a new LineSeries object
@@ -284,7 +285,9 @@ SplineSeries<ChartData, String> getData() { //SplineSeries
     dataLabelSettings:const DataLabelSettings(isVisible : true)
 
   );
-
+  
+    
+ 
 }
 
 class ChartData {

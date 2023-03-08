@@ -4,6 +4,7 @@ import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/constants/msgline.dart';
 import 'package:healthapp/constants/sharedpref.dart';
+import 'package:healthapp/core/navigator.dart';
 import 'package:healthapp/screens/myhome.dart';
 import 'package:http/http.dart' as http;
 import 'package:healthapp/screens/forgott.dart';
@@ -40,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // Login successful
      var logintoken = data["token"];
      email = data["email"];
+     var id=data["id"];
      print('token of login: $logintoken');
 
     //  SharedPreferences pref =await SharedPreferences.getInstance();
@@ -48,11 +50,15 @@ class _LoginScreenState extends State<LoginScreen> {
   MySharedPreferences myPrefs = MySharedPreferences();
   await myPrefs.initPrefs();
   await myPrefs.setString('token', '$logintoken');
+  await myPrefs.setInt('user_id', id);
   String? myToken = myPrefs.getString('token');
+  int? ids = myPrefs.getInt('user_id');
   //bool keyExists = myPrefs.containsKey('myKey');
   //bool keyRemoved = await myPrefs.remove('myKey');
   print("after shared pref token : ${myToken}");
-  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome(token:logintoken)));
+  print("after shared pref id : ${ids}");
+  navigatorKey?.currentState?.pushReplacementNamed("homescreen");
+  //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHome()));
     
   } else {
     var res=data["response"];

@@ -4,6 +4,7 @@ import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/constants/sharedpref.dart';
+import 'package:healthapp/core/navigator.dart';
 import 'package:healthapp/screens/bpgraph.dart';
 import 'package:healthapp/screens/spgraph.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
@@ -13,8 +14,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class MyHome extends StatefulWidget {
 
-  final dynamic token;
-  const MyHome({Key? key,required this.token}) : super(key: key);
+  //final dynamic token;
+  //const MyHome({Key? key,required this.token}) : super(key: key);
   
   
   @override
@@ -329,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
               icon: const Icon(Icons.edit),
               color:Colors.white,
               onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const EditInfo()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EditInfo()));
                },
               ),
             ],
@@ -357,11 +358,11 @@ class _HomeScreenState extends State<HomeScreen> with API {
             title: Text("Blood Group :"),
             //onTap: () { },
           ),
-          const ListTile(
-            leading: Icon(Icons.emoji_emotions),
-            title: Text("Gender :"),
-            //onTap: () { },
-          ),
+          // const ListTile(
+          //   leading: Icon(Icons.emoji_emotions),
+          //   title: Text("Gender :"),
+          //   //onTap: () { },
+          // ),
           const ListTile(
             leading: Icon(Icons.insights),
             title: Text("Cholestrol level :"),
@@ -397,7 +398,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
               await myPrefs.remove('token');
               await myPrefs.remove('name');
               await myPrefs.remove('email');
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const LoginScreen()));
+              navigatorKey?.currentState?.pushReplacementNamed("loginscreen");
              },
           ),
           ],
@@ -470,7 +471,7 @@ class MenuItems {
        await myPrefs.remove('token');
        await myPrefs.remove('name');
        await myPrefs.remove('email');
-       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const LoginScreen()));
+      navigatorKey?.currentState?.pushReplacementNamed("loginscreen");
       }
     }
   }

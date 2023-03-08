@@ -16,7 +16,7 @@ class EditInfo extends StatefulWidget{
 
 class _EditInfo extends State<EditInfo>{
   final GlobalKey<FormState> _key = GlobalKey();
-  final items=['M','F','NIL'];
+  //final items=['M','F','NIL'];
   final bloodgroup=['A+ve','A-ve','B+ve','B-ve','O+ve','O-ve'];
 
   String?value1;
@@ -100,28 +100,28 @@ class _EditInfo extends State<EditInfo>{
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [ 
-                      const Text('Gender:',style: TextStyle(fontWeight: FontWeight.bold),),
-                      Container(
-                      width:100,
-                      height: 40,
-                      padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.black)
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          //hint: Text("Gender"),
-                          value:value1,
-                          iconSize: 36,
-                          isExpanded:true,
-                          icon:const Icon(Icons.arrow_drop_down,color: Colors.black,),
-                          items: items.map(buildMenuItem).toList(),
-                           onChanged: (value1)=>setState(() => this.value1=value1),
-                          ),
-                      ),
-                    ),
-                    horizontaSpace(10),
+                    //   const Text('Gender:',style: TextStyle(fontWeight: FontWeight.bold),),
+                    //   Container(
+                    //   width:100,
+                    //   height: 40,
+                    //   padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 4),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(12),
+                    //     border: Border.all(color: Colors.black)
+                    //   ),
+                    //   child: DropdownButtonHideUnderline(
+                    //     child: DropdownButton<String>(
+                    //       //hint: Text("Gender"),
+                    //       value:value1,
+                    //       iconSize: 36,
+                    //       isExpanded:true,
+                    //       icon:const Icon(Icons.arrow_drop_down,color: Colors.black,),
+                    //       items: items.map(buildMenuItem).toList(),
+                    //        onChanged: (value1)=>setState(() => this.value1=value1),
+                    //       ),
+                    //   ),
+                    // ),
+                    // horizontaSpace(10),
                     const Text('Blood Group:',style: TextStyle(fontWeight: FontWeight.bold),),
                     Container(
                       width:110,
@@ -286,7 +286,7 @@ class _EditInfo extends State<EditInfo>{
                        }
                       _key.currentState!.save();
                      // ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Updating...')));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyHome(token:phone)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyHome()));
                     },
                      child:const Text(" Submit ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                      ),
@@ -302,13 +302,16 @@ class _EditInfo extends State<EditInfo>{
   }
 }
 
-DropdownMenuItem<String>buildMenuItem(String item) => DropdownMenuItem(
-  value:item,
-  child:Text(
-    item,
-    style:const TextStyle(fontSize: 20,fontWeight:FontWeight.bold)
-  )
-);
+// //gender
+// DropdownMenuItem<String>buildMenuItem(String item) => DropdownMenuItem(
+//   value:item,
+//   child:Text(
+//     item,
+//     style:const TextStyle(fontSize: 20,fontWeight:FontWeight.bold)
+//   )
+// );
+
+
 DropdownMenuItem<String>buildMenuItem2(String item) => DropdownMenuItem(
   value:item,
   child:Text(

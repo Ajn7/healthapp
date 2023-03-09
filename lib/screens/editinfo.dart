@@ -22,8 +22,8 @@ class _EditInfo extends State<EditInfo> with API{
   String?value1;
   String?value2=bloodgroup;
 
-  final TextEditingController _nameTEC=TextEditingController();
-  final TextEditingController _emailTEC=TextEditingController();
+  //final TextEditingController _nameTEC=TextEditingController();
+  //final TextEditingController _emailTEC=TextEditingController();
   final TextEditingController _phoneTEC=TextEditingController();
   final TextEditingController _weightTEC=TextEditingController();
   final TextEditingController _heightTEC=TextEditingController();
@@ -131,7 +131,7 @@ class _EditInfo extends State<EditInfo> with API{
                     const Text('Blood Group:',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
                     horizontaSpace(20),
                     Container(
-                      width:100,
+                      width:150,
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal:4,vertical: 4),
                       decoration: BoxDecoration(
@@ -153,7 +153,7 @@ class _EditInfo extends State<EditInfo> with API{
                     ),
                     ],
                   ),
-                  verticalSpace(20),
+                  verticalSpace(10),
                   // Row(
                   //   children: [
                   //     const SizedBox(height:20),
@@ -326,10 +326,10 @@ class _EditInfo extends State<EditInfo> with API{
                       var wght;
                       var hgt;
                       var ag;
-                     
+                     var phn;
                       //var name=_nameTEC.text;
                       //var email=_emailTEC.text;
-                      var phn;
+                      
                       if(_weightTEC.text.isEmpty){
                       wght=weight;
                     

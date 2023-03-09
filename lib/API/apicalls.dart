@@ -144,7 +144,7 @@ import 'package:http/http.dart' as http;
  }
 
  Future editUserData(
- {required String age,
+ {required int age,
  required String bg,
  required String phone,
  required double height,

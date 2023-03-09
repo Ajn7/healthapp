@@ -17,10 +17,10 @@ class EditInfo extends StatefulWidget{
 class _EditInfo extends State<EditInfo> with API{
   final GlobalKey<FormState> _key = GlobalKey();
   //final items=['M','F','NIL'];
-  final bloodgroup=['A+ve','A-ve','B+ve','B-ve','O+ve','O-ve'];
+  final bloodgroups=['A+ve','A-ve','B+ve','B-ve','O+ve','O-ve'];
 
   String?value1;
-  String?value2;
+  String?value2=bloodgroup;
 
   final TextEditingController _nameTEC=TextEditingController();
   final TextEditingController _emailTEC=TextEditingController();
@@ -145,7 +145,7 @@ class _EditInfo extends State<EditInfo> with API{
                           iconSize: 36,
                           isExpanded:true,
                           icon:const Icon(Icons.arrow_drop_down,color: Colors.black,),
-                          items: bloodgroup.map(buildMenuItem2).toList(),
+                          items: bloodgroups.map(buildMenuItem2).toList(),
                            onChanged: (value2)=>setState(() => this.value2=value2),
 
                           ),
@@ -213,15 +213,16 @@ class _EditInfo extends State<EditInfo> with API{
                                            keyboardType: TextInputType.number,
                                            controller: _ageTEC,
                                            decoration:  InputDecoration( 
-                                           helperText:'Previous Value: $age',
+                                           hintText:'$age',
+                                           helperText:'if no change let it blank',
                                            //border:const OutlineInputBorder(),
                                                  ),
-                                           validator: (value) {
-                                                  if (value!.isEmpty ) {
-                                                  ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Age')));
-                                                  }
-                                                  return null;
-                                                  },
+                                          //  validator: (value) {
+                                          //         if (value!.isEmpty ) {
+                                          //         ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Age')));
+                                          //         }
+                                          //         return null;
+                                          //         },
                                       ),
                    ),
                         ],
@@ -239,15 +240,16 @@ class _EditInfo extends State<EditInfo> with API{
                                            keyboardType: TextInputType.number,
                                            controller: _heightTEC,
                                            decoration:  InputDecoration( 
-                                           helperText:'Previous Value: $height',
+                                           hintText:'$height',
+                                           helperText:'if no change let it blank',
                                            //border:const OutlineInputBorder(),
                                                 ),
-                                                validator: (value) {
-                                                  if (value!.isEmpty ) {
-                                                  ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Height')));
-                                                  }
-                                                  return null;
-                                                  },
+                                                // validator: (value) {
+                                                //   if (value!.isEmpty ) {
+                                                //   ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Height')));
+                                                //   }
+                                                //   return null;
+                                                //   },
                                       ),
                    ),
                         ],
@@ -266,15 +268,16 @@ class _EditInfo extends State<EditInfo> with API{
                                            keyboardType: TextInputType.number,
                                            controller:_weightTEC,
                                            decoration:  InputDecoration(
-                                           helperText:'Previous Value: $weight', 
+                                           hintText: '$weight',
+                                           helperText:'if no change let it blank', 
                                            //border:const OutlineInputBorder(),
                                                 ),
-                                                validator: (value) {
-                                                  if (value!.isEmpty ) {
-                                                  ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Weight')));
-                                                  }
-                                                  return null;
-                                                  },
+                                                // validator: (value) {
+                                                //   if (value!.isEmpty ) {
+                                                //   ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Weight')));
+                                                //   }
+                                                //   return null;
+                                                //   },
                                       ),
                    ),
                             ],
@@ -301,16 +304,16 @@ class _EditInfo extends State<EditInfo> with API{
                          controller:_phoneTEC,
                          keyboardType: TextInputType.phone,
                          decoration:InputDecoration( 
-                                  //hintText:'$phone',
-                                  helperText:'Previous Value: $phone',
+                                  hintText:'$phone',
+                                  helperText:'if no change let it blank',
                                   //border: const OutlineInputBorder(),
                                             ),
-                         validator: (value) {
-                                              if (value!.isEmpty ) {
-                                              return 'Enter a valid Phone number!';
-                                              }
-                                              return null;
-                                              },
+                        //  validator: (value) {
+                        //                       if (value!.isEmpty ) {
+                        //                       return 'Enter a valid Phone number!';
+                        //                       }
+                        //                       return null;
+                        //                       },
                                        ),
                                        
                        ),
@@ -320,30 +323,66 @@ class _EditInfo extends State<EditInfo> with API{
                   SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child:ElevatedButton(onPressed:(){
-                      
+                      var wght;
+                      var hgt;
+                      var ag;
+                     
                       //var name=_nameTEC.text;
                       //var email=_emailTEC.text;
-                      var phone=_phoneTEC.text;
-                      var weight=double.parse(_weightTEC.text);
-                      var height=double.parse(_heightTEC.text);
-                      var age=_ageTEC.text;
-                      var bg=value2.toString();
-
-                      print("Weight: $weight");
-                      print("Height: $height");
-                      print("phone:"+phone);
-                      print("bloodgroup"+value2.toString());
-                      final isValid = _key.currentState!.validate();
-                      if (!isValid) {
-                           return ;
-                       }
-                      _key.currentState!.save();
+                      var phn;
+                      if(_weightTEC.text.isEmpty){
+                      wght=weight;
+                    
+                      }else{
+                        //print('Exception');
+                        //print(_weightTEC.text);
+                        wght=double.parse(_weightTEC.text);
+                      }
+                      if(_heightTEC.text.isEmpty){
+                      hgt=height;
+                    
+                      }else{
+                        //print('Exception');
+                        //print(_heightTEC.text);
+                        hgt=double.parse(_heightTEC.text);
+                      }
+                      if(_phoneTEC.text.isEmpty){
+                      phn=phone;
+                    
+                      }else{
+                        //print('Exception');
+                        //print(_heightTEC.text);
+                        phn=_phoneTEC.text;
+                      }
+                      if(_ageTEC.text.isEmpty){
+                      ag=age;
+                    
+                      }else{
+                        //print('Exception');
+                        //print(_heightTEC.text);
+                        ag=int.parse(_ageTEC.text);
+                      }
                       
-                      editUserData(age:age,bg:bg,phone:phone,height:height,weight:weight);
+                      var bg=value2.toString();
+                      
+                       
+
+                      print("Weight: $wght");
+                      print("Height: $hgt");
+                      print("phone:"+phn);
+                      print("age: $age");
+                      print("bloodgroups "+bg);
+                      final isValid = _key.currentState!.validate();
+                      // if (!isValid) {
+                      //      return ;
+                      //  }
+                     //_key.currentState!.save();
+                     // else{
+                      editUserData(age:ag,bg:bg,phone:phn,height:hgt,weight:wght);
                        Future.delayed(const Duration(seconds: 2), (){
                        navigatorKey?.currentState?.pushNamed("homescreen");
                       });
-                       
+                     //}
                       
                                
                     },

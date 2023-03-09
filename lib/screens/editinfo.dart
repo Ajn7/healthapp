@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/constants/msgline.dart';
 import 'package:healthapp/core/navigator.dart';
-import 'package:healthapp/screens/myhome.dart';
-
-
+import 'package:healthapp/API/apicalls.dart';
 
 class EditInfo extends StatefulWidget{
   const EditInfo({super.key});
@@ -15,7 +14,7 @@ class EditInfo extends StatefulWidget{
 
 
 
-class _EditInfo extends State<EditInfo>{
+class _EditInfo extends State<EditInfo> with API{
   final GlobalKey<FormState> _key = GlobalKey();
   //final items=['M','F','NIL'];
   final bloodgroup=['A+ve','A-ve','B+ve','B-ve','O+ve','O-ve'];
@@ -26,8 +25,13 @@ class _EditInfo extends State<EditInfo>{
   final TextEditingController _nameTEC=TextEditingController();
   final TextEditingController _emailTEC=TextEditingController();
   final TextEditingController _phoneTEC=TextEditingController();
+  final TextEditingController _weightTEC=TextEditingController();
+  final TextEditingController _heightTEC=TextEditingController();
+  final TextEditingController _ageTEC=TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       //appBar: AppBar(title:Text("Login Screen")),
       backgroundColor:Colors.white,
@@ -98,8 +102,9 @@ class _EditInfo extends State<EditInfo>{
                   //   ],
                   // ),
                   verticalSpace(20),
+                  
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [ 
                     //   const Text('Gender:',style: TextStyle(fontWeight: FontWeight.bold),),
                     //   Container(
@@ -122,13 +127,15 @@ class _EditInfo extends State<EditInfo>{
                     //       ),
                     //   ),
                     // ),
-                    // horizontaSpace(10),
-                    const Text('Blood Group:',style: TextStyle(fontWeight: FontWeight.bold),),
+                    horizontaSpace(10),
+                    const Text('Blood Group:',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                    horizontaSpace(20),
                     Container(
-                      width:110,
-                      height: 40,
-                      padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 4),
+                      width:100,
+                      height: 50,
+                      padding: const EdgeInsets.symmetric(horizontal:4,vertical: 4),
                       decoration: BoxDecoration(
+                        
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.black)
                       ),
@@ -140,6 +147,7 @@ class _EditInfo extends State<EditInfo>{
                           icon:const Icon(Icons.arrow_drop_down,color: Colors.black,),
                           items: bloodgroup.map(buildMenuItem2).toList(),
                            onChanged: (value2)=>setState(() => this.value2=value2),
+
                           ),
                       ),
                     ),
@@ -187,76 +195,115 @@ class _EditInfo extends State<EditInfo>{
                   //   ],
                   // ),
                   //  verticalSpace(20),
-                  Row(
-                    children: [
-                     horizontaSpace(10),
-                      const Text("Age :",style: TextStyle(fontWeight: FontWeight.bold),),
-                                  SizedBox(
-                    width: 50,
-                    height:30,
+                     verticalSpace(20),
+                      Row(
+
+                        children: [
+                           horizontaSpace(10),
+                           const Text("Age :",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
+        
+                          ),
+                          
+                    Container(
+  
+                    padding:const EdgeInsets.only(top:0),
+                    width: 200,
+                    height:50,
                     child: TextFormField(  
-                                       keyboardType: TextInputType.number,
-                                       decoration: const InputDecoration( 
-                                       border: OutlineInputBorder(),
-                                            ),
-                                       validator: (value) {
-                                              if (value!.isEmpty ) {
-                                              ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Age')));
-                                              }
-                                              return null;
-                                              },
-                                  ),
+                                           keyboardType: TextInputType.number,
+                                           controller: _ageTEC,
+                                           decoration:  InputDecoration( 
+                                           helperText:'Previous Value: $age',
+                                           //border:const OutlineInputBorder(),
+                                                 ),
+                                           validator: (value) {
+                                                  if (value!.isEmpty ) {
+                                                  ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Age')));
+                                                  }
+                                                  return null;
+                                                  },
+                                      ),
                    ),
-                      horizontaSpace(10),
-                      const Text("Height :",style: TextStyle(fontWeight: FontWeight.bold),),
-                                SizedBox(
-                                  width: 70,
-                                  height:30,
-                                  child: TextFormField(  
-                                       keyboardType: TextInputType.number,
-                                       decoration:const  InputDecoration( 
-                                       border:OutlineInputBorder(),
-                                            ),
-                                            validator: (value) {
-                                              if (value!.isEmpty ) {
-                                              ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Height')));
-                                              }
-                                              return null;
-                                              },
-                                  ),
+                        ],
+                      ),
+                  
+                      verticalSpace(20),
+                      Row(
+                        children: [
+                          horizontaSpace(10),
+                          const Text("Height :",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                                    SizedBox(
+                                      width: 200,
+                                      height:50,
+                                      child: TextFormField(  
+                                           keyboardType: TextInputType.number,
+                                           controller: _heightTEC,
+                                           decoration:  InputDecoration( 
+                                           helperText:'Previous Value: $height',
+                                           //border:const OutlineInputBorder(),
+                                                ),
+                                                validator: (value) {
+                                                  if (value!.isEmpty ) {
+                                                  ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Height')));
+                                                  }
+                                                  return null;
+                                                  },
+                                      ),
                    ),
-                      horizontaSpace(10),
-                      const Text("Weight :",style: TextStyle(fontWeight: FontWeight.bold),),
-                                  SizedBox(
-                                  width: 60,
-                                  height:30,
-                                  child: TextFormField(  
-                                       keyboardType: TextInputType.number,
-                                       decoration: const InputDecoration( 
-                                       border: OutlineInputBorder(),
-                                            ),
-                                            validator: (value) {
-                                              if (value!.isEmpty ) {
-                                              ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Weight')));
-                                              }
-                                              return null;
-                                              },
-                                  ),
+                        ],
+                      ),
+                      verticalSpace(20),
+                      
+                          Row(
+                            children: [
+                              horizontaSpace(10),
+                              const Text("Weight :",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                       
+                                      SizedBox(
+                                      width: 200,
+                                      height:50,
+                                      child: TextFormField(  
+                                           keyboardType: TextInputType.number,
+                                           controller:_weightTEC,
+                                           decoration:  InputDecoration(
+                                           helperText:'Previous Value: $weight', 
+                                           //border:const OutlineInputBorder(),
+                                                ),
+                                                validator: (value) {
+                                                  if (value!.isEmpty ) {
+                                                  ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Invalid Weight')));
+                                                  }
+                                                  return null;
+                                                  },
+                                      ),
                    ),
-                    ],
-                  ),
+                            ],
+                          ),
+                  
                   verticalSpace(20),
                   Row(
                     children: [
+                      horizontaSpace(10),
                       const Text('Phone Number :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                       SizedBox(
-                         width:200,
-                         height: 50,
+                       Container(
+                        width:150,
+                        height: 60,
+                        //padding: EdgeInsets.only(top:25),
+                         decoration: BoxDecoration(
+                          
+                          borderRadius: BorderRadius.circular(12),
+                          
+                          //border: Border.all(color: Colors.black)
+                          
+                            ),                   
                          child: TextFormField(
+                         
                          controller:_phoneTEC,
                          keyboardType: TextInputType.phone,
-                         decoration:const InputDecoration( 
-                                  border: OutlineInputBorder(),
+                         decoration:InputDecoration( 
+                                  //hintText:'$phone',
+                                  helperText:'Previous Value: $phone',
+                                  //border: const OutlineInputBorder(),
                                             ),
                          validator: (value) {
                                               if (value!.isEmpty ) {
@@ -274,12 +321,16 @@ class _EditInfo extends State<EditInfo>{
                       width: MediaQuery.of(context).size.width,
                       child:ElevatedButton(onPressed:(){
                       
-                      var name=_nameTEC.text;
-                      var email=_emailTEC.text;
+                      //var name=_nameTEC.text;
+                      //var email=_emailTEC.text;
                       var phone=_phoneTEC.text;
-                      
-                      print("Name:"+name);
-                      print("Email:"+email);
+                      var weight=double.parse(_weightTEC.text);
+                      var height=double.parse(_heightTEC.text);
+                      var age=_ageTEC.text;
+                      var bg=value2.toString();
+
+                      print("Weight: $weight");
+                      print("Height: $height");
                       print("phone:"+phone);
                       print("bloodgroup"+value2.toString());
                       final isValid = _key.currentState!.validate();
@@ -287,10 +338,14 @@ class _EditInfo extends State<EditInfo>{
                            return ;
                        }
                       _key.currentState!.save();
-                     // ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Updating...')));
-                      //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const MyHome()));
-                      navigatorKey?.currentState?.pushNamed("homescreen");
                       
+                      editUserData(age:age,bg:bg,phone:phone,height:height,weight:weight);
+                       Future.delayed(const Duration(seconds: 2), (){
+                       navigatorKey?.currentState?.pushNamed("homescreen");
+                      });
+                       
+                      
+                               
                     },
                      child:const Text(" Submit ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                      ),

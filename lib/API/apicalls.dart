@@ -111,7 +111,7 @@ import 'package:http/http.dart' as http;
   height=myPrefs.getFloat('height');  
   weight=myPrefs.getFloat('weight');  
   bloodgroup=myPrefs.getString('bloodgroup').toString();   
-  phone=myPrefs.getString('phone');           //data['email'];
+  phone=myPrefs.getString('phone').toString();          //data['email'];
   print('Name at deatils api global variable :$name');
   print('Email at deatils api global variable :$email');
   print('age at deatils api global variable :$age');
@@ -143,34 +143,45 @@ import 'package:http/http.dart' as http;
    }
  }
 
- Future editData(String age,String bg,String phone,Float height,Float weight) async {
+ Future editUserData(
+ {required String age,
+ required String bg,
+ required String phone,
+ required double height,
+ required double weight}
+ ) async {
+  MySharedPreferences myPrefs = MySharedPreferences();
+  await myPrefs.initPrefs();
+  String? myToken = myPrefs.getString('token');
   final response = await http.put(
 
-    Uri.parse('$baseurl/healthrecorda/$email/'),
+    Uri.parse('$baseurl/healthrecords/$email/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization':'Token $myToken'
     },
-    // body: jsonEncode(
-    // <String, dynamic>{
-    // 'email': email,
-    // 'age': age,
-    // 'height': height,
-    // 'weight': weight,
-    // 'bloodgroup': bg,
-    // 'phone': phone,
-    // 'user': id,
-    // }),
+    body: jsonEncode(
+    <String, dynamic>{
+    'email': email,
+    'age': age,
+    'height': height,
+    'weight': weight,
+    'bloodgroup': bg,
+    'phone': phone,
+    'user': id,
+    }),
     
   );
 
+  print('Edit info api response body');
+  print(response.body);
   //decode
   Map<String, dynamic> data = jsonDecode(response.body);
   
    
   if (response.statusCode == 200) {
 
-    tme=data['time'];
-    dta=data['reading'];
+    
     print('SP02 Data(init call from myHome) :$dta');
 
   } else {

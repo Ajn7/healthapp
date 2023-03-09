@@ -28,6 +28,7 @@ class _MyHomeState extends State<MyHome> with API{
     void initState(){
     super.initState();
     getData();
+    
 
     }
     getData()async{

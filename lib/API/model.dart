@@ -15,7 +15,7 @@ int?age;
 double?height;
 double?weight;
 String bloodgroup='';
-String?phone;
+String phone='';
 
 
 

@@ -372,7 +372,7 @@ class _EditInfo extends State<EditInfo> with API{
                       print("phone:"+phn);
                       print("age: $age");
                       print("bloodgroups "+bg);
-                      final isValid = _key.currentState!.validate();
+                      //final isValid = _key.currentState!.validate();
                       // if (!isValid) {
                       //      return ;
                       //  }

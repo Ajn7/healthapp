@@ -379,10 +379,13 @@ class _EditInfo extends State<EditInfo> with API{
                      //_key.currentState!.save();
                      // else{
                       editUserData(age:ag,bg:bg,phone:phn,height:hgt,weight:wght);
-                       Future.delayed(const Duration(seconds: 2), (){
-                       navigatorKey?.currentState?.pushNamed("homescreen");
+                      Future.delayed(const Duration(seconds: 1), ()
+                     {
+                      //ScaffoldMessenger.of(context).showSnackBar ( const SnackBar(content: Text('Updating... ')));
+                      navigatorKey?.currentState?.pushReplacementNamed("homescreen");
+                      //Navigator.popUntil(context, (route) => route.isFirst);
                       });
-                     //}
+                  
                       
                                
                     },

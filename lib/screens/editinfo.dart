@@ -6,6 +6,7 @@ import 'package:healthapp/core/navigator.dart';
 import 'package:healthapp/API/apicalls.dart';
 
 class EditInfo extends StatefulWidget{
+  
   const EditInfo({super.key});
 
   @override
@@ -326,7 +327,7 @@ class _EditInfo extends State<EditInfo> with API{
                       var wght;
                       var hgt;
                       var ag;
-                     var phn;
+                      var phn;
                       //var name=_nameTEC.text;
                       //var email=_emailTEC.text;
                       

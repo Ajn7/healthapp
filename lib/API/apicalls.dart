@@ -1,18 +1,18 @@
- import 'dart:convert';
-import 'dart:ffi';
+import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/sharedpref.dart';
-import 'package:healthapp/core/navigator.dart';
 import 'package:http/http.dart' as http;
 
  mixin API {
- Future getReading() async {
+ Future getReading({required String date,required int vitalid}) async {
   // MySharedPreferences myPrefs = MySharedPreferences();
   // await myPrefs.initPrefs();
-  
+  String today=date.substring(0,10);
+  //print('From getReading: $date ,,, $today');
   final response = await http.get(
 
-    Uri.parse('$baseurl/reading/list/'),
+    Uri.parse('$baseurl/vitalrecords/readings/date/list/?user=$id&date=$today&vitalid=$vitalid'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -20,13 +20,16 @@ import 'package:http/http.dart' as http;
   );
 
   //decode
-  Map<String, dynamic> data = jsonDecode(response.body);
+print('List of reading');
+List<dynamic> data = jsonDecode(response.body);
   
    
   if (response.statusCode == 200) {
-
-    tme=data['time'];
-    dta=data['reading'];
+     for (dynamic d in data) {
+      dta.add(d['reading']);
+      tme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZ").parse(d['created_at']));
+      }
+    prev=dta.last;
     print('SP02 Data(init call from myHome) :$dta');
 
   } else {
@@ -191,4 +194,35 @@ import 'package:http/http.dart' as http;
     
    }
  }
+
+ Future addReading({required int reading,required int vitalid}) async {
+  final response = await http.post(
+  
+    Uri.parse('$baseurl/vitalrecords/reading/add/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String,dynamic>{
+      'reading':reading,
+      'vital':vitalid,
+      'user':id,
+    }),
+  );
+
+  //decode
+  Map<String, dynamic> data = jsonDecode(response.body);
+   
+  if (response.statusCode == 200) {
+
+    // Login successful
+     var logintoken = data["token"];
+     email = data["email"];
+     var id=data["id"];
+     print('token of login: $logintoken');
+  }
+   
+ 
+}
  }
+
+ 

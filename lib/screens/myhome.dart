@@ -28,6 +28,7 @@ class _MyHomeState extends State<MyHome> with API{
     void initState(){
     super.initState();
     getData();
+    getReading(date: DateTime.now().toString(), vitalid: 1);
     
 
     }
@@ -81,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
     @override
     void initState(){
     super.initState(); 
-    getReading();
+    
     _tooltipBehavior =  TooltipBehavior(enable: true);
      
     }
@@ -192,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
                 fontSize: 20.0,
               ),
               ),
-             subtitle: const Text('100',style: TextStyle(
+             subtitle:  Text('$prev',style:const TextStyle(
                 fontSize: 20.0,
               ),
               ),

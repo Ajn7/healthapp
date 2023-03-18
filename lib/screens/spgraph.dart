@@ -3,15 +3,17 @@ import 'package:healthapp/API/model.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-
+String notification=' Your SpO2 level is ${dta.last}';
+ int len=dta.length;
+ 
 class SpoGraphscreen extends StatefulWidget {
    const SpoGraphscreen({super.key});
   @override
   State<SpoGraphscreen> createState() => _SpoGraphscreenState();
 }
 
-List<dynamic>data=dta;
-List<dynamic>time=tme;
+//List<dynamic>data=dta;
+//List<dynamic>time=tme;
 
 class _SpoGraphscreenState extends State<SpoGraphscreen> {
   DateTime date=DateTime.now();
@@ -21,16 +23,14 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
 
     @override
     void initState(){
-      
       super.initState(); 
     }
   
   @override
   Widget build(BuildContext bcontext) {
     //final TextEditingController _times=TextEditingController();
-    final TextEditingController _value=TextEditingController();
-    prev=data.last;
-    print('Previos reading data : $prev');
+    final TextEditingController value=TextEditingController();
+   
     return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
@@ -82,7 +82,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
                 ),
                 Padding(              
                             padding:const EdgeInsets.only(top: 10),
-                            child:Text('Previous Reading : $prev',textAlign: TextAlign.center,style:const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                            child:Text('Previous Reading : ${dta[len-1]}',textAlign: TextAlign.center,style:const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                             
                             ),
               const GScreen(),
@@ -112,7 +112,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
                 height: 50,
                 width: 200,
                  child: TextFormField(
-                       controller:_value,
+                       controller:value,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration( 
                                  border: OutlineInputBorder(),
@@ -132,8 +132,19 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
                ),
               MeasureButton(buttonText: 'Add', buttonAction: (){
                 setState(() {
-                double d=double.parse(_value.text);
-                var s=DateTime.now();
+                  double d;
+                  try {
+                       d = double.parse(value.text);
+                      
+                      } on FormatException {
+
+                        d=0;
+  
+                        print('Error: Could not parse value as double');
+                      }
+                //double d=double.parse(value.text);
+                
+              
                 //print(s.day);
                 //print(s.month);
                 //print(s.year);                
@@ -141,24 +152,38 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
                 // const year = now.getFullYear();     // e.g. 2023
                 // month = now.getMonth() + 1;   // e.g. 3 (note: months are zero-indexed)
                 // const date = now.getDate();         // e.g. 4
-                // const hours = now.getHours();       // e.g. 10
-                // const minutes = now.getMinutes();   // e.g. 30
-                // const seconds = now.getSeconds(); 
-                data.add(d);
-                time.add(s.toString());
+                    
+                //addReadings
+
                 Navigator.pushReplacement(
                 bcontext,
                 MaterialPageRoute(
                 builder: (BuildContext context) => super.widget));
                 });
                 
-              })             
+              },             
+              ),
+              Container(
+                  padding:const EdgeInsets.all(20),
+                  margin:const EdgeInsets.all(10),
+                  height: 100,
+                  decoration: BoxDecoration(
+                                              color: Colors.lightBlue[50],
+                                              border: Border.all(color:Colors.black,width: 2),
+                                            ),
+                  child:  Center(child: Text(notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold))),
+                  ),
+                  
               ],
               ),
              ),
           ),
   );
  }
+ 
+  
+ 
+  
 }
  
 class GScreen extends StatefulWidget {
@@ -169,7 +194,7 @@ class GScreen extends StatefulWidget {
 }
 
 class _GScreenState extends State<GScreen>
-    with SingleTickerProviderStateMixin {
+  with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late TooltipBehavior _tooltipBehavior;
 
@@ -201,7 +226,8 @@ class _GScreenState extends State<GScreen>
                  physics:const BouncingScrollPhysics(),
                  scrollDirection: Axis.horizontal,
                  children:[ 
-                  SizedBox(                                
+                  SizedBox(   
+                                                    
                         child: SfCartesianChart(
                             // Initialize category axis
                             title:  ChartTitle(
@@ -271,11 +297,14 @@ SplineSeries<ChartData, String> getData() { //SplineSeries
 
   List<ChartData> spData=[];
 
-    int i;
-    for(i=0;i<time.length;i++){
-      spData.add(ChartData(time[i].toString(),data[i].toDouble()));
-    }
     
+    for(int i=0;i<tme.length;i++){
+      print(dta);
+      print(tme);
+      String time=tme[i].toString();
+      spData.add(ChartData(time.substring(11,16),double.parse(dta[i])));
+    }
+  notifi();
   return SplineSeries<ChartData, String>(
     
     // Create a new LineSeries object
@@ -322,3 +351,12 @@ class ChartData {
 //     );
 //   }
 // }
+void notifi() {
+    int last=int.parse(dta.last);
+    if(last<=95){
+      notification='it is advisable to seek medical attention immediately as your SpO2 level is ${dta.last}';
+    }
+    else{
+      notification=' Your SpO2 level is $last';
+    }
+  }

@@ -1,11 +1,11 @@
 //iqoo - 192.168.53.129
 //bsnl - 192.168.1.23
 //192.168.53.129
-//locla 10.0.0.1:8000
-import 'dart:ffi';
+//hotspot:192.168.222.129
+//import 'dart:ffi';
 
 List<dynamic>dta=[ ]; //dt
-List<dynamic>tme=[' ']; //dte
+List<dynamic>tme=[ ]; //dte
 dynamic prev=0;
 String name='';
 String email='';//'a';

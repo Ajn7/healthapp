@@ -22,12 +22,12 @@ import 'package:http/http.dart' as http;
   //decode
 print('List of reading');
 List<dynamic> data = jsonDecode(response.body);
-  
+print('from getReading::$data');
    
   if (response.statusCode == 200) {
      for (dynamic d in data) {
       dta.add(d['reading']);
-      tme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZ").parse(d['created_at']));
+      tme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(d['created_at']));
       }
     prev=dta.last;
     print('SP02 Data(init call from myHome) :$dta');
@@ -195,7 +195,7 @@ List<dynamic> data = jsonDecode(response.body);
    }
  }
 
- Future addReading({required int reading,required int vitalid}) async {
+ Future addRecord({required int reading,required int vitalid}) async {
   final response = await http.post(
   
     Uri.parse('$baseurl/vitalrecords/reading/add/'),
@@ -213,12 +213,7 @@ List<dynamic> data = jsonDecode(response.body);
   Map<String, dynamic> data = jsonDecode(response.body);
    
   if (response.statusCode == 200) {
-
-    // Login successful
-     var logintoken = data["token"];
-     email = data["email"];
-     var id=data["id"];
-     print('token of login: $logintoken');
+    print('Successfull');
   }
    
  

@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
+import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -15,7 +17,7 @@ class SpoGraphscreen extends StatefulWidget {
 //List<dynamic>data=dta;
 //List<dynamic>time=tme;
 
-class _SpoGraphscreenState extends State<SpoGraphscreen> {
+class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
   DateTime date=DateTime.now();
   //api call
 
@@ -24,6 +26,8 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
     @override
     void initState(){
       super.initState(); 
+      
+      
     }
   
   @override
@@ -131,10 +135,10 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
                                      ),
                ),
               MeasureButton(buttonText: 'Add', buttonAction: (){
-                setState(() {
-                  double d;
+                
+                  int d;
                   try {
-                       d = double.parse(value.text);
+                       d = int.parse(value.text);
                       
                       } on FormatException {
 
@@ -143,8 +147,8 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
                         print('Error: Could not parse value as double');
                       }
                 //double d=double.parse(value.text);
-                
-              
+                addRecord(reading: d, vitalid: 1);
+                getReading(date: DateTime.now().toString(), vitalid: 1);
                 //print(s.day);
                 //print(s.month);
                 //print(s.year);                
@@ -153,13 +157,14 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
                 // month = now.getMonth() + 1;   // e.g. 3 (note: months are zero-indexed)
                 // const date = now.getDate();         // e.g. 4
                     
-                //addReadings
+                
+               
 
                 Navigator.pushReplacement(
                 bcontext,
                 MaterialPageRoute(
                 builder: (BuildContext context) => super.widget));
-                });
+              
                 
               },             
               ),
@@ -185,6 +190,8 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> {
  
   
 }
+
+
  
 class GScreen extends StatefulWidget {
   const GScreen({super.key});
@@ -207,6 +214,7 @@ class _GScreenState extends State<GScreen>
         canShowMarker: false,
       );
     super.initState();
+  
     _controller = AnimationController(vsync: this);
   }
 
@@ -263,6 +271,7 @@ class _GScreenState extends State<GScreen>
                             ),
                             series: <ChartSeries>[
                                 getData()
+                                
                             ]
                         )
                     ),
@@ -353,7 +362,7 @@ class ChartData {
 // }
 void notifi() {
     int last=int.parse(dta.last);
-    if(last<=95){
+    if(last<95){
       notification='it is advisable to seek medical attention immediately as your SpO2 level is ${dta.last}';
     }
     else{

@@ -23,7 +23,9 @@ import 'package:http/http.dart' as http;
 print('List of reading');
 List<dynamic> data = jsonDecode(response.body);
 print('from getReading::$data');
+print(response.statusCode);
    
+  
   if (response.statusCode == 200) {
      for (dynamic d in data) {
       dta.add(d['reading']);

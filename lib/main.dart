@@ -28,13 +28,14 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         routes:{
           "loginscreen":(BuildContext ctx)=>const LoginScreen(),
-          "homescreen":(BuildContext ctx)=>MyHome(),
+          "homescreen":(BuildContext ctx)=>const MyHome(),
           "startup":(BuildContext ctx) => const Startup(),
           "edit":(BuildContext ctx) => const EditInfo(),
           "forgott":(BuildContext ctx) => const ForgottScreen(),
           "bpgraph":(BuildContext ctx) => const BPScreen(),
           "signup":(BuildContext ctx) => const SignupScreen(),
           "spgraph":(BuildContext ctx) => const SpoGraphscreen(),
+         
         },
         initialRoute: "startup",
         title: 'Flutter Demo',

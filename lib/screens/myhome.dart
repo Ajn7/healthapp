@@ -158,12 +158,12 @@ class _HomeScreenState extends State<HomeScreen> with API {
           children:<Widget>[
             ListTile(
               title:const Text(
-              'Previous BP Level',
+              'Previous SPO2 Level',
               style: TextStyle(
                 fontSize: 20.0,
               ),
               ),
-             subtitle: const Text('150',style: TextStyle(
+             subtitle:Text('$prev',style: const TextStyle(
                 fontSize: 20.0,
               ),
               ),
@@ -188,12 +188,12 @@ class _HomeScreenState extends State<HomeScreen> with API {
 
            ListTile(
               title:const Text(
-                'Previous SPO2 Level',
+                'Previous BP Level',
               style: TextStyle(
                 fontSize: 20.0,
               ),
               ),
-             subtitle:  Text('$prev',style:const TextStyle(
+             subtitle: const Text('90/110',style:TextStyle(
                 fontSize: 20.0,
               ),
               ),

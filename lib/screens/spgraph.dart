@@ -5,7 +5,7 @@ import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-String notification=' Your SpO2 level is ${dta.last}';
+String notification='No data found please add reading';//' Your SpO2 level is ${dta.last}';
  int len=dta.length;
  
 class SpoGraphscreen extends StatefulWidget {
@@ -84,11 +84,11 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                     ],
                   ),
                 ),
-                Padding(              
-                            padding:const EdgeInsets.only(top: 10),
-                            child:Text('Previous Reading : ${dta[len-1]}',textAlign: TextAlign.center,style:const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                // Padding(              
+                //             padding:const EdgeInsets.only(top: 10),
+                //             //child:Text('Previous Reading : ${dta[len-1]}',textAlign: TextAlign.center,style:const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                             
-                            ),
+                //             ),
               const GScreen(),
               // SizedBox(
               //   height: 50,
@@ -149,17 +149,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                 //double d=double.parse(value.text);
                 addRecord(reading: d, vitalid: 1);
                 getReading(date: DateTime.now().toString(), vitalid: 1);
-                //print(s.day);
-                //print(s.month);
-                //print(s.year);                
-                //print((s.day).toString());
-                // const year = now.getFullYear();     // e.g. 2023
-                // month = now.getMonth() + 1;   // e.g. 3 (note: months are zero-indexed)
-                // const date = now.getDate();         // e.g. 4
-                    
-                
-               
-
+            
                 Navigator.pushReplacement(
                 bcontext,
                 MaterialPageRoute(
@@ -191,8 +181,6 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
   
 }
 
-
- 
 class GScreen extends StatefulWidget {
   const GScreen({super.key});
   
@@ -304,6 +292,7 @@ class _GScreenState extends State<GScreen>
 
 SplineSeries<ChartData, String> getData() { //SplineSeries
 
+ 
   List<ChartData> spData=[];
 
     
@@ -313,7 +302,8 @@ SplineSeries<ChartData, String> getData() { //SplineSeries
       String time=tme[i].toString();
       spData.add(ChartData(time.substring(11,16),double.parse(dta[i])));
     }
-  notifi();
+      notifi();
+  
   return SplineSeries<ChartData, String>(
     
     // Create a new LineSeries object
@@ -361,6 +351,8 @@ class ChartData {
 //   }
 // }
 void notifi() {
+  
+    try{
     int last=int.parse(dta.last);
     if(last<95){
       notification='it is advisable to seek medical attention immediately as your SpO2 level is ${dta.last}';
@@ -368,4 +360,12 @@ void notifi() {
     else{
       notification=' Your SpO2 level is $last';
     }
+    }
+    catch(error){
+      print('Nodata');
+       
+    }
   }
+
+
+

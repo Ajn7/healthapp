@@ -27,6 +27,8 @@ print(response.statusCode);
    
   
   if (response.statusCode == 200) {
+     dta=[ ]; //dt
+     tme=[ ];
      for (dynamic d in data) {
       dta.add(d['reading']);
       tme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(d['created_at']));
@@ -35,6 +37,9 @@ print(response.statusCode);
     print('SP02 Data(init call from myHome) :$dta');
 
   } else {
+    dta=[ ]; //dt
+    tme=[ ];
+    notification='No data found please add reading';
     var res="response";
     print(res);
     //ScaffoldMessenger.of(context).showSnackBar (SnackBar(content: Text(res)));

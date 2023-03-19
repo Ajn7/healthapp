@@ -5,7 +5,7 @@ import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-String notification='No data found please add reading';//' Your SpO2 level is ${dta.last}';
+//' Your SpO2 level is ${dta.last}';
  int len=dta.length;
  
 class SpoGraphscreen extends StatefulWidget {
@@ -61,6 +61,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                         }
                         setState(() {
                         date=newDate;
+                        getReading(date: date.toString(), vitalid: 1);
                                   }
                                 );                                           
                         },
@@ -90,28 +91,6 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                             
                 //             ),
               const GScreen(),
-              // SizedBox(
-              //   height: 50,
-              //   width: 200,
-              //   child: TextFormField(
-              //          controller:_times,
-              //         keyboardType: TextInputType.datetime,
-              //         decoration: const InputDecoration( 
-              //                    border: OutlineInputBorder(),
-              //                    prefixIcon: Icon(Icons.access_time),
-              //                    hintText: "Time Here",
-              //                    hintStyle: TextStyle(fontSize: 20.0, ),
-              //                    //labelText: "Last Name",
-              //                    //labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
-              //                              ),
-              //         //           validator: (value) {
-              //         //           if (value!.isEmpty) {
-              //         //           return 'Enter a last name!';
-              //         //           }
-              //         //           return null;
-              //         //           },
-              //                        ),
-              // ),
                SizedBox(
                 height: 50,
                 width: 200,

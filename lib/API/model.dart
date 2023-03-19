@@ -16,6 +16,7 @@ double?height;
 double?weight;
 String bloodgroup='';
 String phone='';
+String notification='No data found please add reading';
 
 
 

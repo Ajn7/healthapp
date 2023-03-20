@@ -258,7 +258,7 @@ SplineSeries<ChartData, String> getData() { //SplineSeries
       String time=dataStore.tme[i].toString();
       spData.add(ChartData(time.substring(11,16),double.parse(dataStore.dta[i])));
     }
-    //notifi();
+    notifi();
   
   return SplineSeries<ChartData, String>(
     

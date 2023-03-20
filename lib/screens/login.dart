@@ -8,6 +8,7 @@ import 'package:healthapp/core/navigator.dart';
 import 'package:http/http.dart' as http;
 import 'package:healthapp/screens/forgott.dart';
 import 'package:healthapp/screens/signup.dart';
+DataStore dataStore=DataStore();
 class LoginScreen extends StatefulWidget{
   const LoginScreen({super.key});
 
@@ -22,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future login(String email, String password,BuildContext context) async {
   final response = await http.post(
   
-    Uri.parse('$baseurl/accounts/login/'),
+    Uri.parse('${dataStore.baseurl}/accounts/login/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

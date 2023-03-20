@@ -5,6 +5,8 @@ import 'package:healthapp/constants/msgline.dart';
 import 'package:healthapp/core/navigator.dart';
 import 'package:healthapp/API/apicalls.dart';
 
+DataStore dataStore = DataStore();
+
 class EditInfo extends StatefulWidget{
   
   const EditInfo({super.key});
@@ -21,7 +23,7 @@ class _EditInfo extends State<EditInfo> with API{
   final bloodgroups=['A+ve','A-ve','B+ve','B-ve','O+ve','O-ve'];
 
   String?value1;
-  String?value2=bloodgroup;
+  String?value2=dataStore.bloodgroup;
 
   //final TextEditingController _nameTEC=TextEditingController();
   //final TextEditingController _emailTEC=TextEditingController();
@@ -214,7 +216,7 @@ class _EditInfo extends State<EditInfo> with API{
                                            keyboardType: TextInputType.number,
                                            controller: _ageTEC,
                                            decoration:  InputDecoration( 
-                                           hintText:'$age',
+                                           hintText:'${dataStore.age}',
                                            helperText:'if no change let it blank',
                                            //border:const OutlineInputBorder(),
                                                  ),
@@ -241,7 +243,7 @@ class _EditInfo extends State<EditInfo> with API{
                                            keyboardType: TextInputType.number,
                                            controller: _heightTEC,
                                            decoration:  InputDecoration( 
-                                           hintText:'$height',
+                                           hintText:'${dataStore.height}',
                                            helperText:'if no change let it blank',
                                            //border:const OutlineInputBorder(),
                                                 ),
@@ -269,7 +271,7 @@ class _EditInfo extends State<EditInfo> with API{
                                            keyboardType: TextInputType.number,
                                            controller:_weightTEC,
                                            decoration:  InputDecoration(
-                                           hintText: '$weight',
+                                           hintText: '${dataStore.weight}',
                                            helperText:'if no change let it blank', 
                                            //border:const OutlineInputBorder(),
                                                 ),
@@ -305,7 +307,7 @@ class _EditInfo extends State<EditInfo> with API{
                          controller:_phoneTEC,
                          keyboardType: TextInputType.phone,
                          decoration:InputDecoration( 
-                                  hintText:'$phone',
+                                  hintText:dataStore.phone,
                                   helperText:'if no change let it blank',
                                   //border: const OutlineInputBorder(),
                                             ),
@@ -332,7 +334,7 @@ class _EditInfo extends State<EditInfo> with API{
                       //var email=_emailTEC.text;
                       
                       if(_weightTEC.text.isEmpty){
-                      wght=weight;
+                      wght=dataStore.weight;
                     
                       }else{
                         //print('Exception');
@@ -340,7 +342,7 @@ class _EditInfo extends State<EditInfo> with API{
                         wght=double.parse(_weightTEC.text);
                       }
                       if(_heightTEC.text.isEmpty){
-                      hgt=height;
+                      hgt=dataStore.height;
                     
                       }else{
                         //print('Exception');
@@ -348,7 +350,7 @@ class _EditInfo extends State<EditInfo> with API{
                         hgt=double.parse(_heightTEC.text);
                       }
                       if(_phoneTEC.text.isEmpty){
-                      phn=phone;
+                      phn=dataStore.phone;
                     
                       }else{
                         //print('Exception');
@@ -356,7 +358,7 @@ class _EditInfo extends State<EditInfo> with API{
                         phn=_phoneTEC.text;
                       }
                       if(_ageTEC.text.isEmpty){
-                      ag=age;
+                      ag=dataStore.age;
                     
                       }else{
                         //print('Exception');
@@ -371,7 +373,7 @@ class _EditInfo extends State<EditInfo> with API{
                       print("Weight: $wght");
                       print("Height: $hgt");
                       print("phone:"+phn);
-                      print("age: $age");
+                      print("age: ${dataStore.age}");
                       print("bloodgroups "+bg);
                       //final isValid = _key.currentState!.validate();
                       // if (!isValid) {

@@ -4,9 +4,9 @@ import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
+DataStore dataStore=DataStore();
 //' Your SpO2 level is ${dta.last}';
- int len=dta.length;
+ int len=dataStore.dta.length;
  
 class SpoGraphscreen extends StatefulWidget {
    const SpoGraphscreen({super.key});
@@ -14,19 +14,15 @@ class SpoGraphscreen extends StatefulWidget {
   State<SpoGraphscreen> createState() => _SpoGraphscreenState();
 }
 
-//List<dynamic>data=dta;
-//List<dynamic>time=tme;
 
 class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
-  DateTime date=DateTime.now();
-  //api call
-
+  
   // late TooltipBehavior _tooltipBehavior;
 
     @override
     void initState(){
       super.initState(); 
-      
+      //date=DateTime.now();
       
     }
   
@@ -45,7 +41,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                 InkWell(
                   onTap:()async{
                         DateTime?newDate=await showDatePicker(context: context, 
-                        initialDate:date,
+                        initialDate:dataStore.date,
                         firstDate: DateTime(2012),
                         lastDate: DateTime(2025)
                         );
@@ -60,9 +56,11 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                         return;
                         }
                         setState(() {
-                        date=newDate;
-                        getReading(date: date.toString(), vitalid: 1);
+                        
+                        dataStore.date=newDate;
+                        getReading(date: newDate.toString(), vitalid: 1);
                                   }
+                        
                                 );                                           
                         },
                   child: Row(
@@ -78,7 +76,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                       Padding(
                         padding: const EdgeInsets.only(top:20.0,right: 10),
                         child: Text(
-                        '${date.day} /${date.month} /${date.year}',
+                        '${dataStore.date.day} /${dataStore.date.month} /${dataStore.date.year}',
                         style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
                         ),
                       ),                           
@@ -145,7 +143,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                                               color: Colors.lightBlue[50],
                                               border: Border.all(color:Colors.black,width: 2),
                                             ),
-                  child:  Center(child: Text(notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold))),
+                  child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold))),
                   ),
                   
               ],
@@ -248,40 +246,19 @@ class _GScreenState extends State<GScreen>
     
   }
 }
-// Future<SplineSeries<ChartData, String>> getData() async {
-//   var connectivityResult = await Connectivity().checkConnectivity();
-//   if (connectivityResult == ConnectivityResult.none) {
-//     throw Exception('No internet connection');
-//   }
-
-//   List<ChartData> spData=[];
-
-//   int i;
-//   for(i=0;i<time.length;i++){
-//     spData.add(ChartData(time[i].toString(),data[i].toDouble()));
-//   }
-
-//   return SplineSeries<ChartData, String>(
-//     dataSource:spData,
-//     xValueMapper: (ChartData data, _) => data.x,
-//     yValueMapper: (ChartData data, _) => data.y,
-//     dataLabelSettings:const DataLabelSettings(isVisible : true)
-//   );
-// }
-
 SplineSeries<ChartData, String> getData() { //SplineSeries
 
  
   List<ChartData> spData=[];
 
     
-    for(int i=0;i<tme.length;i++){
-      print(dta);
-      print(tme);
-      String time=tme[i].toString();
-      spData.add(ChartData(time.substring(11,16),double.parse(dta[i])));
+    for(int i=0;i<dataStore.tme.length;i++){
+      print(dataStore.dta);
+      print(dataStore.tme);
+      String time=dataStore.tme[i].toString();
+      spData.add(ChartData(time.substring(11,16),double.parse(dataStore.dta[i])));
     }
-      notifi();
+    //notifi();
   
   return SplineSeries<ChartData, String>(
     
@@ -332,12 +309,12 @@ class ChartData {
 void notifi() {
   
     try{
-    int last=int.parse(dta.last);
+    int last=int.parse(dataStore.dta.last);
     if(last<95){
-      notification='it is advisable to seek medical attention immediately as your SpO2 level is ${dta.last}';
+      dataStore.notification='it is advisable to seek medical attention immediately as your SpO2 level is ${dataStore.dta.last}';
     }
     else{
-      notification=' Your SpO2 level is $last';
+      dataStore.notification=' Your SpO2 level is $last';
     }
     }
     catch(error){

@@ -5,6 +5,7 @@ import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 DateTime _selectedDate=DateTime.now();
+DataStore dataStore = DataStore();
 class BPScreen extends StatelessWidget {
   const BPScreen({Key? key}) : super(key: key);
 
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-var value=dta.last;
+var value=dataStore.dta.last;
 class Meas extends StatefulWidget {
   Meas({super.key});
   @override
@@ -138,7 +139,7 @@ class _MeasState extends State<Meas> {
                   children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child:Container(
+                    child:SizedBox(
                       width: MediaQuery.of(context).size.width * 3,
                       child: SfCartesianChart(
                             // Initialize category axis
@@ -253,8 +254,8 @@ SplineSeries<ChartData, String> getDataSp() {
     // '01:57',
     // '01:60'];
 
-    for(i=0;i<(tme).length;i++){
-      spData.add(ChartData(tme[i].toString(),dta[i].toDouble()));
+    for(i=0;i<(dataStore.tme).length;i++){
+      spData.add(ChartData(dataStore.tme[i].toString(),dataStore.dta[i].toDouble()));
     }
 
   return SplineSeries<ChartData, String>(

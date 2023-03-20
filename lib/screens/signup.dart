@@ -9,7 +9,7 @@ import 'package:healthapp/constants/msgline.dart';
 //import 'package:healthapp/main.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
-
+DataStore dataStore=DataStore();
 
 class SignupScreen extends StatefulWidget{
   const SignupScreen({super.key});
@@ -41,7 +41,7 @@ class _SignupScreen extends State<SignupScreen>{
   async {
   final response = await http.post(
    
-    Uri.parse('$baseurl/accounts/register/'),
+    Uri.parse('${dataStore.baseurl}/accounts/register/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

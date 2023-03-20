@@ -10,7 +10,7 @@ import 'package:healthapp/screens/spgraph.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:healthapp/screens/editinfo.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
+DataStore dataStore=DataStore();
 class MyHome extends StatefulWidget {
     const MyHome({super.key});
   //final dynamic token;
@@ -24,29 +24,30 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> with API{
+   late Future<dynamic>_futureData;
    @override
     void initState(){
     super.initState();
     getData();
     getReading(date: DateTime.now().toString(), vitalid: 1);
-    
+    _futureData=getUserData();
 
     }
     getData()async{
       MySharedPreferences myPrefs = MySharedPreferences();
       await myPrefs.initPrefs();
       setState(() {
-      name =myPrefs.getString('name').toString();
-      email =myPrefs.getString('email').toString();
+      dataStore.name =myPrefs.getString('name').toString();
+      dataStore.email =myPrefs.getString('email').toString();
       });
       
     }
   @override
   Widget build(BuildContext context){
       return ( FutureBuilder<dynamic>(
-      future: getUserData(),
+      future:_futureData,
       initialData: const ['Loading...'],
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      builder:(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
             color:Colors.white,
@@ -163,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
                 fontSize: 20.0,
               ),
               ),
-             subtitle:Text('$prev',style: const TextStyle(
+             subtitle:Text('${dataStore.prev}',style: const TextStyle(
                 fontSize: 20.0,
               ),
               ),
@@ -310,12 +311,12 @@ class _HomeScreenState extends State<HomeScreen> with API {
         child:ListView(
           children: [
             UserAccountsDrawerHeader(
-            accountName: Text(name.toUpperCase(),
+            accountName: Text(dataStore.name.toUpperCase(),
             style:const TextStyle(
               fontSize: 21.0,
             ),
             ), 
-            accountEmail:Text(email),
+            accountEmail:Text(dataStore.email),
             otherAccountsPictures: <Widget>[
               IconButton(
               icon: const Icon(Icons.edit),
@@ -331,22 +332,22 @@ class _HomeScreenState extends State<HomeScreen> with API {
             ),
            ListTile(
             leading:const Icon(Icons.person_outline),
-            title: Text("Age :$age"),
+            title: Text("Age :${dataStore.age}"),
             //onTap: () { },
           ),
            ListTile(
             leading:const Icon(Icons.expand),
-            title: Text("Height :$height"),
+            title: Text("Height :${dataStore.height}"),
             //onTap: () { },
           ),
            ListTile(
             leading:const Icon(Icons.local_florist),
-            title: Text("weight :$weight"),
+            title: Text("weight :${dataStore.weight}"),
             //onTap: () { },
           ),
            ListTile(
             leading:const Icon(Icons.volunteer_activism),
-            title: Text("Blood Group :$bloodgroup"),
+            title: Text("Blood Group :${dataStore.bloodgroup}"),
             //onTap: () { },
           ),
           // const ListTile(
@@ -366,7 +367,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
           // ),
             ListTile(
             leading:const Icon(Icons.phone),
-            title: Text("Phone :$phone"),
+            title: Text("Phone :${dataStore.phone}"),
            // onTap: () { },
           ),
           const Divider(

@@ -4,6 +4,7 @@ import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/sharedpref.dart';
 import 'package:http/http.dart' as http;
 
+DataStore dataStore = DataStore();
  mixin API {
  Future getReading({required String date,required int vitalid}) async {
   // MySharedPreferences myPrefs = MySharedPreferences();
@@ -12,7 +13,7 @@ import 'package:http/http.dart' as http;
   //print('From getReading: $date ,,, $today');
   final response = await http.get(
 
-    Uri.parse('$baseurl/vitalrecords/readings/date/list/?user=$id&date=$today&vitalid=$vitalid'),
+    Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=${dataStore.id}+&date=$today&vitalid=$vitalid'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -27,19 +28,19 @@ print(response.statusCode);
    
   
   if (response.statusCode == 200) {
-     dta=[ ]; //dt
-     tme=[ ];
+     dataStore.dta=[ ]; //dt
+     dataStore.tme=[ ];
      for (dynamic d in data) {
-      dta.add(d['reading']);
-      tme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(d['created_at']));
+      dataStore.dta.add(d['reading']);
+      dataStore.tme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(d['created_at']));
       }
-    prev=dta.last;
-    print('SP02 Data(init call from myHome) :$dta');
+    dataStore.prev=dataStore.dta.last;
+    print('SP02 Data(init call from myHome) :${dataStore.dta}');
 
   } else {
-    dta=[ ]; //dt
-    tme=[ ];
-    notification='No data found please add reading';
+    dataStore.dta=[ ]; //dt
+    dataStore.tme=[ ];
+    dataStore.notification='No data found please add reading';
     var res="response";
     print(res);
     //ScaffoldMessenger.of(context).showSnackBar (SnackBar(content: Text(res)));
@@ -59,7 +60,7 @@ print(response.statusCode);
 
   final response = await http.get(
     
-    Uri.parse('$baseurl/accounts/details/'),
+    Uri.parse('${dataStore.baseurl}/accounts/details/'),
     headers: <String, String>{
       'Authorization':'Token $myToken',
       'Content-Type': 'application/json; charset=UTF-8',
@@ -69,7 +70,7 @@ print(response.statusCode);
 
   final response1 = await http.get(
     
-    Uri.parse('$baseurl/healthrecords/$em/'),
+    Uri.parse('${dataStore.baseurl}/healthrecords/$em/'),
     headers: <String, String>{
       'Authorization':'Token $myToken',
       'Content-Type': 'application/json; charset=UTF-8',
@@ -113,22 +114,22 @@ print(response.statusCode);
     
   String firstname=data['first_name'];
   String lastname=data['last_name'];
-  name='$firstname $lastname';
-  await myPrefs.setString('name',name);
-  email=myPrefs.getString('email').toString(); 
-  name=myPrefs.getString('name').toString();   
-  age=myPrefs.getInt('age');  
-  height=myPrefs.getFloat('height');  
-  weight=myPrefs.getFloat('weight');  
-  bloodgroup=myPrefs.getString('bloodgroup').toString();   
-  phone=myPrefs.getString('phone').toString();          //data['email'];
-  print('Name at deatils api global variable :$name');
-  print('Email at deatils api global variable :$email');
-  print('age at deatils api global variable :$age');
-  print('height at deatils api global variable :$height');
-  print('weight at deatils api global variable :$weight');
-  print('bloodgroup at deatils api global variable :$bloodgroup');
-  print('phone at deatils api global variable :$phone');
+  dataStore.name='$firstname $lastname';
+  await myPrefs.setString('name',dataStore.name);
+  dataStore.email=myPrefs.getString('email').toString(); 
+  dataStore.name=myPrefs.getString('name').toString();   
+  dataStore.age=myPrefs.getInt('age');  
+  dataStore.height=myPrefs.getFloat('height');  
+  dataStore.weight=myPrefs.getFloat('weight');  
+  dataStore.bloodgroup=myPrefs.getString('bloodgroup').toString();   
+  dataStore.phone=myPrefs.getString('phone').toString();          //data['email'];
+  print('Name at deatils api global variable :${dataStore.name}');
+  print('Email at deatils api global variable :${dataStore.email}');
+  print('age at deatils api global variable :${dataStore.age}');
+  print('height at deatils api global variable :${dataStore.height}');
+  print('weight at deatils api global variable :${dataStore.weight}');
+  print('bloodgroup at deatils api global variable :${dataStore.bloodgroup}');
+  print('phone at deatils api global variable :${dataStore.phone}');
  
     
   } else {
@@ -160,25 +161,26 @@ print(response.statusCode);
  required double height,
  required double weight}
  ) async {
+  
   MySharedPreferences myPrefs = MySharedPreferences();
   await myPrefs.initPrefs();
   String? myToken = myPrefs.getString('token');
   final response = await http.put(
 
-    Uri.parse('$baseurl/healthrecords/$email/'),
+    Uri.parse('$dataStore.baseurl/healthrecords/$dataStore.email/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization':'Token $myToken'
     },
     body: jsonEncode(
     <String, dynamic>{
-    'email': email,
+    'email': dataStore.email,
     'age': age,
     'height': height,
     'weight': weight,
     'bloodgroup': bg,
     'phone': phone,
-    'user': id,
+    'user': dataStore.id,
     }),
     
   );
@@ -192,7 +194,7 @@ print(response.statusCode);
   if (response.statusCode == 200) {
 
     
-    print('SP02 Data(init call from myHome) :$dta');
+    print('SP02 Data(init call from myHome) :${dataStore.dta}');
 
   } else {
     var res="response";
@@ -205,14 +207,14 @@ print(response.statusCode);
  Future addRecord({required int reading,required int vitalid}) async {
   final response = await http.post(
   
-    Uri.parse('$baseurl/vitalrecords/reading/add/'),
+    Uri.parse('${dataStore.baseurl}/vitalrecords/reading/add/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String,dynamic>{
       'reading':reading,
       'vital':vitalid,
-      'user':id,
+      'user':dataStore.id,
     }),
   );
 

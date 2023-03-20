@@ -7,7 +7,7 @@ import 'package:healthapp/screens/login.dart';
 import 'package:healthapp/screens/myhome.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/headline.dart';
-
+DataStore dataStore=DataStore();
 class Startup extends StatefulWidget {
   const Startup({super.key});
  
@@ -28,16 +28,16 @@ class _StartupState extends State<Startup> {
   MySharedPreferences myPrefs = MySharedPreferences();
   await myPrefs.initPrefs();
   String? myToken =myPrefs.getString('token');
-  name =myPrefs.getString('name').toString();
-  email =myPrefs.getString('email').toString();
-  id =myPrefs.getInt('user_id');
+  dataStore.name =myPrefs.getString('name').toString();
+  dataStore.email =myPrefs.getString('email').toString();
+  dataStore.id =myPrefs.getInt('user_id');
   
   //dta=myPrefs.getList('readingList');
   
   print('Token of statup(shpf) :$myToken');
-  print('name at statup (shpf) :$name');
-  print('email at statup (shpf):$email');
-  print('id at statup (shpf):$id');
+  print('name at statup (shpf) :${dataStore.name}');
+  print('email at statup (shpf):${dataStore.email}');
+  print('id at statup (shpf):${dataStore.id}');
   //print('email at statup (shpf):$dta');
   
   

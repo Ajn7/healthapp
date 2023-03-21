@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:healthapp/API/model.dart';
@@ -6,6 +7,46 @@ import 'package:http/http.dart' as http;
 
 DataStore dataStore = DataStore();
  mixin API {
+ Future getLastData({required int vitalid}) async {
+  // MySharedPreferences myPrefs = MySharedPreferences();
+  // await myPrefs.initPrefs();
+  String date=DateTime.now().toString();
+  String today=date.substring(0,10);
+  //print('From getReading: $date ,,, $today');
+  final response = await http.get(
+
+    Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=${dataStore.id}+&date=$today&vitalid=$vitalid'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    
+  );
+
+  //decode
+//try{
+List<dynamic> data = jsonDecode(response.body);
+  
+  if (response.statusCode == 200) {
+    MySharedPreferences myPrefs = MySharedPreferences();
+    await myPrefs.initPrefs();
+    
+    List<dynamic>? data=[];
+     for (dynamic d in data) {
+      data.add(d['reading']);
+      await myPrefs.setString('Last',data.last);
+      }
+
+      
+   
+   
+
+  } else {
+    var res="response";
+    print(res);
+
+   }
+
+ }
  Future getReading({required String date,required int vitalid}) async {
   // MySharedPreferences myPrefs = MySharedPreferences();
   // await myPrefs.initPrefs();
@@ -21,21 +62,32 @@ DataStore dataStore = DataStore();
   );
 
   //decode
-print('List of reading');
+//try{
 List<dynamic> data = jsonDecode(response.body);
-print('from getReading::$data');
+print('from getReading api ::$data');
 print(response.statusCode);
    
   
   if (response.statusCode == 200) {
+    MySharedPreferences myPrefs = MySharedPreferences();
+    await myPrefs.initPrefs();
+    
+    //List<dynamic>? dta = myPrefs.getList('dta');
      dataStore.dta=[ ]; //dt
      dataStore.tme=[ ];
      for (dynamic d in data) {
       dataStore.dta.add(d['reading']);
-      dataStore.tme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(d['created_at']));
+      dataStore.tme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(d['created_at']).toString());
+      await myPrefs.setList('data',dataStore.dta);
+      await myPrefs.setList('time',dataStore.tme);
       }
+
+      
     dataStore.prev=dataStore.dta.last;
-    print('SP02 Data(init call from myHome) :${dataStore.dta}');
+    print('SP02 Data(init call from myHome) :${myPrefs.getList('data')}');
+    // Timer(const Duration(seconds:3),(){
+      
+    // });
 
   } else {
     dataStore.dta=[ ]; //dt
@@ -46,7 +98,16 @@ print(response.statusCode);
     //ScaffoldMessenger.of(context).showSnackBar (SnackBar(content: Text(res)));
     
    }
+// }catch (FormatException) {
+  
+//   dataStore.dta=[ ]; //dt
+//   dataStore.tme=[ ];
+//   dataStore.notification='No data found please add reading';
+// }
+ 
  }
+ 
+  
 
  Future getUserData() async {
   
@@ -167,7 +228,7 @@ print(response.statusCode);
   String? myToken = myPrefs.getString('token');
   final response = await http.put(
 
-    Uri.parse('$dataStore.baseurl/healthrecords/$dataStore.email/'),
+    Uri.parse('${dataStore.baseurl}/healthrecords/${dataStore.email}/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization':'Token $myToken'
@@ -220,11 +281,11 @@ print(response.statusCode);
 
   //decode
   Map<String, dynamic> data = jsonDecode(response.body);
-   
-  if (response.statusCode == 200) {
-    print('Successfull');
+  if (response.statusCode!= 201) {
+    
+    print('Un Successfull');
   }
-   
+   getReading(date: DateTime.now().toString(), vitalid: 1);
  
 }
  }

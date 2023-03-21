@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 class MySharedPreferences {
   static final MySharedPreferences _singleton =
       MySharedPreferences._internal();
@@ -36,6 +32,14 @@ Future<bool> setInt(String key, int value) {
 }
 double? getFloat(String key) {
   return _prefs?.getDouble(key);
+}
+
+List<dynamic>?getList(String key) {
+  return _prefs?.getStringList(key);
+}
+
+Future<bool> setList(String key, List<dynamic> value) {
+  return _prefs?.setStringList(key, value.cast<String>()) ?? Future.value(false);
 }
 
 Future<bool> setFloat(String key, double value) {

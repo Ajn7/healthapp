@@ -1,10 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
+import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 DataStore dataStore=DataStore();
+
 //' Your SpO2 level is ${dta.last}';
  int len=dataStore.dta.length;
  
@@ -28,9 +29,28 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
   
   @override
   Widget build(BuildContext bcontext) {
-    //final TextEditingController _times=TextEditingController();
     final TextEditingController value=TextEditingController();
+    print("Graph data 1 ${dataStore.dta}");
+     setState(() {
+      
    
+    try{
+    int last=int.parse(dataStore.dta.last);
+    
+    if(last<95){
+      
+      dataStore.notification='it is advisable to seek medical attention immediately as your SpO2 level is ${dataStore.dta.last}';
+    }
+    else{
+      dataStore.notification=' Your SpO2 level is $last';
+    }
+    }
+    catch(error){
+      print('Nodata');
+       
+    }
+  
+    });
     return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
@@ -55,13 +75,12 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                         ScaffoldMessenger.of(bcontext).showSnackBar (const SnackBar(content: Text('Data Unavailable')));
                         return;
                         }
-                        setState(() {
-                        
-                        dataStore.date=newDate;
+                         dataStore.date=newDate;
+                        print('Graph data ${dataStore.dta}');
+
                         getReading(date: newDate.toString(), vitalid: 1);
-                                  }
                         
-                                );                                           
+                                    
                         },
                   child: Row(
                     children: [
@@ -88,6 +107,8 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                 //             //child:Text('Previous Reading : ${dta[len-1]}',textAlign: TextAlign.center,style:const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                             
                 //             ),
+              
+              
               const GScreen(),
                SizedBox(
                 height: 50,
@@ -125,8 +146,8 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                       }
                 //double d=double.parse(value.text);
                 addRecord(reading: d, vitalid: 1);
-                getReading(date: DateTime.now().toString(), vitalid: 1);
-            
+                
+               
                 Navigator.pushReplacement(
                 bcontext,
                 MaterialPageRoute(
@@ -156,6 +177,8 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
   
  
   
+ 
+  
 }
 
 class GScreen extends StatefulWidget {
@@ -169,7 +192,7 @@ class _GScreenState extends State<GScreen>
   with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late TooltipBehavior _tooltipBehavior;
-
+  
   @override
   void initState() {
      _tooltipBehavior =  TooltipBehavior(
@@ -183,14 +206,16 @@ class _GScreenState extends State<GScreen>
     _controller = AnimationController(vsync: this);
   }
 
+  
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
+  
   @override
   Widget build(BuildContext context) {
+    print('Gscreen ::${dataStore.dta}');
     return Container(
               padding:const EdgeInsets.only(left:40,right:30,top:10),
               //width: 800,
@@ -234,7 +259,7 @@ class _GScreenState extends State<GScreen>
                               //   ),
                               // ),
                             ),
-                            series: <ChartSeries>[
+                            series: <ChartSeries> [
                                 getData()
                                 
                             ]
@@ -243,22 +268,32 @@ class _GScreenState extends State<GScreen>
                  ],
                ),
              );
+  
     
   }
 }
-SplineSeries<ChartData, String> getData() { //SplineSeries
 
- 
+getSharedReading() async {
+  //await Future.delayed(Duration(seconds: 1));
+  
+  MySharedPreferences myPrefs = MySharedPreferences();
+  await myPrefs.initPrefs();
+  dataStore.tme=myPrefs.getList('time')!;
+  dataStore.dta=myPrefs.getList('data')!;
+}
+SplineSeries<ChartData, String> getData() {
+   //SplineSeries
+  getSharedReading();
   List<ChartData> spData=[];
 
-    
     for(int i=0;i<dataStore.tme.length;i++){
-      print(dataStore.dta);
-      print(dataStore.tme);
+
+      print(' from getDat function :${dataStore.dta}');
+      print(' from getDat function :${dataStore.tme}');
       String time=dataStore.tme[i].toString();
       spData.add(ChartData(time.substring(11,16),double.parse(dataStore.dta[i])));
     }
-    notifi();
+    
   
   return SplineSeries<ChartData, String>(
     
@@ -280,48 +315,7 @@ class ChartData {
         final double? y;
     }
 
-//cupertino date picker - import 'package:flutter/cupertino.dart';
-// class CalenderScreen extends StatefulWidget {
-//   const CalenderScreen({super.key});
-//   @override
-//   State<CalenderScreen> createState() => _CalenderScreenState();
-// }
 
-// class _CalenderScreenState extends State<CalenderScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SafeArea(
-//         child: SizedBox(
-//                   height: 200,
-//                   child: CupertinoDatePicker(
-//                     mode: CupertinoDatePickerMode.date,
-//                     initialDateTime: DateTime.now(),
-//                     onDateTimeChanged: (DateTime newDateTime) {
-//                       print(newDateTime);
-//                     },
-//                   ),
-//                 ),
-//       ),
-//     );
-//   }
-// }
-void notifi() {
-  
-    try{
-    int last=int.parse(dataStore.dta.last);
-    if(last<95){
-      dataStore.notification='it is advisable to seek medical attention immediately as your SpO2 level is ${dataStore.dta.last}';
-    }
-    else{
-      dataStore.notification=' Your SpO2 level is $last';
-    }
-    }
-    catch(error){
-      print('Nodata');
-       
-    }
-  }
 
 
 

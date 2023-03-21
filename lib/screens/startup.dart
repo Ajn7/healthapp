@@ -38,6 +38,8 @@ class _StartupState extends State<Startup> {
   print('name at statup (shpf) :${dataStore.name}');
   print('email at statup (shpf):${dataStore.email}');
   print('id at statup (shpf):${dataStore.id}');
+  print('Shared Time list ::: ${myPrefs.getList('time')}');
+
   //print('email at statup (shpf):$dta');
   
   

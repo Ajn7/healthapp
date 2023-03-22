@@ -7,46 +7,45 @@ import 'package:http/http.dart' as http;
 
 DataStore dataStore = DataStore();
  mixin API {
- Future getLastData({required int vitalid}) async {
-  // MySharedPreferences myPrefs = MySharedPreferences();
-  // await myPrefs.initPrefs();
-  String date=DateTime.now().toString();
-  String today=date.substring(0,10);
-  //print('From getReading: $date ,,, $today');
-  final response = await http.get(
+//  Future getLastData({required int vitalid}) async {
+//   // MySharedPreferences myPrefs = MySharedPreferences();
+//   // await myPrefs.initPrefs();
+//   String date=DateTime.now().toString();
+//   String today=date.substring(0,10);
+//   print('From lastdatagetReading');
+//   final response = await http.get(
 
-    Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=${dataStore.id}+&date=$today&vitalid=$vitalid'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
+//     Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=${dataStore.id}+&date=$today&vitalid=$vitalid'),
+//     headers: <String, String>{
+//       'Content-Type': 'application/json; charset=UTF-8',
+//     },
     
-  );
-
-  //decode
-//try{
-List<dynamic> data = jsonDecode(response.body);
-  
-  if (response.statusCode == 200) {
-    MySharedPreferences myPrefs = MySharedPreferences();
-    await myPrefs.initPrefs();
+//   );
+// List<dynamic> data = jsonDecode(response.body);
+//   print('last status:${response.statusCode},$today');
+//   if (response.statusCode == 200) {
+//     MySharedPreferences myPrefs = MySharedPreferences();
+//     await myPrefs.initPrefs();
     
-    List<dynamic>? data=[];
-     for (dynamic d in data) {
-      data.add(d['reading']);
-      await myPrefs.setString('Last',data.last);
-      }
+//     List<dynamic>? lastdata=[];
+//      for (dynamic d in data) {
+//       lastdata.add(d['reading']);
+//       print('last data ${lastdata.last}');
+//       await myPrefs.setString('Last',lastdata.last);
+//       }
 
-      
-   
-   
 
-  } else {
-    var res="response";
-    print(res);
 
-   }
+//   } else {
+//     var res="No data for the given date ";
+//     MySharedPreferences myPrefs = MySharedPreferences();
+//     await myPrefs.initPrefs();
+//     String l='0';
+//     await myPrefs.setString('Last',l);
+//     print(res);
+//    }
 
- }
+//  }
  Future getReading({required String date,required int vitalid}) async {
   // MySharedPreferences myPrefs = MySharedPreferences();
   // await myPrefs.initPrefs();
@@ -78,23 +77,24 @@ print(response.statusCode);
      for (dynamic d in data) {
       dataStore.dta.add(d['reading']);
       dataStore.tme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(d['created_at']).toString());
-      await myPrefs.setList('data',dataStore.dta);
-      await myPrefs.setList('time',dataStore.tme);
-      }
-
       
+      }
+    await myPrefs.setList('data',dataStore.dta);
+    await myPrefs.setList('time',dataStore.tme);
+    print('apicall shareddate');
+    print(myPrefs.getList('data')); 
+    print('apicall datstore.dta');
+    print(dataStore.dta); 
     dataStore.prev=dataStore.dta.last;
-    print('SP02 Data(init call from myHome) :${myPrefs.getList('data')}');
     // Timer(const Duration(seconds:3),(){
       
     // });
 
   } else {
-    dataStore.dta=[ ]; //dt
+    dataStore.dta=['0']; //dt
     dataStore.tme=[ ];
-    dataStore.notification='No data found please add reading';
     var res="response";
-    print(res);
+    print(res+'${dataStore.dta.last}');
     //ScaffoldMessenger.of(context).showSnackBar (SnackBar(content: Text(res)));
     
    }

@@ -11,7 +11,6 @@ import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:healthapp/screens/editinfo.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 DataStore dataStore=DataStore();
-String?prev;
 class MyHome extends StatefulWidget {
     const MyHome({super.key});
   //final dynamic token;
@@ -29,8 +28,6 @@ class _MyHomeState extends State<MyHome> with API{
    @override
     void initState(){
     super.initState();
-    //getData();
-    getLastSP();
     getReading(date: DateTime.now().toString(), vitalid: 1);
     _futureData=getUserData();
 
@@ -44,8 +41,10 @@ class _MyHomeState extends State<MyHome> with API{
     //   });
       
     // }
+  
   @override
   Widget build(BuildContext context){
+    
       return ( FutureBuilder<dynamic>(
       future:_futureData,
       initialData: const ['Loading...'],
@@ -71,12 +70,6 @@ class _MyHomeState extends State<MyHome> with API{
       
   }
   
-  void getLastSP() async{
-    MySharedPreferences myPrefs = MySharedPreferences();
-    await myPrefs.initPrefs();
-    getLastData(vitalid: 1);
-    prev=myPrefs.getString('Last');
-  }
 }
 
 class HomeScreen extends StatefulWidget {
@@ -173,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
                 fontSize: 20.0,
               ),
               ),
-             subtitle:Text('$prev',style: const TextStyle(
+             subtitle:Text('${dataStore.prev}',style: const TextStyle(
                 fontSize: 20.0,
               ),
               ),

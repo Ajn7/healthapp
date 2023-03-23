@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
+import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 DataStore dataStore=DataStore();
@@ -30,16 +31,18 @@ class _BPScreenState extends State<BPScreen> with API {
      setState(() {
 
     try{
-    int last=int.parse(dataStore.bphdta.last);
-    if(last==0){
+    int bpsys=int.parse(dataStore.bpldta.last);
+    int bpdia=int.parse(dataStore.bphdta.last);
+    
+    if(bpsys==0 && bpdia==0){
       dataStore.notification='No data found ';
     }
-    else if(last<95){
+    else if(bpsys>=140 || bpdia<=90){
       
-      dataStore.notification='it is advisable to seek medical attention immediately as your SpO2 level is ${dataStore.dta.last}';
+      dataStore.notification='it is advisable to seek medical attention immediately as your Blood Pressure level is High$bpsys/$bpdia';
     }
     else {
-      dataStore.notification=' Your SpO2 level is $last';
+      dataStore.notification=' Your Blood Pressure level is $bpsys/$bpdia';
     }
     }
     catch(error){
@@ -94,6 +97,7 @@ class _BPScreenState extends State<BPScreen> with API {
             // do
           },
         )  ,
+        verticalSpace(20),
                SizedBox(
                 height: 50,
                 width: 200,
@@ -235,7 +239,7 @@ class _GScreenState extends State<GScreen>
       builder: (BuildContext context,StateSetter setState){
         return Container(
               padding:const EdgeInsets.only(left:40,right:30,top:10),
-              //width: 800,
+              //width: 1500,
               height: 300,
                child: ListView(
                  physics:const BouncingScrollPhysics(),
@@ -267,7 +271,14 @@ class _GScreenState extends State<GScreen>
                               interval: 5,
                              
                             ),
+                            legend:Legend(
+                              isVisible: true, 
+                              position: LegendPosition.bottom,
+                              textStyle:const TextStyle(fontSize:15),
+                               backgroundColor: Colors.yellow.shade200,
+                            ),
                             series: <ChartSeries> [
+                                 
                             
                                  getData(widget.setStateCallback),
                                  getDatatwo(widget.setStateCallback)
@@ -287,9 +298,10 @@ class _GScreenState extends State<GScreen>
 }
 
 SplineSeries<ChartData, String> getData(Function setStateCallback) {
+  
   print('bpgetData SplineSeries');
   List<ChartData> spData=[];
-  List<double> parsedData = dataStore.bphdta.map((data) => double.parse(data)).toList();
+  List<double> parsedData = dataStore.bpldta.map((data) => double.parse(data)).toList();
    print(' 22 ${dataStore.bptme.length}');
     for(int i=0;i<(dataStore.bptme.length);i++){
       //print('for loop:$i');
@@ -299,7 +311,7 @@ SplineSeries<ChartData, String> getData(Function setStateCallback) {
  setStateCallback();
   
   return SplineSeries<ChartData, String>(
-    
+    name: 'Systolic',
     // Create a new LineSeries object
     dataSource:spData,
     xValueMapper: (ChartData data, _) => data.x, // Map x values to ChartData.x
@@ -314,7 +326,7 @@ SplineSeries<ChartData, String> getData(Function setStateCallback) {
 SplineSeries<ChartData, String> getDatatwo(Function setStateCallback) {
   print('getDatatwo SplineSeries');
   List<ChartData> spData=[];
-  List<double> parsedData = dataStore.bpldta.map((data) => double.parse(data)).toList();
+  List<double> parsedData = dataStore.bphdta.map((data) => double.parse(data)).toList();
   
     for(int i=0;i<dataStore.bptme.length;i++){
       String time=dataStore.bptme[i].toString();
@@ -323,7 +335,7 @@ SplineSeries<ChartData, String> getDatatwo(Function setStateCallback) {
  setStateCallback();
   
   return SplineSeries<ChartData, String>(
-    
+    name: 'Diastolic',
     // Create a new LineSeries object
     dataSource:spData,
     xValueMapper: (ChartData data, _) => data.x, // Map x values to ChartData.x

@@ -149,14 +149,14 @@ print(response.statusCode);
     }
     rd += name[i];
   }
-  dataStore.bphdta.add(rd);
+  dataStore.bpldta.add(rd);
   // Extract the second value
   rd = '';
   for (int j = i + 1; j < name.length; j++) {
     
     rd += name[j];
   }
-  dataStore.bpldta.add(rd);
+  dataStore.bphdta.add(rd);
 }
   
     

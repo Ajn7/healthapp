@@ -364,6 +364,29 @@ print(response.statusCode);
    getReading(date: DateTime.now().toString(), vitalid: 1);
  
 }
+ Future addBpRecord({required String reading,required int vitalid}) async {
+  final response = await http.post(
+  
+    Uri.parse('${dataStore.baseurl}/vitalrecords/reading/add/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String,dynamic>{
+      'reading':reading,
+      'vital':vitalid,
+      'user':dataStore.id,
+    }),
+  );
+
+  //decode
+  Map<String, dynamic> data = jsonDecode(response.body);
+  if (response.statusCode!= 201) {
+    
+    print('Un Successfull');
+  }
+   getReading(date: DateTime.now().toString(), vitalid: 1);
+ 
+}
  }
 
  

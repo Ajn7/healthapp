@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
+import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 DataStore dataStore=DataStore();
-
  int len=dataStore.dta.length;
- 
+ List<Widget> widgets = [];
 class SpoGraphscreen extends StatefulWidget {
    const SpoGraphscreen({super.key});
   @override
@@ -19,6 +19,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
 
     @override
     void initState(){
+      
       super.initState(); 
       
     }
@@ -50,106 +51,118 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
     });
     return StatefulBuilder(
       builder: (BuildContext context,StateSetter setState){
-        return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
-          body: SingleChildScrollView(
-            child: SafeArea(
-              child:Column(
-              children: [
-                InkWell(
-                  onTap:()async{
-                        DateTime?newDate=await showDatePicker(context: context, 
-                        initialDate:dataStore.date,
-                        firstDate: DateTime(2012),
-                        lastDate: DateTime(2025)
-                        );
-                        Future.microtask(() async {
-                        await dateCheck(context, newDate);
-                        });
-                         
-                        },
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding:EdgeInsets.only(left:20,top: 20,right: 8),
-                        child: Icon(
-                        size: 40,
-                        color: Colors.blue,
-                        Icons.edit_calendar_outlined
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top:20.0,right: 10),
-                        child: Text(
-                        '${dataStore.date.day} /${dataStore.date.month} /${dataStore.date.year}',
-                        style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
-                        ),
-                      ),                           
-                    ],
-                  ),
-                ),
-               GScreen(
-          setStateCallback: () {
-            // do
+        return RefreshIndicator(
+          onRefresh: () async {
+            getReading(date: DateTime.now().toString(), vitalid: 1);
           },
-        )  ,
-               SizedBox(
-                height: 50,
-                width: 200,
-                 child: TextFormField(
-                       controller:value,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration( 
-                                 border: OutlineInputBorder(),
-                                 prefixIcon: Icon(Icons.add_circle_outline),
-                                 hintText: "Enter SPO2 Here",
-                                 hintStyle: TextStyle(fontSize: 20.0, ),
-                                 //labelText: "Last Name",
-                                 //labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
-                                           ),
-                      
-                                     ),
-               ),
-              MeasureButton(buttonText: 'Add', buttonAction: (){
-                  int d;
-                  try {
-                       d = int.parse(value.text);
-                      
-                      } on FormatException {
-
-                        d=0;
-  
-                        print('Error: Could not parse value as double');
-                      }
-                //double d=double.parse(value.text);
-                addRecord(reading: d, vitalid: 1);
-                getReading(date: DateTime.now().toString().substring(0,10), vitalid: 1);
-               
-                Navigator.pushReplacement(
-                bcontext,
-                MaterialPageRoute(
-                builder: (BuildContext context) => super.widget));
-              
-                
-              },             
-              ),
-              Container(
-                  padding:const EdgeInsets.all(20),
-                  margin:const EdgeInsets.all(10),
-                  height: 100,
-                  decoration: BoxDecoration(
-                                              color: Colors.lightBlue[50],
-                                              border: Border.all(color:Colors.black,width: 2),
-                                            ),
-                  child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold))),
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
+            body: SingleChildScrollView(
+              child: SafeArea(
+                child:Column(
+                children: [
+                  InkWell(
+                    onTap:()async{
+                          DateTime?newDate=await showDatePicker(context: context, 
+                          initialDate:dataStore.date,
+                          firstDate: DateTime(2012),
+                          lastDate: DateTime(2025)
+                          );
+                          Future.microtask(() async {
+                          await dateCheck(context, newDate);
+                          });
+                           
+                          },
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding:EdgeInsets.only(left:20,top: 20,right: 8),
+                          child: Icon(
+                          size: 40,
+                          color: Colors.blue,
+                          Icons.edit_calendar_outlined
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top:20.0,right: 10),
+                          child: Text(
+                          '${dataStore.date.day} /${dataStore.date.month} /${dataStore.date.year}',
+                          style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
+                          ),
+                        ),                           
+                      ],
+                    ),
                   ),
-                  
-              ],
-              ),
-             ),
+                 GScreen(
+            setStateCallback: () {
+              // do
+            },
           ),
-  );
+           SizedBox(
+                  height: 50,
+                  width: 200,
+                   child: TextFormField(
+                         controller:value,
+                        keyboardType: TextInputType.number,
+                        decoration:  InputDecoration( 
+                                   border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                   ),
+                                   //prefixIcon: Icon(Icons.add_circle_outline),
+                                   hintText: "Enter SPO2 Here",
+                                   labelText: 'SP02',
+                                   hintStyle:const TextStyle(fontSize: 15.0, ),
+                                   //labelText: "Last Name",
+                                   //labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
+                                             ),
+                        
+                                       ),
+                 ),            
+                 verticalSpace(10),
+                MeasureButton(buttonText: 'Add', buttonAction: (){
+                    int d;
+                    try {
+                         d = int.parse(value.text);
+                        
+                        } on FormatException {
+          
+                          d=0;
+          
+                          print('Error: Could not parse value as double');
+                        }
+                  //double d=double.parse(value.text);
+                  addRecord(reading: d, vitalid: 1);
+                  getReading(date: DateTime.now().toString().substring(0,10), vitalid: 1);
+                 
+                  Navigator.pushReplacement(
+                  bcontext,
+                  MaterialPageRoute(
+                  builder: (BuildContext context) => super.widget));
+                
+                  
+                },             
+                ),
+                verticalSpace(20),
+                Container(
+                    padding:const EdgeInsets.all(20),
+                    margin:const EdgeInsets.all(10),
+                    height: 100,
+                    decoration: BoxDecoration(
+                                                color: Colors.lightBlue[50],
+                                                border: Border.all(color:Colors.black,width: 2),
+                                              ),
+                    child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold)
+                    )
+                    ),
+                    ),
+                    
+                ],
+                ),
+               ),
+            ),
+          ),
+        );
       }
       );
  }
@@ -189,7 +202,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
 // });
                           //print('Graph data[0] ${dataStore.dta}');
     }
- 
+  
   }
 
 class GScreen extends StatefulWidget {

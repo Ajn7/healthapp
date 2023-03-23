@@ -28,16 +28,20 @@ class DataStore {
 
   List<dynamic> dta = []; //dt
   List<dynamic> tme = []; //dte
+  List<dynamic> bphdta = []; //dt
+  List<dynamic> bpldta = []; //dt
+  List<dynamic> bptme = [];
   dynamic prev = 0;
+  dynamic bpprev = 0;
   String name = '';
   String email = ''; //'a';
-  String baseurl = 'http://192.168.222.129:8000';
+  String baseurl = 'http://192.168.1.23:8000';
   int? id;
   int? age;
   double? height;
   double? weight;
   String bloodgroup = '';
   String phone = '';
-  String notification = 'No data found please add reading';
+  String notification = 'No data found please ';
   DateTime date=DateTime.now();
 }

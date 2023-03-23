@@ -106,7 +106,83 @@ print(response.statusCode);
 // }
  
  }
+  Future getReadingBp({required String date,required int vitalid}) async {
+  // MySharedPreferences myPrefs = MySharedPreferences();
+  // await myPrefs.initPrefs();
+  String today=date.substring(0,10);
+  //print('From getReading: $date ,,, $today');
+  final response = await http.get(
+
+    Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=${dataStore.id}+&date=$today&vitalid=$vitalid'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    
+  );
+
+  //decode
+//try{
+List<dynamic> data = jsonDecode(response.body);
+print('from getbpReading api ::$data');
+print(response.statusCode);
+   
+  
+  if (response.statusCode == 200) {
+    MySharedPreferences myPrefs = MySharedPreferences();
+    await myPrefs.initPrefs();
+    
+    //List<dynamic>? dta = myPrefs.getList('dta');
+     dataStore.bphdta=[ ];
+     dataStore.bpldta=[ ]; //dt
+     dataStore.bptme=[ ];
+     var i=0;
+     for (dynamic d in data) {
+      dataStore.bptme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(d['created_at']).toString());
+  var name = d['reading'];
+  dataStore.bpprev=d['reading'];
+  var rd = '';
+  int i = 0;
+  // Extract the first value
+  for (i = 0; i < name.length; i++) {
+    if (name[i] == '/') {
+      break;
+    }
+    rd += name[i];
+  }
+  dataStore.bphdta.add(rd);
+  // Extract the second value
+  rd = '';
+  for (int j = i + 1; j < name.length; j++) {
+    
+    rd += name[j];
+  }
+  dataStore.bpldta.add(rd);
+}
+  
+    
+    print('apicall bphreading');
+    print(dataStore.bphdta); 
+    print('apicall bpldata');
+    print(dataStore.bpldta); 
+    
+
+  } else {
+    dataStore.bphdta=['0']; 
+    dataStore.bpldta=['0'];//dt
+    dataStore.bptme=[ ];
+    var res="response";
+    print(res+'${dataStore.dta.last}');
+    //ScaffoldMessenger.of(context).showSnackBar (SnackBar(content: Text(res)));
+    
+   }
+// }catch (FormatException) {
+  
+//   dataStore.dta=[ ]; //dt
+//   dataStore.tme=[ ];
+//   dataStore.notification='No data found please add reading';
+// }
  
+ }
   
 
  Future getUserData() async {

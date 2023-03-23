@@ -32,7 +32,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
     try{
     int last=int.parse(dataStore.dta.last);
     if(last==0){
-      dataStore.notification='No data found please add reading';
+      dataStore.notification='No data found ';
     }
     else if(last<95){
       

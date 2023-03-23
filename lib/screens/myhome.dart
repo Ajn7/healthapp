@@ -29,6 +29,7 @@ class _MyHomeState extends State<MyHome> with API{
     void initState(){
     super.initState();
     getReading(date: DateTime.now().toString(), vitalid: 1);
+    getReadingBp(date: DateTime.now().toString().substring(0,10), vitalid: 2);
     _futureData=getUserData();
 
     }
@@ -61,7 +62,11 @@ class _MyHomeState extends State<MyHome> with API{
           );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
-        } else {
+        }
+        // else if(snapshot.data.isEmpty){
+        //   return const Text('No data available');
+        // } 
+        else {
           return const HomeScreen();
         }
       },
@@ -196,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
                 fontSize: 20.0,
               ),
               ),
-             subtitle: const Text('90/110',style:TextStyle(
+             subtitle:Text('${dataStore.bpprev}',style:const TextStyle(
                 fontSize: 20.0,
               ),
               ),
@@ -234,24 +239,37 @@ class _HomeScreenState extends State<HomeScreen> with API {
                         height: 200,
                         width: 200,
                     child: SfCartesianChart(
-                        // Initialize category axis
-                        primaryXAxis: CategoryAxis(),
-                        series: <ChartSeries>[
-                            // Initialize line series
-                            LineSeries<ChartData, dynamic>(
-                                dataSource: [
-                                    // Bind data source
-                                    ChartData('Jan 1', 35),
-                                    ChartData('Jan 2', 28),
-                                    ChartData('Jan 3', 34),
-                                    ChartData('Jan 4', 32),
-                                    ChartData('Jan 5', 40)
-                                ],
-                                xValueMapper: (ChartData data, _) => data.x,
-                                yValueMapper: (ChartData data, _) => data.y
-                            )
-                        ]
-                    )
+    title: ChartTitle(text: 'Sales comparison'),
+    legend: Legend(isVisible: true),
+    series: <LineSeries>[
+        LineSeries<ChartData, dynamic>(
+            name: 'Product A',
+            dataSource: [
+                ChartData('Jan 1', 35),
+                ChartData('Jan 2', 28),
+                ChartData('Jan 3', 34),
+                ChartData('Jan 4', 32),
+                ChartData('Jan 5', 40)
+            ],
+            xValueMapper: (ChartData data, _) => data.x,
+            yValueMapper: (ChartData data, _) => data.y
+        ),
+        LineSeries<ChartData, dynamic>(
+            name: 'Product B',
+            dataSource: [
+                ChartData('Jan 1', 20),
+                ChartData('Jan 2', 30),
+                ChartData('Jan 3', 25),
+                ChartData('Jan 4', 28),
+                ChartData('Jan 5', 35)
+            ],
+            xValueMapper: (ChartData data, _) => data.x,
+            yValueMapper: (ChartData data, _) => data.y
+        ),
+    ],
+    primaryXAxis: CategoryAxis(),
+    primaryYAxis: NumericAxis(),
+)
                 ),
                 horizontaSpace(20),
                 MeasureButton(buttonText: 'Measure', buttonAction: () { 

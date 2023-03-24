@@ -33,13 +33,17 @@ class _BPScreenState extends State<BPScreen> with API {
     try{
     int bpsys=int.parse(dataStore.bpldta.last);
     int bpdia=int.parse(dataStore.bphdta.last);
-    
+    //normal range sys 90-120,60-80
     if(bpsys==0 && bpdia==0){
       dataStore.notification='No data found ';
     }
-    else if(bpsys>=140 || bpdia>=90){
+    else if(bpsys>=140 || bpdia>=90){ //sys >=140, dia>=90
       
-      dataStore.notification='it is advisable to seek medical attention immediately as your Blood Pressure level is High$bpsys/$bpdia';
+      dataStore.notification='it is advisable to seek medical attention immediately as your Blood Pressure level is High $bpsys/$bpdia';
+    }
+    else if(bpsys<90 || bpdia<60){ //sys less90, lessthan60
+      
+      dataStore.notification='it is advisable to seek medical attention immediately as your Blood Pressure level is Low $bpsys/$bpdia';
     }
     else {
       dataStore.notification=' Your Blood Pressure level is $bpsys/$bpdia';
@@ -141,7 +145,10 @@ class _BPScreenState extends State<BPScreen> with API {
                         }
                                  //double d=double.parse(value.text);
                                  addBpRecord(reading: d, vitalid: 2);
-                                 getReadingBp(date: DateTime.now().toString().substring(0,10), vitalid: 2);
+                                 getReadingBp(date: DateTime.now().toString().substring(0,10), vitalid: 2).then((_) {
+                                 setState(() {});
+                                 });
+   
                                 
                                  Navigator.pushReplacement(
                                  bcontext,

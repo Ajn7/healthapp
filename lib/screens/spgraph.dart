@@ -133,7 +133,9 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                         }
                   //double d=double.parse(value.text);
                   addRecord(reading: d, vitalid: 1);
-                  getReading(date: DateTime.now().toString().substring(0,10), vitalid: 1);
+                  getReading(date: DateTime.now().toString().substring(0,10), vitalid: 1).then((_) {
+                           setState(() { });
+                            });
                  
                   Navigator.pushReplacement(
                   bcontext,

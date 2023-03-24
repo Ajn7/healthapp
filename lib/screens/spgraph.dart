@@ -5,6 +5,8 @@ import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 DataStore dataStore=DataStore();
+bool isvisible=true;
+DateTime today=DateTime.now();
  int len=dataStore.dta.length;
  List<Widget> widgets = [];
 class SpoGraphscreen extends StatefulWidget {
@@ -99,28 +101,35 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
               // do
             },
           ),
-           SizedBox(
-                  height: 50,
-                  width: 200,
-                   child: TextFormField(
-                         controller:value,
-                        keyboardType: TextInputType.number,
-                        decoration:  InputDecoration( 
-                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                   ),
-                                   //prefixIcon: Icon(Icons.add_circle_outline),
-                                   hintText: "Enter SPO2 Here",
-                                   labelText: 'SP02',
-                                   hintStyle:const TextStyle(fontSize: 15.0, ),
-                                   //labelText: "Last Name",
-                                   //labelStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
+          Visibility(
+                 visible:isvisible,
+                 child: SizedBox(
+                   child: Row(
+                     children: [
+                      horizontaSpace(50),
+                       SizedBox(
+                        height: 50,
+                        width: 200,
+                         child: TextFormField(
+                               controller:value,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration( 
+                                         border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                         ),
+                                         //prefixIcon: Icon(Icons.add_circle_outline),
+                                         hintText: "Enter SPO2 Here",
+                                         labelText: 'SpO2',
+                                         hintStyle:const TextStyle(fontSize: 15.0, ),
+                                         //errorText: "Error",
+                                                   ),
+                                        validator: (String? value) {
+                                        return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
+                                        },
                                              ),
-                        
-                                       ),
-                 ),            
-                 verticalSpace(10),
-                MeasureButton(buttonText: 'Add', buttonAction: (){
+                       ),
+                       horizontaSpace(20),
+                       MeasureButton(buttonText: 'Add', buttonAction: (){
                     int d;
                     try {
                          d = int.parse(value.text);
@@ -145,6 +154,11 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                   
                 },             
                 ),
+                       
+                     ],
+                   ),
+                 ),
+               ),
                 verticalSpace(20),
                 Container(
                     padding:const EdgeInsets.all(20),
@@ -173,6 +187,16 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
      if(newDate==null){
                         return;
                         }
+      else if(newDate.year == today.year && newDate.month == today.month && newDate.day == today.day){
+        isvisible=true;
+        //print('Cu isVisible true: $isvisible');
+        
+        dataStore.date=newDate;
+                          getReading(date: newDate.toString(), vitalid: 1);
+                          setState(() {
+                          print('Graph data[0] ${dataStore.dta}');
+                          });
+      }
                         else if(newDate.compareTo(DateTime.now())>0)
                         {
                           
@@ -194,6 +218,8 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                         //ScaffoldMessenger.of(bcontext).showSnackBar (const SnackBar(content: Text('Data Unavailable')));
                         return;
                         }
+                        else{
+                          isvisible=false;
                           dataStore.date=newDate;
                           getReading(date: newDate.toString(), vitalid: 1);
                           setState(() {
@@ -202,7 +228,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
 //                           Future.delayed(Duration(seconds: 1), () {
   
 // });
-                          //print('Graph data[0] ${dataStore.dta}');
+                                        }                //print('Graph data[0] ${dataStore.dta}');
     }
   
   }

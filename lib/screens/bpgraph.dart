@@ -8,7 +8,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 DataStore dataStore=DataStore();
 bool isvisible=true;
 DateTime today=DateTime.now();
- int len=dataStore.dta.length;
+int len=dataStore.dta.length;
  
 class BPScreen extends StatefulWidget {
    const BPScreen({super.key});

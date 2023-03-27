@@ -54,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
   await myPrefs.setInt('user_id', id);
   String? myToken = myPrefs.getString('token');
   int? ids = myPrefs.getInt('user_id');
+  dataStore.id=ids;
   var em=myPrefs.getString('email');
   //bool keyExists = myPrefs.containsKey('myKey');
   //bool keyRemoved = await myPrefs.remove('myKey');

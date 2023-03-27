@@ -53,130 +53,127 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
     });
     return StatefulBuilder(
       builder: (BuildContext context,StateSetter setState){
-        return RefreshIndicator(
-          onRefresh: () async {
-            getReading(date: DateTime.now().toString(), vitalid: 1);
-          },
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
-            body: SingleChildScrollView(
-              child: SafeArea(
-                child:Column(
-                children: [
-                  InkWell(
-                    onTap:()async{
-                          DateTime?newDate=await showDatePicker(context: context, 
-                          initialDate:dataStore.date,
-                          firstDate: DateTime(2012),
-                          lastDate: DateTime(2025)
-                          );
-                          Future.microtask(() async {
-                          await dateCheck(context, newDate);
-                          });
-                           
-                          },
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding:EdgeInsets.only(left:20,top: 20,right: 8),
-                          child: Icon(
-                          size: 40,
-                          color: Colors.blue,
-                          Icons.edit_calendar_outlined
-                          ),
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
+          body: SingleChildScrollView(
+            child: SafeArea(
+              child:Column(
+              children: [
+                InkWell(
+                  onTap:()async{
+                        DateTime?newDate=await showDatePicker(context: context, 
+                        initialDate: dataStore.datesp,
+                        firstDate: DateTime(2012),
+                        lastDate: DateTime(2025)
+                        );
+                        Future.microtask(() async {
+                        await dateCheck(context, newDate);
+                        });
+                         
+                        },
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding:EdgeInsets.only(left:20,top: 20,right: 8),
+                        child: Icon(
+                        size: 40,
+                        color: Colors.blue,
+                        Icons.edit_calendar_outlined
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top:20.0,right: 10),
-                          child: Text(
-                          '${dataStore.date.day} /${dataStore.date.month} /${dataStore.date.year}',
-                          style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
-                          ),
-                        ),                           
-                      ],
-                    ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top:20.0,right: 10),
+                        child: Text(
+                        '${dataStore.datesp.day} /${dataStore.datesp.month} /${dataStore.datesp.year}',
+                        style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
+                        ),
+                      ),                           
+                    ],
                   ),
-                 GScreen(
-            setStateCallback: () {
-              // do
-            },
-          ),
-          Visibility(
-                 visible:isvisible,
-                 child: SizedBox(
-                   child: Row(
-                     children: [
-                      horizontaSpace(50),
-                       SizedBox(
-                        height: 50,
-                        width: 200,
-                         child: TextFormField(
-                               controller:value,
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration( 
-                                         border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                         ),
-                                         //prefixIcon: Icon(Icons.add_circle_outline),
-                                         hintText: "Enter SPO2 Here",
-                                         labelText: 'SpO2',
-                                         hintStyle:const TextStyle(fontSize: 15.0, ),
-                                         //errorText: "Error",
-                                                   ),
-                                        validator: (String? value) {
-                                        return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
-                                        },
-                                             ),
-                       ),
-                       horizontaSpace(20),
-                       MeasureButton(buttonText: 'Add', buttonAction: (){
-                    int d;
-                    try {
-                         d = int.parse(value.text);
-                        
-                        } on FormatException {
-          
-                          d=0;
-          
-                          print('Error: Could not parse value as double');
-                        }
-                  //double d=double.parse(value.text);
-                  addRecord(reading: d, vitalid: 1);
-                  getReading(date: DateTime.now().toString().substring(0,10), vitalid: 1).then((_) {
-                           setState(() { });
-                            });
-                 
-                  Navigator.pushReplacement(
-                  bcontext,
-                  MaterialPageRoute(
-                  builder: (BuildContext context) => super.widget));
-                
-                  
-                },             
                 ),
-                       
-                     ],
-                   ),
+               GScreen(
+          setStateCallback: () {
+            // do
+          },
+        ),
+        Visibility(
+               visible:isvisible,
+               child: SizedBox(
+                 child: Row(
+                   children: [
+                    horizontaSpace(50),
+                     SizedBox(
+                      height: 50,
+                      width: 200,
+                       child: TextFormField(
+                             controller:value,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration( 
+                                       border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                       ),
+                                       //prefixIcon: Icon(Icons.add_circle_outline),
+                                       hintText: "Enter SPO2 Here",
+                                       labelText: 'SpO2',
+                                       hintStyle:const TextStyle(fontSize: 15.0, ),
+                                       //errorText: "Error",
+                                                 ),
+                                      validator: (String? value) {
+                                      return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
+                                      },
+                                           ),
+                     ),
+                     horizontaSpace(20),
+                     MeasureButton(buttonText: 'Add', buttonAction: (){
+                  int d;
+                  try {
+                       d = int.parse(value.text);
+                      
+                      } on FormatException {
+        
+                        d=0;
+        
+                        print('Error: Could not parse value as double');
+                      }
+                //double d=double.parse(value.text);
+                addRecord(reading: d, vitalid: 1);
+                getReading(date: DateTime.now().toString().substring(0,10), vitalid: 1).then((_) {
+                         setState(() { });
+                          });
+               
+                Navigator.pushReplacement(
+                bcontext,
+                MaterialPageRoute(
+                builder: (BuildContext context) => super.widget));
+              
+                
+              },             
+              ),
+                     
+                   ],
                  ),
                ),
-                verticalSpace(20),
-                Container(
-                    padding:const EdgeInsets.all(20),
-                    margin:const EdgeInsets.all(10),
-                    height: 100,
-                    decoration: BoxDecoration(
-                                                color: Colors.lightBlue[50],
-                                                border: Border.all(color:Colors.black,width: 2),
-                                              ),
-                    child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold)
-                    )
-                    ),
-                    ),
-                    
-                ],
-                ),
-               ),
-            ),
+             ),
+              verticalSpace(20),
+              Container(
+                  padding:const EdgeInsets.all(20),
+                  margin:const EdgeInsets.all(10),
+                  height: 100,
+                  decoration: BoxDecoration(
+                                              color: Colors.lightBlue[50],
+                                              border: Border.all(color:Colors.black,width: 2),
+                                            ),
+                  child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold)
+                  )
+                  ),
+                  ),
+                   MeasureButton(buttonText: 'Measure ', buttonAction: (){
+                   
+                  })
+              ],
+              ),
+             ),
           ),
         );
       }
@@ -191,7 +188,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
         isvisible=true;
         //print('Cu isVisible true: $isvisible');
         
-        dataStore.date=newDate;
+        dataStore.datesp=newDate;
                           getReading(date: newDate.toString(), vitalid: 1);
                           setState(() {
                           print('Graph data[0] ${dataStore.dta}');
@@ -220,7 +217,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                         }
                         else{
                           isvisible=false;
-                          dataStore.date=newDate;
+                          dataStore.datesp=newDate;
                           getReading(date: newDate.toString(), vitalid: 1);
                           setState(() {
                           print('Graph data[0] ${dataStore.dta}');

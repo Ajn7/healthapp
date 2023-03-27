@@ -47,13 +47,14 @@ DataStore dataStore = DataStore();
 
 //  }
  Future getReading({required String date,required int vitalid}) async {
-  // MySharedPreferences myPrefs = MySharedPreferences();
-  // await myPrefs.initPrefs();
+  MySharedPreferences myPrefs = MySharedPreferences();
+  await myPrefs.initPrefs();
+  var id=myPrefs.getInt('user_id');
   String today=date.substring(0,10);
   //print('From getReading: $date ,,, $today');
   final response = await http.get(
 
-    Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=${dataStore.id}+&date=$today&vitalid=$vitalid'),
+    Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=$id+&date=$today&vitalid=$vitalid'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -61,7 +62,7 @@ DataStore dataStore = DataStore();
   );
 
   //decode
-//try{
+try{
 List<dynamic> data = jsonDecode(response.body);
 print('from getReading api ::$data');
 print(response.statusCode);
@@ -98,22 +99,24 @@ print(response.statusCode);
     //ScaffoldMessenger.of(context).showSnackBar (SnackBar(content: Text(res)));
     
    }
-// }catch (FormatException) {
+}on FormatException {
   
-//   dataStore.dta=[ ]; //dt
-//   dataStore.tme=[ ];
-//   dataStore.notification='No data found please add reading';
-// }
+  dataStore.dta=[ ]; //dt
+  dataStore.tme=[ ];
+  dataStore.notification='No data found please add reading';
+}
  
  }
   Future getReadingBp({required String date,required int vitalid}) async {
-  // MySharedPreferences myPrefs = MySharedPreferences();
-  // await myPrefs.initPrefs();
+  MySharedPreferences myPrefs = MySharedPreferences();
+  await myPrefs.initPrefs();
+  await myPrefs.initPrefs();
+  var id=myPrefs.getInt('user_id');
   String today=date.substring(0,10);
   //print('From getReading: $date ,,, $today');
   final response = await http.get(
 
-    Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=${dataStore.id}+&date=$today&vitalid=$vitalid'),
+    Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=$id+&date=$today&vitalid=$vitalid'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -121,7 +124,7 @@ print(response.statusCode);
   );
 
   //decode
-//try{
+try{
 List<dynamic> data = jsonDecode(response.body);
 print('from getbpReading api ::$data');
 print(response.statusCode);
@@ -175,12 +178,12 @@ print(response.statusCode);
     //ScaffoldMessenger.of(context).showSnackBar (SnackBar(content: Text(res)));
     
    }
-// }catch (FormatException) {
+}on FormatException {
   
-//   dataStore.dta=[ ]; //dt
-//   dataStore.tme=[ ];
-//   dataStore.notification='No data found please add reading';
-// }
+  dataStore.dta=[ ]; //dt
+  dataStore.tme=[ ];
+  dataStore.notification='No data found please add reading';
+}
  
  }
   

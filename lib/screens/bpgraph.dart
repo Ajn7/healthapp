@@ -174,7 +174,7 @@ class _BPScreenState extends State<BPScreen> with API {
                                             ),
                   child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold))),
                   ),
-                  MeasureButton(buttonText: 'Test', buttonAction: (){
+                  MeasureButton(buttonText: 'Measure ', buttonAction: (){
                     Navigator.push(context, MaterialPageRoute(builder:(context)=>MyWidget()));
                   })
                   

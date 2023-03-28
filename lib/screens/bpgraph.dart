@@ -197,10 +197,12 @@ class _BPScreenState extends State<BPScreen> with API {
         print(newDate.compareTo(DateTime.now())==0);
         
         dataStore.date=newDate;
-                          getReadingBp(date: newDate.toString(), vitalid: 2);
-                          setState(() {
-                          print('Graph data[0] ${dataStore.dta}');
-                          });
+                         
+                          getReadingBp(date: newDate.toString(), vitalid: 2).then((_) {
+      setState(() {
+        print('Sample Graph data[0] ${dataStore.dta}');
+      });
+  });
       }
                         else if(newDate.compareTo(DateTime.now())>0)
                         {
@@ -226,11 +228,11 @@ class _BPScreenState extends State<BPScreen> with API {
                         else{
                           print('isvisible is :$isvisible');
                           dataStore.date=newDate;
-                          getReadingBp(date: newDate.toString(), vitalid: 2);
-                          setState(() {
-                            isvisible=false;
-                          print('Graph data[0] ${dataStore.dta}');
-                          });
+                          getReadingBp(date: newDate.toString(), vitalid: 2).then((_) {
+      setState(() {
+        print('Sample Graph data[0] ${dataStore.dta}');
+      });
+  });
 //                           Future.delayed(Duration(seconds: 1), () {
   
 // });

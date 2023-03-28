@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/constants/divider.dart';
+import 'package:healthapp/screens/samplegraph.dart';
+//import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 DataStore dataStore=DataStore();
@@ -17,20 +19,19 @@ class SpoGraphscreen extends StatefulWidget {
 
 
 class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
-  
-
     @override
+
     void initState(){
-      
+
       super.initState(); 
-      
+
     }
   
   @override
   Widget build(BuildContext bcontext) {
     final TextEditingController value=TextEditingController();
     print("Graph data 1 ${dataStore.dta}");
-     setState(() {
+    setState(() {
 
     try{
     int last=int.parse(dataStore.dta.last);
@@ -46,8 +47,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
     }
     }
     catch(error){
-      print('Nodata');
-       
+      print('Nodata');   
     }
   
     });
@@ -169,6 +169,10 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                   ),
                   ),
                    MeasureButton(buttonText: 'Measure ', buttonAction: (){
+                    //  Navigator.pushReplacement(
+                    //  bcontext,
+                    //  MaterialPageRoute(
+                    //  builder: (BuildContext context) =>const SampleGraphScreen()));
                    
                   })
               ],
@@ -189,10 +193,14 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
         //print('Cu isVisible true: $isvisible');
         
         dataStore.datesp=newDate;
-                          getReading(date: newDate.toString(), vitalid: 1);
-                          setState(() {
-                          print('Graph data[0] ${dataStore.dta}');
-                          });
+         getReading(date: newDate.toString(), vitalid: 1).then((_) {
+      setState(() {
+        print('Sample Graph data[0] ${dataStore.dta}');
+      });
+  });
+        // setState(() {
+        //       print('Graph data[0] ${dataStore.dta}');
+        //       });
       }
                         else if(newDate.compareTo(DateTime.now())>0)
                         {
@@ -218,10 +226,11 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                         else{
                           isvisible=false;
                           dataStore.datesp=newDate;
-                          getReading(date: newDate.toString(), vitalid: 1);
-                          setState(() {
-                          print('Graph data[0] ${dataStore.dta}');
-                          });
+                           getReading(date: newDate.toString(), vitalid: 1).then((_) {
+      setState(() {
+        print('Sample Graph data[0] ${dataStore.dta}');
+      });
+  });
 //                           Future.delayed(Duration(seconds: 1), () {
   
 // });
@@ -333,12 +342,16 @@ class _GScreenState extends State<GScreen>
 
 SplineSeries<ChartData, String> getData(Function setStateCallback) {
   print('getData SplineSeries');
+  //MySharedPreferences myPrefs=MySharedPreferences();
+  //print('Test 1');
+  // List<dynamic>?data=myPrefs.getList('data');
+  // List<dynamic>?time=myPrefs.getList('time');
   List<ChartData> spData=[];
   List<double> parsedData = dataStore.dta.map((data) => double.parse(data)).toList();
   
     for(int i=0;i<dataStore.tme.length;i++){
-      String time=dataStore.tme[i].toString();
-      spData.add(ChartData(time.substring(11,16),parsedData[i]));
+      String tme=dataStore.tme[i].toString();
+      spData.add(ChartData(tme.substring(11,16),parsedData[i]));
     }
  setStateCallback();
     

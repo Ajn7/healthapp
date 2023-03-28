@@ -36,7 +36,7 @@ class DataStore {
 
   String name = '';
   String email = ''; //'a';
-  String baseurl = 'http://172.16.0.63:8000';
+  String baseurl = 'http://192.168.1.23:8000';
   int? id;
   int? age;
   double? height;

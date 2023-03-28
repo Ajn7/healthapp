@@ -51,7 +51,6 @@ DataStore dataStore = DataStore();
   await myPrefs.initPrefs();
   var id=myPrefs.getInt('user_id');
   String today=date.substring(0,10);
-  //print('From getReading: $date ,,, $today');
   final response = await http.get(
 
     Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=$id+&date=$today&vitalid=$vitalid'),
@@ -65,9 +64,8 @@ DataStore dataStore = DataStore();
 try{
 List<dynamic> data = jsonDecode(response.body);
 print('from getReading api ::$data');
-print(response.statusCode);
-   
-  
+//print(response.statusCode);
+
   if (response.statusCode == 200) {
     MySharedPreferences myPrefs = MySharedPreferences();
     await myPrefs.initPrefs();
@@ -75,6 +73,8 @@ print(response.statusCode);
     //List<dynamic>? dta = myPrefs.getList('dta');
      dataStore.dta=[ ]; //dt
      dataStore.tme=[ ];
+     //dataStore.dta=['90','95'];
+     //dataStore.tme=['2023-03-18T17:16:57.086508+05:30','2023-03-18T17:1:57.086508+05:30'];
      for (dynamic d in data) {
       dataStore.dta.add(d['reading']);
       dataStore.tme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(d['created_at']).toString());
@@ -82,8 +82,9 @@ print(response.statusCode);
       }
     await myPrefs.setList('data',dataStore.dta);
     await myPrefs.setList('time',dataStore.tme);
-    print('apicall shareddate');
-    print(myPrefs.getList('data')); 
+    // print('apicall shareddate');
+    // print(myPrefs.getList('data')); 
+    // print(myPrefs.getList('time')); 
     print('apicall datstore.dta');
     print(dataStore.dta); 
     dataStore.prev=dataStore.dta.last;
@@ -92,6 +93,9 @@ print(response.statusCode);
     // });
 
   } else {
+    await myPrefs.setList('data',[]);
+    await myPrefs.setList('time',[]);
+
     dataStore.dta=['0']; //dt
     dataStore.tme=[ ];
     var res="response";
@@ -174,7 +178,7 @@ print(response.statusCode);
     dataStore.bpldta=['0'];//dt
     dataStore.bptme=[ ];
     var res="response";
-    print(res+'${dataStore.dta.last}');
+    //print(res+'${dataStore.dta.last}');
     //ScaffoldMessenger.of(context).showSnackBar (SnackBar(content: Text(res)));
     
    }

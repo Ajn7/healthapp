@@ -349,11 +349,15 @@ print(response.statusCode);
  }
 
  Future addRecord({required int reading,required int vitalid}) async {
+  MySharedPreferences myPrefs = MySharedPreferences();
+  await myPrefs.initPrefs();
+  String? myToken = myPrefs.getString('token');
   final response = await http.post(
   
     Uri.parse('${dataStore.baseurl}/vitalrecords/reading/add/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization':'Token $myToken'
     },
     body: jsonEncode(<String,dynamic>{
       'reading':reading,
@@ -372,10 +376,14 @@ print(response.statusCode);
  
 }
  Future addBpRecord({required String reading,required int vitalid}) async {
+  MySharedPreferences myPrefs = MySharedPreferences();
+  await myPrefs.initPrefs();
+  String? myToken = myPrefs.getString('token');
   final response = await http.post(
   
     Uri.parse('${dataStore.baseurl}/vitalrecords/reading/add/'),
     headers: <String, String>{
+      'Authorization':'Token $myToken',
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String,dynamic>{

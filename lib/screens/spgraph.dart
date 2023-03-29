@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/constants/divider.dart';
-import 'package:healthapp/screens/samplegraph.dart';
 //import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -137,7 +136,9 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                         print('Error: Could not parse value as double');
                       }
                 //double d=double.parse(value.text);
-                addRecord(reading: d, vitalid: 1);
+                addRecord(reading: d, vitalid: 1).then((_) {
+                         setState(() { });
+                          });
                 getReading(date: DateTime.now().toString().substring(0,10), vitalid: 1).then((_) {
                          setState(() { });
                           });

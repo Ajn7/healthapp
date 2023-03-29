@@ -193,8 +193,8 @@ class _BPScreenState extends State<BPScreen> with API {
                         }
       else if(newDate.year == today.year && newDate.month == today.month && newDate.day == today.day){
         isvisible=true;
-        print('Cu isVisible true: $isvisible');
-        print(newDate.compareTo(DateTime.now())==0);
+        //print('Cu isVisible true: $isvisible');
+        //print(newDate.compareTo(DateTime.now())==0);
         
         dataStore.date=newDate;
                          
@@ -226,6 +226,7 @@ class _BPScreenState extends State<BPScreen> with API {
                         return;
                         }
                         else{
+                          isvisible=false;
                           print('isvisible is :$isvisible');
                           dataStore.date=newDate;
                           getReadingBp(date: newDate.toString(), vitalid: 2).then((_) {

@@ -85,6 +85,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with API {
+  bool _shouldReload = false;
   late TooltipBehavior _tooltipBehavior;
 
     @override
@@ -268,6 +269,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
                 MeasureButton(buttonText: 'Measure', buttonAction: () { 
                        // getData();
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const SpoGraphscreen()));
+                         
                       }),
                     ],
                   ),

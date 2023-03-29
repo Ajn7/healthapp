@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/constants/divider.dart';
+import 'package:healthapp/screens/samplegraph.dart';
 //import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -170,10 +171,10 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                   ),
                   ),
                    MeasureButton(buttonText: 'Measure ', buttonAction: (){
-                    //  Navigator.pushReplacement(
-                    //  bcontext,
-                    //  MaterialPageRoute(
-                    //  builder: (BuildContext context) =>const SampleGraphScreen()));
+                     Navigator.pushReplacement(
+                     bcontext,
+                     MaterialPageRoute(
+                     builder: (BuildContext context) => ConnectedBluetoothDevicesPage()));
                    
                   })
               ],

@@ -4,7 +4,6 @@ import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/core/navigator.dart';
 //import 'package:healthapp/main.dart';
 import 'package:healthapp/screens/login.dart';
-import 'package:healthapp/screens/myhome.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/headline.dart';
 DataStore dataStore=DataStore();

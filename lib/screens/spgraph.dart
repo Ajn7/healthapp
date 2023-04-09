@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/constants/divider.dart';
-import 'package:healthapp/screens/samplegraph.dart';
+import 'package:healthapp/screens/spo2btmeasure.dart';
 //import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -107,8 +107,8 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                       height: 50,
                       width: 200,
                        child: TextFormField(
-                             controller:value,
-                            keyboardType: TextInputType.emailAddress,
+                            controller:value,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration( 
                                        border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10.0),
@@ -137,17 +137,13 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                         print('Error: Could not parse value as double');
                       }
                 //double d=double.parse(value.text);
-                addRecord(reading: d, vitalid: 1).then((_) {
-                         setState(() { });
-                          });
-                getReading(date: DateTime.now().toString().substring(0,10), vitalid: 1).then((_) {
-                         setState(() { });
-                          });
-               
-                Navigator.pushReplacement(
-                bcontext,
-                MaterialPageRoute(
-                builder: (BuildContext context) => super.widget));
+   addRecord(reading: d, vitalid: 1);
+   navigateToNextScreen();
+   
+                // Navigator.pushReplacement(
+                // bcontext,
+                // MaterialPageRoute(
+                // builder: (BuildContext context) => super.widget));
               
                 
               },             
@@ -174,7 +170,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                      Navigator.pushReplacement(
                      bcontext,
                      MaterialPageRoute(
-                     builder: (BuildContext context) => ConnectedBluetoothDevicesPage()));
+                     builder: (BuildContext context) =>const ConnectedBluetoothDevicesPage()));
                    
                   })
               ],
@@ -238,6 +234,18 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
 // });
                                         }                //print('Graph data[0] ${dataStore.dta}');
     }
+    
+      void navigateToNextScreen() async {
+    await Future.delayed(const Duration(seconds: 1),(){
+      
+    });
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (BuildContext context) => super.widget,
+    ),
+  );
+}
   
   }
 

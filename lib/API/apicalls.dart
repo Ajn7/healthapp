@@ -399,7 +399,7 @@ print(response.statusCode);
     
     print('Un Successfull');
   }
-   getReading(date: DateTime.now().toString(), vitalid: 1);
+   getReading(date: DateTime.now().toString(), vitalid: 2);
  
 }
  }

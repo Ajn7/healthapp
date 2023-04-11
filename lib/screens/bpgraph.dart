@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/constants/divider.dart';
+import 'package:healthapp/screens/bpbtmeasure.dart';
 import 'package:healthapp/screens/spark.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -146,17 +147,8 @@ class _BPScreenState extends State<BPScreen> with API {
                         }
                                  //double d=double.parse(value.text);
                                  addBpRecord(reading: d, vitalid: 2);
-                                 getReadingBp(date: DateTime.now().toString().substring(0,10), vitalid: 2).then((_) {
-                                 setState(() {});
-                                 });
-                          
-                                
-                                 Navigator.pushReplacement(
-                                 bcontext,
-                                 MaterialPageRoute(
-                                 builder: (BuildContext context) => super.widget));
-                               
-                                 
+                                 navigateToNextScreen();
+                                                        
                                },             
                                ),
                      ],
@@ -175,8 +167,12 @@ class _BPScreenState extends State<BPScreen> with API {
                   child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold))),
                   ),
                   MeasureButton(buttonText: 'Measure ', buttonAction: (){
-                    Navigator.push(context, MaterialPageRoute(builder:(context)=>MyWidget()));
-                  })
+                    Navigator.pushReplacement(
+                     bcontext,
+                     MaterialPageRoute(
+                     builder: (BuildContext context) =>const ConnectedBpBluetoothDevicesPage()));
+                    //Navigator.push(context, MaterialPageRoute(builder:(context)=>MyWidget())); refresh
+                  }) 
                   
               ],
               ),
@@ -240,6 +236,18 @@ class _BPScreenState extends State<BPScreen> with API {
                           //print('Graph data[0] ${dataStore.dta}');
     }
   }
+  
+    void navigateToNextScreen() async {
+    await Future.delayed(const Duration(seconds: 3),(){
+      
+    });
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (BuildContext context) => super.widget,
+    ),
+  );
+}
  
   }
 

@@ -137,8 +137,8 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                         print('Error: Could not parse value as double');
                       }
                 //double d=double.parse(value.text);
-   addRecord(reading: d, vitalid: 1);
-   navigateToNextScreen();
+                addRecord(reading: d, vitalid: 1);
+                navigateToNextScreen();
    
                 // Navigator.pushReplacement(
                 // bcontext,

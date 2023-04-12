@@ -5,8 +5,8 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 //import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/screens/spgraph.dart';
 import 'dart:core';
-
 var counter=0;
+int mydvid=0;
 class ConnectedBluetoothDevicesPage extends StatefulWidget {
 
   const ConnectedBluetoothDevicesPage({super.key});
@@ -85,12 +85,11 @@ class _ConnectedBluetoothDevicesPageState
     Timer(const Duration(seconds: 10), () { 
       checkBluetoothStatus(context);
        allowNavigation = true;
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const BlutoothMeasurePage()));
     });
   }
 }
 
-getConnection()  {
+getConnection(context)  {
   FlutterBluePlus flutterBluePlus = FlutterBluePlus.instance;
   Future<void> startScanning() async {
     print('Scanning for BLE devices...');
@@ -103,6 +102,7 @@ var subscription = flutterBluePlus.scanResults.listen((results)  {
         for (ScanResult r in results) {
         print('${r.device.name} found! rssi: ${r.rssi} Id: ${r.device.id}');
         if(r.device.id.toString() == 'C0:00:00:00:01:DE' ){
+          mydvid=1;
           flutterBluePlus.stopScan();
            r.device.connect().then((_) async {
           
@@ -147,6 +147,9 @@ for (BluetoothService service in services) {
           print('connected to device');  
         }
     }
+ 
+      
+  
 });
  flutterBluePlus.stopScan();
 }
@@ -163,7 +166,7 @@ Future<void> checkBluetoothStatus(context) async {
  
   if (isOn) {
     print('Bluetooth is on');
-    getConnectionInfo();
+    getConnectionInfo(context);
   } else {
     showAlertDialog(context);
   }
@@ -171,7 +174,7 @@ Future<void> checkBluetoothStatus(context) async {
 
 }
 
-Future<void> getConnectionInfo() async {
+Future<void> getConnectionInfo(context) async {
 List<BluetoothDevice> connectedDevices = [];
 connectedDevices = await FlutterBluePlus.instance.connectedDevices;
 print(connectedDevices.isNotEmpty);
@@ -236,31 +239,32 @@ for (BluetoothService service in services) {
 
   }
 else{
-getConnection();
+getConnection(context);
 }
 }on PlatformException catch (e) {
   print('Error: ${e.message}');
 }
 }
-showAlertDialog(BuildContext context) {
 
+//  turn on bt
+showAlertDialog(context) {
   // set up the buttons
   Widget cancelButton = TextButton(
     child:const Text("Cancel"),
     onPressed:  () {
-       Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const SpoGraphscreen()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const SpoGraphscreen()));
     },
   );
+  
   Widget continueButton = TextButton(
     child:const Text("Continue"),
     onPressed:  () async{
       FlutterBluePlus.instance.turnOn();
       Navigator.pop(context);
       Timer(const Duration(seconds:5),(){
-        getConnection();
-      });
+        getConnection(context);
+     });
       ScaffoldMessenger.of(context).showSnackBar (const SnackBar(content: Text('Turned on')));
-     
     },
   );
 
@@ -283,6 +287,48 @@ showAlertDialog(BuildContext context) {
   );
 }
 
+// add data manually
+showAlertDialogofBt(BuildContext context) {
+//   set up the buttons
+  Widget cancelButton = TextButton(
+    child:const Text("Add Data Manually"),
+    onPressed:  () {
+      NavigatorState navigator = Navigator.of(context);
+      navigator.popUntil((route) => route.isFirst);
+      navigator.push(MaterialPageRoute(builder: (context) => const SpoGraphscreen()));
+    },
+  );
+  Widget continueButton = TextButton(
+    child:const Text("Scan Again"),
+    onPressed:  () {
+     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const ConnectedBluetoothDevicesPage()));
+    },
+  );
+ if(mydvid == 0){
+  print(mydvid);
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title:const Text("Alert"),
+    content: const Text("Device's Unavailable."),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+ }
+}
+
+
+
+
 class BlutoothMeasurePage extends StatefulWidget {
 
   const BlutoothMeasurePage({super.key});
@@ -299,13 +345,22 @@ class _BlutoothMeasurePagePageState
   List<BluetoothDevice> connectedDevicesList = <BluetoothDevice>[];
 
   @override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+   Future.delayed(Duration.zero, () {
+    showAlertDialogofBt(context);
+  });
+}
+
+  @override
   void initState() {
     super.initState();
-    
+    //showAlertDialogofBt(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Connected Bluetooth Devices'),

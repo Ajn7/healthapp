@@ -100,45 +100,57 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
         Visibility(
                visible:isvisible,
                child: SizedBox(
-                 child: Row(
+                 child: Column(
                    children: [
-                    horizontaSpace(50),
-                     SizedBox(
-                      height: 50,
-                      width: 200,
-                       child: TextFormField(
-                            controller:value,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration( 
-                                       border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                       ),
-                                       //prefixIcon: Icon(Icons.add_circle_outline),
-                                       hintText: "Enter SPO2 Here",
-                                       labelText: 'SpO2',
-                                       hintStyle:const TextStyle(fontSize: 15.0, ),
-                                       //errorText: "Error",
-                                                 ),
-                                      validator: (String? value) {
-                                      return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
-                                      },
+                     MeasureButton(buttonText: 'Measure ', buttonAction: (){
+                     Navigator.pushReplacement(
+                     bcontext,
+                     MaterialPageRoute(
+                     builder: (BuildContext context) =>const ConnectedBluetoothDevicesPage()));
+                   
+                  }),
+                  verticalSpace(20),
+                  const Text('Or Add Data Manually'),
+                  verticalSpace(10),
+                     Row(
+                       children: [
+                        horizontaSpace(50),
+                         SizedBox(
+                          height: 50,
+                          width: 200,
+                           child: TextFormField(
+                                controller:value,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration( 
+                                           border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10.0),
                                            ),
-                     ),
-                     horizontaSpace(20),
-                     MeasureButton(buttonText: 'Add', buttonAction: (){
-                  int d;
-                  try {
-                       d = int.parse(value.text);
-                      
-                      } on FormatException {
+                                           //prefixIcon: Icon(Icons.add_circle_outline),
+                                           hintText: "Enter SPO2 Here",
+                                           labelText: 'SpO2',
+                                           hintStyle:const TextStyle(fontSize: 15.0, ),
+                                           //errorText: "Error",
+                                                     ),
+                                          validator: (String? value) {
+                                          return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
+                                          },
+                                               ),
+                         ),
+                         horizontaSpace(20),
+                         MeasureButton(buttonText: 'Add', buttonAction: (){
+                      int d;
+                      try {
+                           d = int.parse(value.text);
+                          
+                          } on FormatException {
         
-                        d=0;
+                            d=0;
         
-                        print('Error: Could not parse value as double');
-                      }
+                            print('Error: Could not parse value as double');
+                          }
                 //double d=double.parse(value.text);
                 addRecord(reading: d, vitalid: 1);
-                navigateToNextScreen();
+                navigateToNextScreen(context);
    
                 // Navigator.pushReplacement(
                 // bcontext,
@@ -148,10 +160,15 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                 
               },             
               ),
-                     
+              
+                         
+                       ],
+                     ),
                    ],
                  ),
                ),
+               
+
              ),
               verticalSpace(20),
               Container(
@@ -166,13 +183,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                   )
                   ),
                   ),
-                   MeasureButton(buttonText: 'Measure ', buttonAction: (){
-                     Navigator.pushReplacement(
-                     bcontext,
-                     MaterialPageRoute(
-                     builder: (BuildContext context) =>const ConnectedBluetoothDevicesPage()));
                    
-                  })
               ],
               ),
              ),
@@ -210,7 +221,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                             content:const Text("The data you requested is not  available."),
                             actions: [
                               TextButton(
-                                child: Text("OK"),
+                                child: const Text("OK"),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
@@ -235,7 +246,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
                                         }                //print('Graph data[0] ${dataStore.dta}');
     }
     
-      void navigateToNextScreen() async {
+      void navigateToNextScreen(context) async {
     await Future.delayed(const Duration(seconds: 1),(){
       
     });

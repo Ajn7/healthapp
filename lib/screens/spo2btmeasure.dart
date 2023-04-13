@@ -121,6 +121,7 @@ if (connectedDevices.isNotEmpty) {
     print('Device UUID: $deviceUuid');
 
     if(deviceUuid.toString() == 'C0:00:00:00:01:DE'){
+        mydvid=1;
         print('MyDevice');
         List<BluetoothService> services = await device.discoverServices();
         BluetoothCharacteristic spo2Characteristic;
@@ -165,7 +166,7 @@ if (connectedDevices.isNotEmpty) {
   
 }
     }else{
-        mydvid=1;
+        mydvid=2;
     }
     //device.connect(); // -- exception
 
@@ -299,7 +300,7 @@ showAlertDialogofBt(BuildContext context) {
       NavigatorState navigator = Navigator.of(context);
       navigator.popUntil((route) => route.isFirst);
       navigator.push(MaterialPageRoute(builder: (context) => const SpoGraphscreen()));
-      //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const SpoGraphscreen()));
+      
     },
   );
   Widget continueButton = TextButton(
@@ -328,7 +329,7 @@ showAlertDialogofBt(BuildContext context) {
   );
 }
 
-//connected to another device mydvid=1
+//connected to another device mydvid=2
 showAlertDialogforcoonect(BuildContext context) {
 
   
@@ -336,7 +337,9 @@ showAlertDialogforcoonect(BuildContext context) {
   Widget cancelButton = TextButton(
     child:const Text("Cancel"),
     onPressed:  () {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const SpoGraphscreen()));
+      NavigatorState navigator = Navigator.of(context);
+      navigator.popUntil((route) => route.isFirst);
+      navigator.push(MaterialPageRoute(builder: (context) => const SpoGraphscreen()));
     },
   );
   Widget continueButton = TextButton(
@@ -364,7 +367,9 @@ showAlertDialogforcoonect(BuildContext context) {
     builder: (BuildContext context) {
       return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const SpoGraphscreen()));
+        NavigatorState navigator = Navigator.of(context);
+        navigator.popUntil((route) => route.isFirst);
+        navigator.push(MaterialPageRoute(builder: (context) => const SpoGraphscreen()));
         return false;
       }, child: alert,
   );
@@ -424,10 +429,12 @@ void didChangeDependencies() {
   }
   
   void popupbox() {
-    if(mydvid==1){
+    if(mydvid == 2){
      showAlertDialogforcoonect(context);
     }else if(mydvid== 0){
       showAlertDialogofBt(context);
+  }else{
+
   }
 }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/constants/divider.dart';
+import 'package:healthapp/screens/myhome.dart';
 import 'package:healthapp/screens/spo2btmeasure.dart';
 //import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
@@ -26,7 +27,12 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
       super.initState(); 
 
     }
-  
+  @override
+  void dispose() {
+    isvisible=true;
+    dataStore.datesp=DateTime.now();
+    super.dispose();
+  }  
   @override
   Widget build(BuildContext bcontext) {
     final TextEditingController value=TextEditingController();
@@ -51,146 +57,156 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
     }
   
     });
-    return StatefulBuilder(
-      builder: (BuildContext context,StateSetter setState){
-        return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
-          body: SingleChildScrollView(
-            child: SafeArea(
-              child:Column(
-              children: [
-                InkWell(
-                  onTap:()async{
-                        DateTime?newDate=await showDatePicker(context: context, 
-                        initialDate: dataStore.datesp,
-                        firstDate: DateTime(2012),
-                        lastDate: DateTime(2025)
-                        );
-                        Future.microtask(() async {
-                        await dateCheck(context, newDate);
-                        });
-                         
-                        },
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding:EdgeInsets.only(left:20,top: 20,right: 8),
-                        child: Icon(
-                        size: 40,
-                        color: Colors.blue,
-                        Icons.edit_calendar_outlined
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top:20.0,right: 10),
-                        child: Text(
-                        '${dataStore.datesp.day} /${dataStore.datesp.month} /${dataStore.datesp.year}',
-                        style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
-                        ),
-                      ),                           
-                    ],
-                  ),
-                ),
-               GScreen(
-          setStateCallback: () {
-            // do
-          },
-        ),
-        Visibility(
-               visible:isvisible,
-               child: SizedBox(
-                 child: Column(
-                   children: [
-                     MeasureButton(buttonText: 'Measure ', buttonAction: (){
-                     Navigator.pushReplacement(
-                     bcontext,
-                     MaterialPageRoute(
-                     builder: (BuildContext context) =>const ConnectedBluetoothDevicesPage()));
-                   
-                  }),
-                  verticalSpace(20),
-                  const Text('Or Add Data Manually'),
-                  verticalSpace(10),
-                     Row(
-                       children: [
-                        horizontaSpace(50),
-                         SizedBox(
-                          height: 50,
-                          width: 200,
-                           child: TextFormField(
-                                controller:value,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration( 
-                                           border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10.0),
-                                           ),
-                                           //prefixIcon: Icon(Icons.add_circle_outline),
-                                           hintText: "Enter SPO2 Here",
-                                           labelText: 'SpO2',
-                                           hintStyle:const TextStyle(fontSize: 15.0, ),
-                                           //errorText: "Error",
-                                                     ),
-                                          validator: (String? value) {
-                                          return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
-                                          },
-                                               ),
-                         ),
-                         horizontaSpace(20),
-                         MeasureButton(buttonText: 'Add', buttonAction: (){
-                      int d;
-                      try {
-                           d = int.parse(value.text);
-                          
-                          } on FormatException {
-        
-                            d=0;
-        
-                            print('Error: Could not parse value as double');
-                          }
-                //double d=double.parse(value.text);
-                addRecord(reading: d, vitalid: 1);
-                navigateToNextScreen(context);
-   
-                // Navigator.pushReplacement(
-                // bcontext,
-                // MaterialPageRoute(
-                // builder: (BuildContext context) => super.widget));
-              
-                
-              },             
-              ),
-              
-                         
-                       ],
-                     ),
-                   ],
-                 ),
-               ),
-               
-
-             ),
-              verticalSpace(20),
-              Container(
-                  padding:const EdgeInsets.all(20),
-                  margin:const EdgeInsets.all(10),
-                  height: 100,
-                  decoration: BoxDecoration(
-                                              color: Colors.lightBlue[50],
-                                              border: Border.all(color:Colors.black,width: 2),
-                                            ),
-                  child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold)
-                  )
-                  ),
-                  ),
-                   
-              ],
-              ),
-             ),
-          ),
+    return WillPopScope(
+       onWillPop: () async{
+        Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const MyHome()),
+         ModalRoute.withName('/oldScreen'),
         );
-      }
-      );
+        return true;
+      },
+      child: StatefulBuilder(
+        builder: (BuildContext context,StateSetter setState){
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
+            body: SingleChildScrollView(
+              child: SafeArea(
+                child:Column(
+                children: [
+                  InkWell(
+                    onTap:()async{
+                          DateTime?newDate=await showDatePicker(context: context, 
+                          initialDate: dataStore.datesp,
+                          firstDate: DateTime(2012),
+                          lastDate: DateTime(2025)
+                          );
+                          Future.microtask(() async {
+                          await dateCheck(context, newDate);
+                          });
+                           
+                          },
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding:EdgeInsets.only(left:20,top: 20,right: 8),
+                          child: Icon(
+                          size: 40,
+                          color: Colors.blue,
+                          Icons.edit_calendar_outlined
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top:20.0,right: 10),
+                          child: Text(
+                          '${dataStore.datesp.day} /${dataStore.datesp.month} /${dataStore.datesp.year}',
+                          style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
+                          ),
+                        ),                           
+                      ],
+                    ),
+                  ),
+                 GScreen(
+            setStateCallback: () {
+              // do
+            },
+          ),
+          Visibility(
+                 visible:isvisible,
+                 child: SizedBox(
+                   child: Column(
+                     children: [
+                       MeasureButton(buttonText: 'Measure ', buttonAction: (){
+                       Navigator.pushReplacement(
+                       bcontext,
+                       MaterialPageRoute(
+                       builder: (BuildContext context) =>const ConnectedBluetoothDevicesPage()));
+                     
+                    }),
+                    verticalSpace(20),
+                    const Text('Or Add Data Manually'),
+                    verticalSpace(10),
+                       Row(
+                         children: [
+                          horizontaSpace(50),
+                           SizedBox(
+                            height: 50,
+                            width: 200,
+                             child: TextFormField(
+                                  controller:value,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration( 
+                                             border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                             ),
+                                             //prefixIcon: Icon(Icons.add_circle_outline),
+                                             hintText: "Enter SPO2 Here",
+                                             labelText: 'SpO2',
+                                             hintStyle:const TextStyle(fontSize: 15.0, ),
+                                             //errorText: "Error",
+                                                       ),
+                                            validator: (String? value) {
+                                            return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
+                                            },
+                                                 ),
+                           ),
+                           horizontaSpace(20),
+                           MeasureButton(buttonText: 'Add', buttonAction: (){
+                        int d;
+                        try {
+                             d = int.parse(value.text);
+                            
+                            } on FormatException {
+          
+                              d=0;
+          
+                              print('Error: Could not parse value as double');
+                            }
+                  //double d=double.parse(value.text);
+                  addRecord(reading: d, vitalid: 1);
+                  navigateToNextScreen(context);
+       
+                  // Navigator.pushReplacement(
+                  // bcontext,
+                  // MaterialPageRoute(
+                  // builder: (BuildContext context) => super.widget));
+                
+                  
+                },             
+                ),
+                
+                           
+                         ],
+                       ),
+                     ],
+                   ),
+                 ),
+                 
+    
+               ),
+                verticalSpace(20),
+                Container(
+                    padding:const EdgeInsets.all(20),
+                    margin:const EdgeInsets.all(10),
+                    height: 100,
+                    decoration: BoxDecoration(
+                                                color: Colors.lightBlue[50],
+                                                border: Border.all(color:Colors.black,width: 2),
+                                              ),
+                    child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold)
+                    )
+                    ),
+                    ),
+                     
+                ],
+                ),
+               ),
+            ),
+          );
+        }
+        ),
+    );
  }
  
   Future<void> dateCheck(BuildContext context,DateTime?newDate) async{
@@ -250,7 +266,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
     await Future.delayed(const Duration(seconds: 1),(){
       
     });
-  Navigator.pushReplacement(
+ Navigator.pushReplacement(
     context,
     MaterialPageRoute(
       builder: (BuildContext context) => super.widget,

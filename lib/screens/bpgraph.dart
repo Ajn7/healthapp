@@ -3,7 +3,7 @@ import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/screens/bpbtmeasure.dart';
-import 'package:healthapp/screens/spark.dart';
+import 'package:healthapp/screens/myhome.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 DataStore dataStore=DataStore();
@@ -26,6 +26,12 @@ class _BPScreenState extends State<BPScreen> with API {
       super.initState(); 
       
     }
+    @override
+  void dispose() {
+    isvisible=true;
+    dataStore.date=DateTime.now();
+    super.dispose();
+  }  
   
   @override
   Widget build(BuildContext bcontext) {
@@ -59,128 +65,138 @@ class _BPScreenState extends State<BPScreen> with API {
     }
   
     });
-    return StatefulBuilder(
-      builder: (BuildContext context,StateSetter setState){
-        return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
-          body: SingleChildScrollView(
-            child: SafeArea(
-              child:Column(
-              children: [
-                InkWell(
-                  onTap:()async{
-                        DateTime?newDate=await showDatePicker(context: context, 
-                        initialDate:dataStore.date,
-                        firstDate: DateTime(2012),
-                        lastDate: DateTime(2025)
-                        );
-                        Future.microtask(() async {
-                        await dateCheck(context, newDate);
-                        });
-                         
-                        },
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding:EdgeInsets.only(left:20,top: 20,right: 8),
-                        child: Icon(
-                        size: 40,
-                        color: Colors.blue,
-                        Icons.edit_calendar_outlined
+    return WillPopScope(
+      onWillPop: () async{
+        Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const MyHome()),
+         ModalRoute.withName('/oldScreen'),
+        );
+        return true;
+      },
+      child: StatefulBuilder(
+        builder: (BuildContext context,StateSetter setState){
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
+            body: SingleChildScrollView(
+              child: SafeArea(
+                child:Column(
+                children: [
+                  InkWell(
+                    onTap:()async{
+                          DateTime?newDate=await showDatePicker(context: context, 
+                          initialDate:dataStore.date,
+                          firstDate: DateTime(2012),
+                          lastDate: DateTime(2025)
+                          );
+                          Future.microtask(() async {
+                          await dateCheck(context, newDate);
+                          });
+                           
+                          },
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding:EdgeInsets.only(left:20,top: 20,right: 8),
+                          child: Icon(
+                          size: 40,
+                          color: Colors.blue,
+                          Icons.edit_calendar_outlined
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top:20.0,right: 10),
-                        child: Text(
-                        '${dataStore.date.day} /${dataStore.date.month} /${dataStore.date.year}',
-                        style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
-                        ),
-                      ),                           
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(top:20.0,right: 10),
+                          child: Text(
+                          '${dataStore.date.day} /${dataStore.date.month} /${dataStore.date.year}',
+                          style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
+                          ),
+                        ),                           
+                      ],
+                    ),
                   ),
-                ),
-               GScreen(
-          setStateCallback: () {
-            // do
-          },
-                )  ,
-                verticalSpace(20),
-               Visibility(
-                 visible:isvisible,
-                 child: SizedBox(
-                   child: Row(
-                     children: [
-                      horizontaSpace(50),
-                       SizedBox(
-                        height: 50,
-                        width: 200,
-                         child: TextFormField(
-                               controller:value,
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration( 
-                                         border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                         ),
-                                         //prefixIcon: Icon(Icons.add_circle_outline),
-                                         hintText: "Enter Blood Pressure Here",
-                                         labelText: 'BP',
-                                         hintStyle:const TextStyle(fontSize: 15.0, ),
-                                         //errorText: "Error",
-                                                   ),
-                                        validator: (String? value) {
-                                        return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
-                                        },
-                                             ),
-                       ),
-                       horizontaSpace(20),
-                       MeasureButton(buttonText: 'Add', buttonAction: (){
-                    String d;
-                    try {
-                         d = (value.text).toString();
-                        
-                        } on FormatException {
-                   
-                          d=' ';
-                   
-                          print('Error: Could not parse value as double');
-                        }
-                                 //double d=double.parse(value.text);
-                                 addBpRecord(reading: d, vitalid: 2);
-                                 navigateToNextScreen();
-                                                        
-                               },             
-                               ),
-                     ],
+                 GScreen(
+            setStateCallback: () {
+              // do
+            },
+                  )  ,
+                  verticalSpace(20),
+                 Visibility(
+                   visible:isvisible,
+                   child: SizedBox(
+                     child: Row(
+                       children: [
+                        horizontaSpace(50),
+                         SizedBox(
+                          height: 50,
+                          width: 200,
+                           child: TextFormField(
+                                 controller:value,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration( 
+                                           border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                           ),
+                                           //prefixIcon: Icon(Icons.add_circle_outline),
+                                           hintText: "Enter Blood Pressure Here",
+                                           labelText: 'BP',
+                                           hintStyle:const TextStyle(fontSize: 15.0, ),
+                                           //errorText: "Error",
+                                                     ),
+                                          validator: (String? value) {
+                                          return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
+                                          },
+                                               ),
+                         ),
+                         horizontaSpace(20),
+                         MeasureButton(buttonText: 'Add', buttonAction: (){
+                      String d;
+                      try {
+                           d = (value.text).toString();
+                          
+                          } on FormatException {
+                     
+                            d=' ';
+                     
+                            print('Error: Could not parse value as double');
+                          }
+                                   //double d=double.parse(value.text);
+                                   addBpRecord(reading: d, vitalid: 2);
+                                   navigateToNextScreen();
+                                                          
+                                 },             
+                                 ),
+                       ],
+                     ),
                    ),
                  ),
+                verticalSpace(50),
+                Container(
+                    padding:const EdgeInsets.all(20),
+                    margin:const EdgeInsets.all(10),
+                    height: 100,
+                    decoration: BoxDecoration(
+                                                color: Colors.lightBlue[50],
+                                                border: Border.all(color:Colors.black,width: 2),
+                                              ),
+                    child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold))),
+                    ),
+                    MeasureButton(buttonText: 'Measure ', buttonAction: (){
+                      Navigator.pushReplacement(
+                       bcontext,
+                       MaterialPageRoute(
+                       builder: (BuildContext context) =>const ConnectedBpBluetoothDevicesPage()));
+                      //Navigator.push(context, MaterialPageRoute(builder:(context)=>MyWidget())); refresh
+                    }) 
+                    
+                ],
+                ),
                ),
-              verticalSpace(50),
-              Container(
-                  padding:const EdgeInsets.all(20),
-                  margin:const EdgeInsets.all(10),
-                  height: 100,
-                  decoration: BoxDecoration(
-                                              color: Colors.lightBlue[50],
-                                              border: Border.all(color:Colors.black,width: 2),
-                                            ),
-                  child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold))),
-                  ),
-                  MeasureButton(buttonText: 'Measure ', buttonAction: (){
-                    Navigator.pushReplacement(
-                     bcontext,
-                     MaterialPageRoute(
-                     builder: (BuildContext context) =>const ConnectedBpBluetoothDevicesPage()));
-                    //Navigator.push(context, MaterialPageRoute(builder:(context)=>MyWidget())); refresh
-                  }) 
-                  
-              ],
-              ),
-             ),
-          ),
-        );
-      }
-      );
+            ),
+          );
+        }
+        ),
+    );
  }
  
   Future<void> dateCheck(BuildContext context,DateTime?newDate) async{

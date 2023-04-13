@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/services.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/constants/divider.dart';
@@ -7,11 +8,19 @@ import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/core/navigator.dart';
 import 'package:healthapp/screens/bpgraph.dart';
 import 'package:healthapp/screens/spgraph.dart';
+import 'package:healthapp/screens/startup.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
 import 'package:healthapp/screens/editinfo.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:app_settings/app_settings.dart';
+import 'package:lottie/lottie.dart';
+//import 'dart:io';
+
 DataStore dataStore=DataStore();
+bool connection=false;
 class MyHome extends StatefulWidget {
+  
     const MyHome({super.key});
   //final dynamic token;
   //const MyHome({Key? key,required this.token}) : super(key: key);
@@ -24,13 +33,15 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> with API{
-   late Future<dynamic>_futureData;
+   late Future<dynamic>_futureData=Future.value('initial value');
    @override
     void initState(){
     super.initState();
-    getReading(date: DateTime.now().toString(), vitalid: 1);
-    getReadingBp(date: DateTime.now().toString().substring(0,10), vitalid: 2);
+    checkInternetConnectivity();
     _futureData=getUserData();
+    // getReading(date: DateTime.now().toString(), vitalid: 1);
+    // getReadingBp(date: DateTime.now().toString().substring(0,10), vitalid: 2);
+    // _futureData=getUserData();
 
     }
     // getData()async{
@@ -61,7 +72,7 @@ class _MyHomeState extends State<MyHome> with API{
             ),
           );
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Center(child: Text('Error: ${snapshot.error}', style:const TextStyle(fontSize: 10,)));
         }
         // else if(snapshot.data.isEmpty){
         //   return const Text('No data available');
@@ -72,9 +83,114 @@ class _MyHomeState extends State<MyHome> with API{
       },
     ));
     
+    
       
   }
+
   
+  Future<bool> checkInternetConnectivity() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
+    getReading(date: DateTime.now().toString(), vitalid: 1);
+    getReadingBp(date: DateTime.now().toString().substring(0,10), vitalid: 2);
+    _futureData=getUserData();//.then((_){
+    //   setState(() {
+        
+    //   });
+    // });
+      return true;
+    } else {
+      showAlertDialog(context);
+      return false;
+    }
+  }
+
+  showAlertDialog(context) {
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child:const Text("Cancel"),
+    onPressed:  () {
+      showAlertDialogofClose(context);
+      //exit(0);
+      //quit application
+    },
+  );
+  
+  Widget continueButton = TextButton(
+    child:const Text("settings"),
+    onPressed:  () async{
+      AppSettings.openWIFISettings(callback: () {
+                    NavigatorState navigator = Navigator.of(context);
+                    navigator.popUntil((route) => route.isFirst);
+                    navigator.pushReplacement(MaterialPageRoute(builder: (context) => const Startup()));
+                  });
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title:const Text("No Internet connection"),
+    content: Column(
+      children: [
+        const Text("Internet is currently unavailable. Please click settings to turn on your device's internet connection to continue."),
+        Lottie.asset('assets/images/nointernet.json')
+      ],
+    ),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+   showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return WillPopScope(
+      onWillPop: () async {
+        showAlertDialogofClose(context);
+        return false;
+      }, child: alert,
+  );
+    }
+  );
+  
+}
+showAlertDialogofClose(BuildContext context) {
+//   set up the buttons
+  Widget cancelButton = TextButton(
+    child:const Text("close"),
+    onPressed:  () {
+      Navigator.pop(context);
+      SystemNavigator.pop();
+      
+    },
+  );
+  Widget continueButton = TextButton(
+    child:const Text("Yes"),
+    onPressed:  () {
+     Navigator.pop(context);
+    },
+  );
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title:const Text("Alert"),
+    content: const Text("Do you want to continue ?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext dialogContext) {
+      return alert;
+    },
+  );
+}
+
 }
 
 class HomeScreen extends StatefulWidget {
@@ -460,6 +576,8 @@ class MenuItems {
     );
   }
 
+  
+
   static onChanged(BuildContext context, MenuItem item) async {
     switch (item) {
       //case MenuItems.home:
@@ -484,6 +602,7 @@ class MenuItems {
       }
     }
   }
+  
 }
 
 class ChartData {
@@ -491,3 +610,5 @@ class ChartData {
         final dynamic x;
         final double? y;
     }
+
+    

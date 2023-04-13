@@ -47,6 +47,7 @@ dependencies:
   flutter_blue_plus: ^1.4.0
   location: ^4.4.0
   location_permissions: ^3.0.0
+  app_settings: ^4.2.0
  
 
 

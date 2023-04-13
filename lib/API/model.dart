@@ -46,4 +46,6 @@ class DataStore {
   String notification = 'No data found please ';
   DateTime date=DateTime.now();
   DateTime datesp=DateTime.now();
+  String spo2ServiceId ='6e400001-b5a3-f393-e0a9-e50e24dcca9e';//'5833ff01-9b8b-5191-6142-22a4536ef123' ;//
+  String spo2CharacteristicId ='6e400003-b5a3-f393-e0a9-e50e24dcca9e';//'5833ff02-9b8b-5191-6142-22a4536ef123';//'6e400003-b5a3-f393-e0a9-e50e24dcca9e';
 }

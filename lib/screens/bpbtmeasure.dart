@@ -84,7 +84,7 @@ class _ConnectedBpBluetoothDevicesPageState
     Timer(const Duration(seconds: 10), () { 
       checkBluetoothStatus(context);
        allowNavigation = true;
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const BlutoothMeasurePage()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const BlutoothBpMeasurePage()));
     });
   }
 }
@@ -267,18 +267,18 @@ showAlertDialog(BuildContext context) {
   );
 }
 
-class BlutoothMeasurePage extends StatefulWidget {
+class BlutoothBpMeasurePage extends StatefulWidget {
 
-  const BlutoothMeasurePage({super.key});
+  const BlutoothBpMeasurePage({super.key});
 
   @override
-  State<BlutoothMeasurePage> createState()=>_BlutoothMeasurePagePageState();
+  State<BlutoothBpMeasurePage> createState()=>_BlutoothBpMeasurePagePageState();
  
 }
 
 
-class _BlutoothMeasurePagePageState
-    extends State<BlutoothMeasurePage> {
+class _BlutoothBpMeasurePagePageState
+    extends State<BlutoothBpMeasurePage> {
   
   List<BluetoothDevice> connectedDevicesList = <BluetoothDevice>[];
 
@@ -394,7 +394,7 @@ class _BlutoothMeasurePagePageState
 //     Timer(const Duration(seconds: 10), () { 
 //       checkBluetoothStatus(context);
 //        allowNavigation = true;
-//       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const BlutoothMeasurePage()));
+//       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const BlutoothBpMeasurePage()));
 //     });
 //   }
 // }
@@ -555,18 +555,18 @@ class _BlutoothMeasurePagePageState
 //   );
 // }
 
-// class BlutoothMeasurePage extends StatefulWidget {
+// class BlutoothBpMeasurePage extends StatefulWidget {
 
-//   const BlutoothMeasurePage({super.key});
+//   const BlutoothBpMeasurePage({super.key});
 
 //   @override
-//   State<BlutoothMeasurePage> createState()=>_BlutoothMeasurePagePageState();
+//   State<BlutoothBpMeasurePage> createState()=>_BlutoothBpMeasurePagePageState();
  
 // }
 
 
-// class _BlutoothMeasurePagePageState
-//     extends State<BlutoothMeasurePage> {
+// class _BlutoothBpMeasurePagePageState
+//     extends State<BlutoothBpMeasurePage> {
   
 //   List<BluetoothDevice> connectedDevicesList = <BluetoothDevice>[];
 

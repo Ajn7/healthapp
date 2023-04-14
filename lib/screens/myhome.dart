@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/services.dart';
@@ -130,11 +132,15 @@ class _MyHomeState extends State<MyHome> with API{
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title:const Text("No Internet connection"),
-    content: Column(
-      children: [
-        const Text("Internet is currently unavailable. Please click settings to turn on your device's internet connection to continue."),
-        Lottie.asset('assets/images/nointernet.json')
-      ],
+    content: SizedBox(
+      width: 200,
+      height:200,
+      child: Column(
+        children: [
+          const Text("Internet is currently unavailable. Please click settings to turn on your device's internet connection to continue."),
+          Lottie.asset('assets/images/nointernet.json',height: 100, width: 100)
+        ],
+      ),
     ),
     actions: [
       cancelButton,
@@ -159,7 +165,7 @@ class _MyHomeState extends State<MyHome> with API{
 showAlertDialogofClose(BuildContext context) {
 //   set up the buttons
   Widget cancelButton = TextButton(
-    child:const Text("close"),
+    child:const Text("Yes"),
     onPressed:  () {
       Navigator.pop(context);
       SystemNavigator.pop();
@@ -167,7 +173,7 @@ showAlertDialogofClose(BuildContext context) {
     },
   );
   Widget continueButton = TextButton(
-    child:const Text("Yes"),
+    child:const Text("No"),
     onPressed:  () {
      Navigator.pop(context);
     },
@@ -175,7 +181,7 @@ showAlertDialogofClose(BuildContext context) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title:const Text("Alert"),
-    content: const Text("Do you want to continue ?"),
+    content: const Text("Do you want to close app?"),
     actions: [
       cancelButton,
       continueButton,
@@ -584,6 +590,7 @@ class MenuItems {
       //Do something
        // break;
       case MenuItems.help:
+          navigatorKey?.currentState?.pushNamed("help");
       //Do something
        break;
       case MenuItems.share:

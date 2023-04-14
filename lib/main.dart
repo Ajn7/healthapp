@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:healthapp/screens/bpbtmeasure.dart';
 import 'package:healthapp/screens/bpgraph.dart';
 import 'package:healthapp/screens/editinfo.dart';
 import 'package:healthapp/screens/forgott.dart';
+import 'package:healthapp/screens/helpscreen.dart';
 import 'package:healthapp/screens/login.dart';
 import 'package:healthapp/screens/myhome.dart';
 import 'package:healthapp/screens/signup.dart';
 import 'package:healthapp/screens/spgraph.dart';
+import 'package:healthapp/screens/spo2btmeasure.dart';
 import 'core/navigator.dart';
 import 'screens/startup.dart';
 
@@ -35,6 +38,8 @@ class MyApp extends StatelessWidget {
           "bpgraph":(BuildContext ctx) => const BPScreen(),
           "signup":(BuildContext ctx) => const SignupScreen(),
           "spgraph":(BuildContext ctx) => const SpoGraphscreen(),
+          "btmeasure":(BuildContext ctx) => const BlutoothMeasurePage(),
+          "help":(BuildContext ctx) => const helpscreen(),
          
         },
         initialRoute: "startup",

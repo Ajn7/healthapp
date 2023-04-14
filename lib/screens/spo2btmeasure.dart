@@ -2,11 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:healthapp/core/navigator.dart';
 import 'package:healthapp/screens/spgraph.dart';
 import 'dart:core';
 import 'package:app_settings/app_settings.dart';
-var counter=0;
+int counter=0;
 int mydvid=0;
+ List <int> spo2List =[];
+ late StreamSubscription<List<int>> streamSubscription;
 class ConnectedBluetoothDevicesPage extends StatefulWidget {
 
   const ConnectedBluetoothDevicesPage({super.key});
@@ -85,7 +88,8 @@ class _ConnectedBluetoothDevicesPageState
     Timer(const Duration(seconds: 10), () { 
       checkBluetoothStatus(context);
        allowNavigation = true;
-       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const BlutoothMeasurePage()));
+       navigatorKey?.currentState?.pushReplacementNamed("btmeasure");
+       //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const BlutoothMeasurePage()));
     });
   }
 }
@@ -95,7 +99,7 @@ Future<void> checkBluetoothStatus(context) async {
  
   if (isOn) {
     print('Bluetooth is on');
-    getConnectionInfo(context);
+    getConnectionInfo();
   } else {
     showAlertDialog(context);
   }
@@ -103,13 +107,13 @@ Future<void> checkBluetoothStatus(context) async {
 
 }
 
-Future<void> getConnectionInfo(context) async {
+Future<void> getConnectionInfo() async {
 List<BluetoothDevice> connectedDevices = [];
 connectedDevices = await FlutterBluePlus.instance.connectedDevices;
 print(connectedDevices.isNotEmpty);
 try{
 if (connectedDevices.isNotEmpty) {
-  print('Connected devices: ');
+  print('Connected device: ');
   print('Connected devices: ${connectedDevices.length}');
   for (BluetoothDevice device in connectedDevices) {
     print(connectedDevices);
@@ -135,8 +139,8 @@ if (connectedDevices.isNotEmpty) {
               print('SPO2 characteristic found!');
               spo2Characteristic = characteristic;
               await spo2Characteristic.setNotifyValue(true);
-              late StreamSubscription<List<int>> streamSubscription;
-                  int counter = 0;
+              
+                  
               streamSubscription = spo2Characteristic.value.listen((value) {
                 // Assuming that the device sends the data in the format <SPO2><PR><other data>
                 //print('Values: $value');
@@ -144,16 +148,34 @@ if (connectedDevices.isNotEmpty) {
                 if (value.length >= 2 ) {
                   int spo2 = value[5];
                   int pr = value[6];
+                  if (counter < 100) {
+                  spo2List.add(spo2);
+                  }
+                 // spo2List.add(spo2);
                   print('SPO2: $spo2, PR: $pr');
                   counter ++;
                   print('count = $counter');
+                  //print(StackTrace.current);
                 }
-                if (counter >= 500) {
+                if (counter >= 100) {
+                      print('exceded');
                       streamSubscription.cancel();
-                      spo2Characteristic.setNotifyValue(false);
+                      print('List :::$spo2List');
+                      print('Length=${spo2List.length}');
+                      
+                      device.disconnect();
+                      
+                      //spo2Characteristic.setNotifyValue(false);
+                      counter=0;
+                      spo2List=[];
+                      
+                      
                     }
+                
+                
+                    //streamSubscription.cancel();
               });
-              
+
               break;
             }
             else{
@@ -167,30 +189,25 @@ if (connectedDevices.isNotEmpty) {
 }
     }else{
         mydvid=2;
+        break;
     }
-    //device.connect(); // -- exception
-
-    //Timer.periodic(Duration(minutes: 1), (timer) async {
-
- //});
-
     }
 
   }
 else{
-getConnection(context);
+getConnection();
 }
 }on PlatformException catch (e) {
   print('Error: ${e.message}');
 }
 }
-getConnection(context)  {
+getConnection()  {
   FlutterBluePlus flutterBluePlus = FlutterBluePlus.instance;
   Future<void> startScanning() async {
     print('Scanning for BLE devices...');
     flutterBluePlus.startScan(timeout:const Duration(seconds: 10));
     // Listen to scan results
-    print(flutterBluePlus.scanResults);
+    //print(flutterBluePlus.scanResults);
     var subscription = flutterBluePlus.scanResults.listen((results)  {
     //print('Result:$results');
     // do something with scan results
@@ -201,9 +218,11 @@ getConnection(context)  {
           flutterBluePlus.stopScan();
            r.device.connect().then((_) async {
           
-  Timer.periodic(Duration(minutes: 3), (timer) async {
+  //Timer.periodic(Duration(minutes: 3), (timer) async {
+
   List<BluetoothService> services = await  r.device.discoverServices();
   BluetoothCharacteristic spo2Characteristic;
+  try{
 for (BluetoothService service in services) {
   print('in1');
   //print(service);
@@ -216,16 +235,39 @@ for (BluetoothService service in services) {
               print('SPO2 characteristic found!');
               spo2Characteristic = characteristic;
               await spo2Characteristic.setNotifyValue(true);
-              spo2Characteristic.value.listen((value) {
+        
+              streamSubscription = spo2Characteristic.value.listen((value) {
                 // Assuming that the device sends the data in the format <SPO2><PR><other data>
-                print('Values: $value');
-                if (value.length >= 2) {
+                //print('Values: $value');
+                
+                if (value.length >= 2 ) {
                   int spo2 = value[5];
                   int pr = value[6];
+                  if (counter < 100) {
+                  spo2List.add(spo2);
+                  }
+                 // spo2List.add(spo2);
                   print('SPO2: $spo2, PR: $pr');
-                  
+                  counter ++;
+                  print('count = $counter');
+                  //print(StackTrace.current);
                 }
+                if (counter >= 100) {
+                      print('exceded');
+                      streamSubscription.cancel();
+                      print('List :::$spo2List');
+                      print('Length=${spo2List.length}');
+                      r.device.disconnect();
+                      //spo2Characteristic.setNotifyValue(true);
+                      counter=0;
+                      spo2List=[];
+                      
+                    }
+                
+                
+                    //streamSubscription.cancel();
               });
+              
               break;
             }
           }
@@ -234,10 +276,14 @@ for (BluetoothService service in services) {
       }
   
 }
+  }on PlatformException catch (e) {
+                print('Error: ${e.message}');
+              }
  });
-          });
+          //});
            
           print('connected to device');  
+          break;
         }
     }
  
@@ -266,7 +312,7 @@ showAlertDialog(context) {
       FlutterBluePlus.instance.turnOn();
       Navigator.pop(context);
       Timer(const Duration(seconds:5),(){
-        getConnection(context);
+        getConnection();
      });
       ScaffoldMessenger.of(context).showSnackBar (const SnackBar(content: Text('Turned on')));
     },
@@ -400,14 +446,15 @@ class _BlutoothMeasurePagePageState
 void didChangeDependencies() {
   super.didChangeDependencies();
    Future.delayed(Duration.zero, () {
-    popupbox();
+   popupbox();
   });
 }
 
   @override
   void initState() {
     super.initState();
-    //showAlertDialogofBt(context);
+     //popupbox();
+    showspo2();
   }
   var avg=true;
   @override
@@ -420,7 +467,7 @@ void didChangeDependencies() {
       body: Center(
         child: Column(
           children: const [
-              Text('This page is under development.'),
+              Text('This page is under developments'),
           ],
         ),
       )
@@ -434,7 +481,18 @@ void didChangeDependencies() {
     }else if(mydvid== 0){
       showAlertDialogofBt(context);
   }else{
-
+    print('Id Myid:$mydvid');
   }
 }
+
+  void showspo2() {
+    List <int> Last=[];
+    for(var i=0; i<spo2List.length; i++){
+      if(spo2List[i]>=80 && spo2List[i]<=100){
+      Last.add(spo2List[i]);
+       
+      }
+    }
+    print('Last Lis $Last');
+  }
 }

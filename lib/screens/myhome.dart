@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/services.dart';
@@ -134,11 +132,11 @@ class _MyHomeState extends State<MyHome> with API{
     title:const Text("No Internet connection"),
     content: SizedBox(
       width: 200,
-      height:200,
+      height:250,
       child: Column(
         children: [
           const Text("Internet is currently unavailable. Please click settings to turn on your device's internet connection to continue."),
-          Lottie.asset('assets/images/nointernet.json',height: 100, width: 100)
+          Lottie.asset('assets/images/nointernet.json',height: 150, width: 150)
         ],
       ),
     ),
@@ -281,167 +279,169 @@ class _HomeScreenState extends State<HomeScreen> with API {
                  ),
       ],
       backgroundColor: Colors.blue,),
-      body: Container(
-        padding:const EdgeInsets.only(top:7.0),
-        //height: (MediaQuery.of(context).size.height)*0.7,
-        color:Colors.white,
-        child:Column(
-          children:<Widget>[
-            ListTile(
-              title:const Text(
-              'Previous SPO2 Level',
-              style: TextStyle(
-                fontSize: 20.0,
+      body: SingleChildScrollView(
+        child: Container(
+          padding:const EdgeInsets.only(top:7.0),
+          //height: (MediaQuery.of(context).size.height)*0.7,
+          color:Colors.white,
+          child:Column(
+            children:<Widget>[
+              ListTile(
+                title:const Text(
+                'Previous SPO2 Level',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+                ),
+               subtitle:Text('${dataStore.prev}',style: const TextStyle(
+                  fontSize: 20.0,
+                ),
+                ),
+               leading: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                   SizedBox(
+                    height: (MediaQuery.of(context).size.height)*0.2,
+                    child:const CircleAvatar(
+                      radius: 20.0,
+                      backgroundColor: Colors.white60,
+                      child:Icon(
+                        Icons.bloodtype,
+                        color:Colors.red,
+                        size: 30.0,
+                      ),
+                    )
+                  ),
+                ],
+               ),
               ),
-              ),
-             subtitle:Text('${dataStore.prev}',style: const TextStyle(
-                fontSize: 20.0,
-              ),
-              ),
-             leading: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                 SizedBox(
-                  height: (MediaQuery.of(context).size.height)*0.2,
-                  child:const CircleAvatar(
+      
+             ListTile(
+                title:const Text(
+                  'Previous BP Level',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+                ),
+               subtitle:Text('${dataStore.bpprev}',style:const TextStyle(
+                  fontSize: 20.0,
+                ),
+                ),
+               leading: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const <Widget>[
+                  CircleAvatar(
                     radius: 20.0,
                     backgroundColor: Colors.white60,
                     child:Icon(
-                      Icons.bloodtype,
-                      color:Colors.red,
-                      size: 30.0,
+                      Icons.devices,
+                      color:Colors.blue,
+                      size: 20.0,
                     ),
-                  )
-                               ),
-              ],
+                  ),
+                ],
+               ),
+              ) ,
+             Container(
+              //height: (MediaQuery.of(context).size.height)*0.4,
+              padding: const EdgeInsets.only(top:7.0),
+              width: MediaQuery.of(context).size.width,
+              color:Colors.grey.shade100,
+              child: Column(
+                children : [ 
+      
+                    horizontaSpace(20),
+                    const Text("SPO2",style: TextStyle(fontSize: 25,color: Colors.green),),
+                    horizontaSpace(20),
+                 
+                verticalSpace(20),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          width: 200,
+                      child: SfCartesianChart(
+                        // Enables the legend
+                         // legend: Legend(isVisible: true),
+                        //title: ChartTitle(text: ' analysis'),
+                          // Initialize category axis
+                          tooltipBehavior: _tooltipBehavior,
+                          primaryXAxis: CategoryAxis(),
+                          series: <ChartSeries>[
+                              // Initialize line series
+                              LineSeries<ChartData, dynamic>(
+                                  dataSource: [
+                                      // Bind data source
+                                      ChartData('Jan 1', 35),
+                                      ChartData('Jan 2', 28),
+                                      ChartData('Jan 3', 34),
+                                      ChartData('Jan 4', 32),
+                                      ChartData('Jan 5', 40)
+                                  ],
+                                  xValueMapper: (ChartData data, _) => data.x,
+                                  yValueMapper: (ChartData data, _) => data.y,
+                                  // Render the data label
+                                  dataLabelSettings:const DataLabelSettings(isVisible : true)
+                              )
+                          ]
+                      )
+                  ),
+                  horizontaSpace(20),
+                  MeasureButton(buttonText: 'Measure', buttonAction: () { 
+                         // getData();
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const SpoGraphscreen()));
+                           
+                        }),
+                      ],
+                    ),
+                 horizontaSpace(20),
+                    const Text("BP",style: TextStyle(fontSize: 25,color: Colors.green),),
+                    horizontaSpace(20),
+                 
+                verticalSpace(20),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          width: 200,
+                      child: SfCartesianChart(
+                        // Enables the legend
+                         // legend: Legend(isVisible: true),
+                        //title: ChartTitle(text: ' analysis'),
+                          // Initialize category axis
+                          tooltipBehavior: _tooltipBehavior,
+                          primaryXAxis: CategoryAxis(),
+                          series: <ChartSeries>[
+                              // Initialize line series
+                              LineSeries<ChartData, dynamic>(
+                                  dataSource: [
+                                      // Bind data source
+                                      ChartData('Jan 1', 35),
+                                      ChartData('Jan 2', 28),
+                                      ChartData('Jan 3', 34),
+                                      ChartData('Jan 4', 32),
+                                      ChartData('Jan 5', 40)
+                                  ],
+                                  xValueMapper: (ChartData data, _) => data.x,
+                                  yValueMapper: (ChartData data, _) => data.y,
+                                  // Render the data label
+                                  dataLabelSettings:const DataLabelSettings(isVisible : true)
+                              )
+                          ]
+                      )
+                  ),
+                  horizontaSpace(20),
+                  MeasureButton(buttonText: 'Measure', buttonAction: () { 
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const BPScreen()));
+                        }),
+                      ],
+                    ),
+                ],
+              ),
              ),
-            ),
-
-           ListTile(
-              title:const Text(
-                'Previous BP Level',
-              style: TextStyle(
-                fontSize: 20.0,
-              ),
-              ),
-             subtitle:Text('${dataStore.bpprev}',style:const TextStyle(
-                fontSize: 20.0,
-              ),
-              ),
-             leading: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                CircleAvatar(
-                  radius: 20.0,
-                  backgroundColor: Colors.white60,
-                  child:Icon(
-                    Icons.devices,
-                    color:Colors.blue,
-                    size: 20.0,
-                  ),
-                ),
-              ],
-             ),
-            ) ,
-           Container(
-            //height: (MediaQuery.of(context).size.height)*0.4,
-            padding: const EdgeInsets.only(top:7.0),
-            width: MediaQuery.of(context).size.width,
-            color:Colors.grey.shade100,
-            child: Column(
-              children : [ 
-
-                  horizontaSpace(20),
-                  const Text("SPO2",style: TextStyle(fontSize: 25,color: Colors.green),),
-                  horizontaSpace(20),
-               
-              verticalSpace(20),
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: 200,
-                        width: 200,
-                    child: SfCartesianChart(
-                      // Enables the legend
-                       // legend: Legend(isVisible: true),
-                      //title: ChartTitle(text: ' analysis'),
-                        // Initialize category axis
-                        tooltipBehavior: _tooltipBehavior,
-                        primaryXAxis: CategoryAxis(),
-                        series: <ChartSeries>[
-                            // Initialize line series
-                            LineSeries<ChartData, dynamic>(
-                                dataSource: [
-                                    // Bind data source
-                                    ChartData('Jan 1', 35),
-                                    ChartData('Jan 2', 28),
-                                    ChartData('Jan 3', 34),
-                                    ChartData('Jan 4', 32),
-                                    ChartData('Jan 5', 40)
-                                ],
-                                xValueMapper: (ChartData data, _) => data.x,
-                                yValueMapper: (ChartData data, _) => data.y,
-                                // Render the data label
-                                dataLabelSettings:const DataLabelSettings(isVisible : true)
-                            )
-                        ]
-                    )
-                ),
-                horizontaSpace(20),
-                MeasureButton(buttonText: 'Measure', buttonAction: () { 
-                       // getData();
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const SpoGraphscreen()));
-                         
-                      }),
-                    ],
-                  ),
-               horizontaSpace(20),
-                  const Text("BP",style: TextStyle(fontSize: 25,color: Colors.green),),
-                  horizontaSpace(20),
-               
-              verticalSpace(20),
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: 200,
-                        width: 200,
-                    child: SfCartesianChart(
-                      // Enables the legend
-                       // legend: Legend(isVisible: true),
-                      //title: ChartTitle(text: ' analysis'),
-                        // Initialize category axis
-                        tooltipBehavior: _tooltipBehavior,
-                        primaryXAxis: CategoryAxis(),
-                        series: <ChartSeries>[
-                            // Initialize line series
-                            LineSeries<ChartData, dynamic>(
-                                dataSource: [
-                                    // Bind data source
-                                    ChartData('Jan 1', 35),
-                                    ChartData('Jan 2', 28),
-                                    ChartData('Jan 3', 34),
-                                    ChartData('Jan 4', 32),
-                                    ChartData('Jan 5', 40)
-                                ],
-                                xValueMapper: (ChartData data, _) => data.x,
-                                yValueMapper: (ChartData data, _) => data.y,
-                                // Render the data label
-                                dataLabelSettings:const DataLabelSettings(isVisible : true)
-                            )
-                        ]
-                    )
-                ),
-                horizontaSpace(20),
-                MeasureButton(buttonText: 'Measure', buttonAction: () { 
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const BPScreen()));
-                      }),
-                    ],
-                  ),
-              ],
-            ),
-           ),
-          ],
-
+            ],
+      
+          ),
         ),
       ),
       drawer: Drawer(

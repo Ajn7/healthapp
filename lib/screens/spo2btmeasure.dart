@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:healthapp/core/navigator.dart';
 import 'package:healthapp/screens/spgraph.dart';
 import 'dart:core';
 import 'package:app_settings/app_settings.dart';
@@ -28,7 +27,11 @@ class _ConnectedBluetoothDevicesPageState
   @override
   void initState() {
     super.initState();
-    checkBluetoothStatus(context);
+    mydvid=0;
+     Future.delayed(const Duration(seconds: 3), () {
+   checkBluetoothStatus(context);
+  });
+    
   }
 
   @override
@@ -88,7 +91,9 @@ class _ConnectedBluetoothDevicesPageState
     Timer(const Duration(seconds: 10), () { 
       checkBluetoothStatus(context);
        allowNavigation = true;
-       navigatorKey?.currentState?.pushReplacementNamed("btmeasure");
+        NavigatorState navigator = Navigator.of(context);
+        navigator.popUntil((route) => route.isFirst);
+        navigator.push(MaterialPageRoute(builder: (context) => const BlutoothMeasurePage()));
        //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const BlutoothMeasurePage()));
     });
   }
@@ -145,10 +150,14 @@ if (connectedDevices.isNotEmpty) {
                 // Assuming that the device sends the data in the format <SPO2><PR><other data>
                 //print('Values: $value');
                 
-                if (value.length >= 2 ) {
+                if (value.length >= 12 ) {
+                  print('val: $value');
+                  if(value[5] > 10 && value[6]>10 )
+                  {
+                  
                   int spo2 = value[5];
                   int pr = value[6];
-                  if (counter < 100) {
+                  if (counter <=100) {
                   spo2List.add(spo2);
                   }
                  // spo2List.add(spo2);
@@ -157,7 +166,8 @@ if (connectedDevices.isNotEmpty) {
                   print('count = $counter');
                   //print(StackTrace.current);
                 }
-                if (counter >= 100) {
+                }
+                if (counter >100) {
                       print('exceded');
                       streamSubscription.cancel();
                       print('List :::$spo2List');
@@ -189,6 +199,7 @@ if (connectedDevices.isNotEmpty) {
 }
     }else{
         mydvid=2;
+        //navigatorKey?.currentState?.pushReplacementNamed("btmeasure");
         break;
     }
     }
@@ -201,7 +212,7 @@ getConnection();
   print('Error: ${e.message}');
 }
 }
-getConnection()  {
+getConnection()  async{
   FlutterBluePlus flutterBluePlus = FlutterBluePlus.instance;
   Future<void> startScanning() async {
     print('Scanning for BLE devices...');
@@ -240,10 +251,12 @@ for (BluetoothService service in services) {
                 // Assuming that the device sends the data in the format <SPO2><PR><other data>
                 //print('Values: $value');
                 
-                if (value.length >= 2 ) {
+                if (value.length >= 12 ) {
+                  if(value[5] > 10 && value[6] > 10 ){
+                   print('val: $value');
                   int spo2 = value[5];
                   int pr = value[6];
-                  if (counter < 100) {
+                  if (counter <=100) {
                   spo2List.add(spo2);
                   }
                  // spo2List.add(spo2);
@@ -252,7 +265,7 @@ for (BluetoothService service in services) {
                   print('count = $counter');
                   //print(StackTrace.current);
                 }
-                if (counter >= 100) {
+                if (counter > 100) {
                       print('exceded');
                       streamSubscription.cancel();
                       print('List :::$spo2List');
@@ -265,7 +278,7 @@ for (BluetoothService service in services) {
                     }
                 
                 
-                    //streamSubscription.cancel();
+                  }  //streamSubscription.cancel();
               });
               
               break;
@@ -284,6 +297,9 @@ for (BluetoothService service in services) {
            
           print('connected to device');  
           break;
+        }else{
+          mydvid=0;
+          //navigatorKey?.currentState?.pushReplacementNamed("btmeasure");
         }
     }
  
@@ -359,7 +375,7 @@ showAlertDialogofBt(BuildContext context) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title:const Text("Alert"),
-    content: const Text("Device's Unavailable."),
+    content: const Text("Device Unavailable."),
     actions: [
       cancelButton,
       continueButton,
@@ -377,8 +393,6 @@ showAlertDialogofBt(BuildContext context) {
 
 //connected to another device mydvid=2
 showAlertDialogforcoonect(BuildContext context) {
-
-  
 //   set up the buttons
   Widget cancelButton = TextButton(
     child:const Text("Cancel"),
@@ -454,7 +468,7 @@ void didChangeDependencies() {
   void initState() {
     super.initState();
      //popupbox();
-    showspo2();
+    //showspo2();
   }
   var avg=true;
   @override
@@ -485,14 +499,14 @@ void didChangeDependencies() {
   }
 }
 
-  void showspo2() {
-    List <int> Last=[];
-    for(var i=0; i<spo2List.length; i++){
-      if(spo2List[i]>=80 && spo2List[i]<=100){
-      Last.add(spo2List[i]);
+  // void showspo2() {
+  //   List <int> Last=[];
+  //   for(var i=0; i<spo2List.length; i++){
+  //     if(spo2List[i]>=80 && spo2List[i]<=100){
+  //     Last.add(spo2List[i]);
        
-      }
-    }
-    print('Last Lis $Last');
-  }
+  //     }
+  //   }
+  //   print('Last Lis $Last');
+  // }
 }

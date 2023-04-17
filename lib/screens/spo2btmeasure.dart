@@ -2,14 +2,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:healthapp/API/apicalls.dart';
+import 'package:healthapp/API/model.dart';
 import 'package:healthapp/screens/spgraph.dart';
 import 'dart:core';
 import 'package:app_settings/app_settings.dart';
+DataStore dataStore=DataStore();
 int counter=0;
 int mydvid=0;
  List <int> spo2List =[];
  late StreamSubscription<List<int>> streamSubscription;
-class ConnectedBluetoothDevicesPage extends StatefulWidget {
+class ConnectedBluetoothDevicesPage extends StatefulWidget  {
 
   const ConnectedBluetoothDevicesPage({super.key});
 
@@ -452,7 +455,7 @@ class BlutoothMeasurePage extends StatefulWidget {
 
 
 class _BlutoothMeasurePagePageState
-    extends State<BlutoothMeasurePage> {
+    extends State<BlutoothMeasurePage> with API {
   
   List<BluetoothDevice> connectedDevicesList = <BluetoothDevice>[];
 
@@ -468,7 +471,10 @@ void didChangeDependencies() {
   void initState() {
     super.initState();
      //popupbox();
-    //showspo2();
+    showspo2();
+     Future.delayed(const Duration(seconds: 5), () {
+   navigateTo();
+  });
   }
   var avg=true;
   @override
@@ -480,8 +486,8 @@ void didChangeDependencies() {
       ),
       body: Center(
         child: Column(
-          children: const [
-              Text('This page is under developments'),
+          children:  [
+              Text('Your SpO2 Level Is: ${spo2List.last}'),
           ],
         ),
       )
@@ -499,14 +505,25 @@ void didChangeDependencies() {
   }
 }
 
-  // void showspo2() {
-  //   List <int> Last=[];
-  //   for(var i=0; i<spo2List.length; i++){
-  //     if(spo2List[i]>=80 && spo2List[i]<=100){
-  //     Last.add(spo2List[i]);
-       
-  //     }
-  //   }
-  //   print('Last Lis $Last');
-  // }
+  void showspo2() {
+    print('Last List Length ${spo2List.last}');
+  }
+  
+  void navigateTo() {
+    int d=int.parse(spo2List.last.toString());
+    addRecord(reading: d, vitalid: 1);
+    navigateToNextScreen(context);
+  }
+  
+  void navigateToNextScreen(BuildContext context) async{
+    await Future.delayed(const Duration(seconds: 1),(){
+      
+    });
+ Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (BuildContext context) => const SpoGraphscreen(),
+    ),
+  );
+  }
 }

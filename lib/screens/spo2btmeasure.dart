@@ -506,7 +506,14 @@ void didChangeDependencies() {
 }
 
   void showspo2() {
-    print('Last List Length ${spo2List.last}');
+    //try{
+      print('Last List Length ${spo2List.last}');
+    //}on State catch(e) {
+
+    //}
+
+    
+    
   }
   
   void navigateTo() {

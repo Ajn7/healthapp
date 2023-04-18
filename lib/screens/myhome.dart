@@ -343,103 +343,123 @@ class _HomeScreenState extends State<HomeScreen> with API {
                 ],
                ),
               ) ,
-             Container(
-              //height: (MediaQuery.of(context).size.height)*0.4,
-              padding: const EdgeInsets.only(top:7.0),
-              width: MediaQuery.of(context).size.width,
-              color:Colors.grey.shade100,
-              child: Column(
-                children : [ 
-      
-                    horizontaSpace(20),
-                    const Text("SPO2",style: TextStyle(fontSize: 25,color: Colors.green),),
-                    horizontaSpace(20),
-                 
-                verticalSpace(20),
-                    Row(
-                      children: [
+              const Divider(
+                 //height: 100,
+                 color: Colors.orange,
+                 thickness: 1,
+                 indent : 10,
+                 endIndent : 10,      
+                 ),
+                 verticalSpace(20),
+                 Column(
+                  children: [
+                  const Text('Oxygen Saturation(SpO2)',style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                  verticalSpace(10),
+                   Container (
+                   color: Colors.white,
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                     children:  [
                         SizedBox(
-                          height: 200,
-                          width: 200,
-                      child: SfCartesianChart(
-                        // Enables the legend
-                         // legend: Legend(isVisible: true),
-                        //title: ChartTitle(text: ' analysis'),
-                          // Initialize category axis
-                          tooltipBehavior: _tooltipBehavior,
-                          primaryXAxis: CategoryAxis(),
-                          series: <ChartSeries>[
-                              // Initialize line series
-                              LineSeries<ChartData, dynamic>(
-                                  dataSource: [
-                                      // Bind data source
-                                      ChartData('Jan 1', 35),
-                                      ChartData('Jan 2', 28),
-                                      ChartData('Jan 3', 34),
-                                      ChartData('Jan 4', 32),
-                                      ChartData('Jan 5', 40)
-                                  ],
-                                  xValueMapper: (ChartData data, _) => data.x,
-                                  yValueMapper: (ChartData data, _) => data.y,
-                                  // Render the data label
-                                  dataLabelSettings:const DataLabelSettings(isVisible : true)
-                              )
-                          ]
-                      )
+                         height: 200,
+                         width: 200,
+                     child:  SfCartesianChart(
+                     // Enables the legend
+                      // legend: Legend(isVisible: true),
+                     //title: ChartTitle(text: ' analysis'),
+                       // Initialize category axis
+                       //tooltipBehavior: _tooltipBehavior,
+                       primaryXAxis: CategoryAxis(),
+                       series: <ChartSeries>[
+                           // Initialize line series
+                           AreaSeries<ChartData, dynamic>(
+                            color: Colors.blue[200],
+                            
+                                borderColor: Colors.red,
+                                borderWidth: 2,
+                               dataSource: [
+                                
+                                   // Bind data source
+                                   ChartData('Jan 1', 94),
+                                   ChartData('Jan 2', 94),
+                                   ChartData('Jan 3', 96),
+                                   ChartData('Jan 4', 95),
+                                   ChartData('Jan 5', 98),
+                                    ChartData('.....', 99),
+                               ],
+                               xValueMapper: (ChartData data, _) => data.x,
+                               yValueMapper: (ChartData data, _) => data.y,
+                               // Render the data label
+                               dataLabelSettings:const DataLabelSettings(isVisible : true)
+                           )
+                       ]
+                   ),
+                     
                   ),
-                  horizontaSpace(20),
+                      horizontaSpace(20),
                   MeasureButton(buttonText: 'Measure', buttonAction: () { 
-                         // getData();
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const SpoGraphscreen()));
-                           
-                        }),
-                      ],
-                    ),
-                 horizontaSpace(20),
-                    const Text("BP",style: TextStyle(fontSize: 25,color: Colors.green),),
+                        // getData();
+                         Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const SpoGraphscreen()));
+                          
+                       }),   
+                       
+                     ],
+                   ),
+                  
+                   ),
+                 const Text('Blood Pressure(BP)',style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                 verticalSpace(10),
+                 Container (
+                 color: Colors.white,
+                 child: Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                   children:  [
+                      SizedBox(
+                       height: 200,
+                       width: 200,
+                   child: SfCartesianChart(
+                       // Enables the legend
+                        // legend: Legend(isVisible: true),
+                       //title: ChartTitle(text: ' analysis'),
+                         // Initialize category axis
+                         //tooltipBehavior: _tooltipBehavior,
+                         primaryXAxis: CategoryAxis(),
+                         series: <ChartSeries>[
+                             // Initialize line series
+                             LineSeries<ChartData, dynamic>(
+                                 dataSource: [
+                                     // Bind data source
+                                     ChartData('Jan 1', 35),
+                                     ChartData('Jan 2', 28),
+                                     ChartData('Jan 3', 34),
+                                     ChartData('Jan 4', 32),
+                                     ChartData('Jan 5', 40)
+                                 ],
+                                 xValueMapper: (ChartData data, _) => data.x,
+                                 yValueMapper: (ChartData data, _) => data.y,
+                                 // Render the data label
+                                 dataLabelSettings:const DataLabelSettings(isVisible : true)
+                             )
+                         ]
+                     ),
+                   
+                  ),
                     horizontaSpace(20),
-                 
-                verticalSpace(20),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 200,
-                          width: 200,
-                      child: SfCartesianChart(
-                        // Enables the legend
-                         // legend: Legend(isVisible: true),
-                        //title: ChartTitle(text: ' analysis'),
-                          // Initialize category axis
-                          tooltipBehavior: _tooltipBehavior,
-                          primaryXAxis: CategoryAxis(),
-                          series: <ChartSeries>[
-                              // Initialize line series
-                              LineSeries<ChartData, dynamic>(
-                                  dataSource: [
-                                      // Bind data source
-                                      ChartData('Jan 1', 35),
-                                      ChartData('Jan 2', 28),
-                                      ChartData('Jan 3', 34),
-                                      ChartData('Jan 4', 32),
-                                      ChartData('Jan 5', 40)
-                                  ],
-                                  xValueMapper: (ChartData data, _) => data.x,
-                                  yValueMapper: (ChartData data, _) => data.y,
-                                  // Render the data label
-                                  dataLabelSettings:const DataLabelSettings(isVisible : true)
-                              )
-                          ]
-                      )
-                  ),
-                  horizontaSpace(20),
                   MeasureButton(buttonText: 'Measure', buttonAction: () { 
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const BPScreen()));
-                        }),
-                      ],
-                    ),
-                ],
-              ),
-             ),
+                      // getData();
+                       Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const BPScreen()));
+                        
+                     }),   
+                     
+                   ],
+                 ),
+                  
+                 )
+                 
+                 
+                 ],)
+                 
+           
             ],
       
           ),

@@ -5,7 +5,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 //import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/screens/spgraph.dart';
 import 'dart:core';
-
+late StreamSubscription<List<int>> streamSubscription;
 class ConnectedBpBluetoothDevicesPage extends StatefulWidget {
 
   const ConnectedBpBluetoothDevicesPage({super.key});
@@ -99,38 +99,63 @@ print(flutterBluePlus.scanResults);
 var subscription = flutterBluePlus.scanResults.listen((results)  {
     print('Result:$results');
     // do something with scan results
-        for (ScanResult r in results) {
-        print('${r.device.name} found! rssi: ${r.rssi} Id: ${r.device.id}');
-        if(r.device.id.toString() == '46:F8:00:00:FF:FF' ){
+    //46:F8:00:00:FF:FF
+    for (ScanResult r in results) {
+       print('${r.device.name} found! rssi: ${r.rssi} Id: ${r.device.id}');
+       if(r.device.id.toString() == '46:F8:00:00:FF:FF' ){
+         // mydvid=1;
           flutterBluePlus.stopScan();
-           r.device.connect();//.then((_) async {
-//           final String bp2ServiceId ='6e400001-b5a3-f393-e0a9-e50e24dcca9e';
-//           final String bpCharacteristicId ='6e400003-b5a3-f393-e0a9-e50e24dcca9e';
-//           List<BluetoothService> services = await r.device.discoverServices();
-//           BluetoothCharacteristic bpCharacteristic;
-// for (BluetoothService service in services) {
-//   print('in1');
-//   print(services);
-//   // if (service.uuid == Guid(bp2ServiceId)) {
-//   //   print('in2');
-//   //   // for (BluetoothCharacteristic characteristic in service.characteristics) {
-//   //   //    print(service.characteristics);
-//   //   //   if (characteristic.uuid ==  Guid(bpCharacteristicId)) {
-//   //   //     print('in3');
-//   //   //     bpCharacteristic = characteristic;
-//   //   //     await bpCharacteristic.setNotifyValue(true);
-//   //   //     break;
-//   //   //   }
-//   //   // }
-//   // }
-  
-// }
+           r.device.connect().then((_) async {
+          
+  //Timer.periodic(Duration(minutes: 3), (timer) async {
 
-//           });
+  List<BluetoothService> services = await  r.device.discoverServices();
+  BluetoothCharacteristic spo2Characteristic;
+  try{
+for (BluetoothService service in services) {
+  print('in1');
+  //print(service);
+//   
+for (BluetoothService service in services) {
+        if (service.uuid.toString() == dataStore.bpServiceId) {
+          print('SPO2 service found!');
+          for (BluetoothCharacteristic characteristic in service.characteristics) {
+            if (characteristic.uuid.toString() == dataStore.bpCharacteristicId) {
+              print('SPO2 characteristic found!');
+              spo2Characteristic = characteristic;
+              await spo2Characteristic.setNotifyValue(true);
+        
+              streamSubscription = spo2Characteristic.value.listen((value) {
+                // Assuming that the device sends the data in the format <SPO2><PR><other data>
+                print('Values: $value');
+                r.device.disconnect();
+                
+                
+                
+                    //streamSubscription.cancel();
+              });
+              
+              break;
+            }
+          }
+          break;
+        }
+      }
+  
+}
+  }on PlatformException catch (e) {
+                print('Error: ${e.message}');
+              }
+ });
+          //});
            
           print('connected to device');  
+          break;
+        }else{
+          //mydvid=0;
+          //navigatorKey?.currentState?.pushReplacementNamed("btmeasure");
         }
-    }
+    }    
 });
  flutterBluePlus.stopScan();
 }
@@ -165,48 +190,46 @@ if (connectedDevices.isNotEmpty) {
   print('Connected devices: ${connectedDevices.length}');
   for (BluetoothDevice device in connectedDevices) {
     print(connectedDevices);
-    print('Device name: ${device.name}');
+    print('Device name1: ${device.name}');
     print('Device ID: ${device.id}');
     print('Device type: ${device.type}');
     DeviceIdentifier deviceId = device.id;
     String deviceUuid = deviceId.toString();
     print('Device UUID: $deviceUuid');
     //device.connect(); // -- exception
-    Timer.periodic(Duration(seconds: 30), (timer) async {
-  final String bp2ServiceId ='14839ac4-7d7e-415c-9a42-167340cf2339';//'5833ff01-9b8b-5191-6142-22a4536ef123' ;//
-  final String bpCharacteristicId ='0734594a-a8e7-4b1a-a6b1-cd5243059a57';//'8b00ace7-eb0b-49b0-bbe9-9aee0a26e1a3';//'6e400003-b5a3-f393-e0a9-e50e24dcca9e';
-  List<BluetoothService> services = await device.discoverServices();
-  BluetoothCharacteristic bpCharacteristic;
-for (BluetoothService service in services) {
-  print('in1');
-  //print(service);
-//   
-for (BluetoothService service in services) {
-        if (service.uuid.toString() == bp2ServiceId) {
-          print('BP service found!');
-          for (BluetoothCharacteristic characteristic in service.characteristics) {
-            if (characteristic.uuid.toString() == bpCharacteristicId) {
+  //Timer.periodic(Duration(seconds: 10), (timer) async {
+  
+  //List<BluetoothService> services = await device.discoverServices();
+  //BluetoothCharacteristic bpCharacteristic;
+  if(deviceUuid.toString() == '46:F8:00:00:FF:FF'){
+    //mydvid=1;
+    print('MyDevice is Ready');
+    List<BluetoothService> services = await device.discoverServices();
+    BluetoothCharacteristic spo2Characteristic;
+    for (BluetoothService service in services) {
+            print('Inside service');
+            for (BluetoothService service in services) {
+            if (service.uuid.toString() == dataStore.bpServiceId) {
+            print('BP service found!');
+            for (BluetoothCharacteristic characteristic in service.characteristics) {
+              
+              if (characteristic.uuid.toString().substring(4,8) == dataStore.bpCharacteristicId) {
               print('BP characteristic found!');
-              bpCharacteristic = characteristic;
-              await bpCharacteristic.setNotifyValue(true);
-               for (BluetoothDescriptor descriptor in characteristic.descriptors) {
-            if (descriptor.uuid.toString() == '00002902-0000-1000-8000-00805f9b34fb') {
-              await descriptor.write([0x01, 0x00]);
-              print('BP descriptor set!');
+              spo2Characteristic = characteristic;
+              await spo2Characteristic.setNotifyValue(true);
+              streamSubscription = spo2Characteristic.value.listen((value) {
+                // Assuming that the device sends the data in the format <SPO2><PR><other data>
+                int systolic = value[1] << 8 | value[0];
+                int diastolic = value[3] << 8 | value[2];
+                print("Systolic: $systolic, Diastolic: $diastolic");
+                device.disconnect();
+                    //streamSubscription.cancel();
+              });
+
               break;
             }
-          }
-              bpCharacteristic.value.listen((value) {
-                // Assuming that the device sends the data in the format <bp><PR><other data>
-                print('Values BP: $value');
-                // if (value.length >= 2) {
-                //   int bp = value[5];
-                //   int pr = value[6];
-                //   print('bp: $bp, PR: $pr');
-                  
-                // }
-              });
-              break;
+            else{
+               print('BP characteristic Not found!');
             }
           }
           break;
@@ -214,7 +237,8 @@ for (BluetoothService service in services) {
       }
   
 }
- });
+  }
+
 
     }
 
@@ -603,3 +627,105 @@ class _BlutoothBpMeasurePagePageState
 
 // }
 
+
+
+class BPMonitor extends StatefulWidget {
+  const BPMonitor({super.key});
+
+  
+
+  @override
+  _BPMonitorState createState() => _BPMonitorState();
+}
+
+class _BPMonitorState extends State<BPMonitor> {
+  late BluetoothDevice device;
+  late List<BluetoothService> services;
+  late BluetoothCharacteristic bloodPressureCharacteristic;
+  late StreamSubscription<List<int>> bloodPressureStream;
+
+  static const String serviceId = "14839ac4-7d7e-415c-9a42-167340cf2339";
+  static const String characteristicId = "2A37";
+
+  void _startScanning() {
+    FlutterBluePlus.instance.startScan(timeout: Duration(seconds: 4));
+  }
+
+   Future<void> _connectToDevice() async {
+  final String deviceId = "46:F8:00:00:FF:FF";
+  late StreamSubscription<ScanResult> scanSubscription;
+  scanSubscription = FlutterBluePlus.instance.scan(timeout: Duration(seconds: 4)).listen((scanResult) async {
+    if (scanResult.device.id.toString() == deviceId) {
+      await scanSubscription.cancel();
+      await scanResult.device.connect();
+      device = scanResult.device;
+    }
+  });
+}
+
+  Future<void> _discoverServices() async {
+    services = await device.discoverServices();
+    BluetoothService bloodPressureService = services
+        .firstWhere((service) => service.uuid.toString() == serviceId);
+    bloodPressureCharacteristic = bloodPressureService.characteristics
+        .firstWhere((characteristic) => characteristic.uuid.toString() == characteristicId);
+  }
+
+  void _startBloodPressureStream() {
+    bloodPressureCharacteristic.setNotifyValue(true);
+    bloodPressureStream = bloodPressureCharacteristic.value.listen((value) {
+      // Parse the blood pressure data from the value list here
+      // For example, you could parse the systolic and diastolic pressure values like this:
+      int systolic = value[1] << 8 | value[0];
+      int diastolic = value[3] << 8 | value[2];
+      print("Systolic: $systolic, Diastolic: $diastolic");
+    });
+  }
+
+  void _stopBloodPressureStream() {
+    bloodPressureCharacteristic.setNotifyValue(false);
+    bloodPressureStream.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('BPBp'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: _startScanning,
+              child: Text("Start Scanning"),
+            ),
+            ElevatedButton(
+              onPressed: _connectToDevice,
+              child: Text("Connect to Device"),
+            ),
+            ElevatedButton(
+              onPressed: _discoverServices,
+              child: Text("Discover Services"),
+            ),
+            ElevatedButton(
+              onPressed: _startBloodPressureStream,
+              child: Text("Start Blood Pressure Stream"),
+            ),
+            ElevatedButton(
+              onPressed: _stopBloodPressureStream,
+              child: Text("Stop Blood Pressure Stream"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _stopBloodPressureStream();
+    super.dispose();
+  }
+}

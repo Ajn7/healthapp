@@ -359,30 +359,30 @@ showAlertDialog(context) {
 // add data manually if mydvid==0
 showAlertDialogofBt(BuildContext context) {
 //   set up the buttons
-  Widget cancelButton = TextButton(
-    child:const Text("Add Data Manually"),
-    onPressed:  () {
-      NavigatorState navigator = Navigator.of(context);
-      navigator.popUntil((route) => route.isFirst);
-      navigator.push(MaterialPageRoute(builder: (context) => const SpoGraphscreen()));
+  // Widget cancelButton = TextButton(
+  //   child:const Text("Add Data Manually"),
+  //   onPressed:  () {
+  //     NavigatorState navigator = Navigator.of(context);
+  //     navigator.popUntil((route) => route.isFirst);
+  //     navigator.push(MaterialPageRoute(builder: (context) => const SpoGraphscreen()));
       
-    },
-  );
-  Widget continueButton = TextButton(
-    child:const Text("Scan Again"),
-    onPressed:  () {
-     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const ConnectedBluetoothDevicesPage()));
-    },
-  );
-  print(mydvid);
+  //   },
+  // );
+  // Widget continueButton = TextButton(
+  //   child:const Text("Scan Again"),
+  //   onPressed:  () {
+  //    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>const ConnectedBluetoothDevicesPage()));
+  //   },
+  // );
+  // print(mydvid);
   // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title:const Text("Alert"),
-    content: const Text("Device Unavailable."),
-    actions: [
-      cancelButton,
-      continueButton,
-    ],
+  AlertDialog alert = const AlertDialog(
+    title: Text("Alert"),
+    content:  Text("Device Unavailable.\nPlease scan again or add data manually"),
+    // actions: [
+    //   cancelButton,
+    //   continueButton,
+    // ],
   );
 
   // show the dialog
@@ -415,13 +415,13 @@ showAlertDialogforcoonect(BuildContext context) {
   );
 
   // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title:const Text("Alert"),
-    content: const Text("Connected with another bluetooth device."),
-    actions: [
-      cancelButton,
-      continueButton,
-    ],
+  AlertDialog alert = const AlertDialog(
+    title: Text("Alert"),
+    content:  Text("Connected with another  device.Please disconnect and try again"),
+    // actions: [
+    //   cancelButton,
+    //   continueButton,
+    // ],
   );
 
   // show the dialog
@@ -506,19 +506,20 @@ void didChangeDependencies() {
 }
 
   void showspo2() {
-    //try{
+    try{
       print('Last List Length ${spo2List.last}');
-    //}on State catch(e) {
-
-    //}
-
+    } catch (e) {
+    spo2List.add(0);
+}
     
     
   }
   
   void navigateTo() {
+    if(spo2List.last != 0){
     int d=int.parse(spo2List.last.toString());
     addRecord(reading: d, vitalid: 1);
+    }
     navigateToNextScreen(context);
   }
   

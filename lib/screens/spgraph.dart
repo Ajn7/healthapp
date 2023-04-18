@@ -10,8 +10,9 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 DataStore dataStore=DataStore();
 bool isvisible=true;
 DateTime today=DateTime.now();
- int len=dataStore.dta.length;
- List<Widget> widgets = [];
+int len=dataStore.dta.length;
+//List<Widget> widgets = [];
+
 class SpoGraphscreen extends StatefulWidget {
    const SpoGraphscreen({super.key});
   @override

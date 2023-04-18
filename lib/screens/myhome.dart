@@ -37,6 +37,7 @@ class _MyHomeState extends State<MyHome> with API{
    @override
     void initState(){
     super.initState();
+    getLastData();
     checkInternetConnectivity();
     _futureData=getUserData();
     // getReading(date: DateTime.now().toString(), vitalid: 1);

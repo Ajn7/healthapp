@@ -65,8 +65,8 @@ class _BPScreenState extends State<BPScreen> with API {
     }
   
     });
-    return WillPopScope(
-      onWillPop: () async{
+     return WillPopScope(
+       onWillPop: () async{
         Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const MyHome()),
@@ -86,7 +86,7 @@ class _BPScreenState extends State<BPScreen> with API {
                   InkWell(
                     onTap:()async{
                           DateTime?newDate=await showDatePicker(context: context, 
-                          initialDate:dataStore.date,
+                          initialDate: dataStore.datesp,
                           firstDate: DateTime(2012),
                           lastDate: DateTime(2025)
                           );
@@ -108,7 +108,7 @@ class _BPScreenState extends State<BPScreen> with API {
                         Padding(
                           padding: const EdgeInsets.only(top:20.0,right: 10),
                           child: Text(
-                          '${dataStore.date.day} /${dataStore.date.month} /${dataStore.date.year}',
+                          '${dataStore.datesp.day} /${dataStore.datesp.month} /${dataStore.datesp.year}',
                           style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
                           ),
                         ),                           
@@ -119,58 +119,81 @@ class _BPScreenState extends State<BPScreen> with API {
             setStateCallback: () {
               // do
             },
-                  )  ,
-                  verticalSpace(20),
-                 Visibility(
-                   visible:isvisible,
-                   child: SizedBox(
-                     child: Row(
-                       children: [
-                        horizontaSpace(50),
-                         SizedBox(
-                          height: 50,
-                          width: 200,
-                           child: TextFormField(
-                                 controller:value,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: InputDecoration( 
-                                           border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10.0),
-                                           ),
-                                           //prefixIcon: Icon(Icons.add_circle_outline),
-                                           hintText: "Enter Blood Pressure Here",
-                                           labelText: 'BP',
-                                           hintStyle:const TextStyle(fontSize: 15.0, ),
-                                           //errorText: "Error",
-                                                     ),
-                                          validator: (String? value) {
-                                          return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
-                                          },
-                                               ),
-                         ),
-                         horizontaSpace(20),
-                         MeasureButton(buttonText: 'Add', buttonAction: (){
-                      String d;
-                      try {
-                           d = (value.text).toString();
-                          
-                          } on FormatException {
+          ),
+          Visibility(
+                 visible:isvisible,
+                 child: SizedBox(
+                   child: Column(
+                     children: [
+                       MeasureButton(buttonText: 'Measure ', buttonAction: (){
+                       Navigator.pushReplacement(
+                       bcontext,
+                       MaterialPageRoute(
+                       builder: (BuildContext context) =>const ConnectedBpBluetoothDevicesPage()));
                      
-                            d=' ';
-                     
-                            print('Error: Could not parse value as double');
-                          }
-                                   //double d=double.parse(value.text);
-                                   addBpRecord(reading: d, vitalid: 2);
-                                   navigateToNextScreen();
-                                                          
-                                 },             
-                                 ),
-                       ],
-                     ),
+                    }),
+                    verticalSpace(20),
+                    const Text('Or Add Data Manually'),
+                    verticalSpace(10),
+                       Row(
+                         children: [
+                          horizontaSpace(50),
+                           SizedBox(
+                            height: 50,
+                            width: 200,
+                             child: TextFormField(
+                                  controller:value,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: InputDecoration( 
+                                             border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                             ),
+                                             //prefixIcon: Icon(Icons.add_circle_outline),
+                                             hintText: "Enter BP Here",
+                                             labelText: 'BP',
+                                             hintStyle:const TextStyle(fontSize: 15.0, ),
+                                             //errorText: "Error",
+                                                       ),
+                                            validator: (String? value) {
+                                            return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
+                                            },
+                                                 ),
+                           ),
+                           horizontaSpace(20),
+                           MeasureButton(buttonText: 'Add', buttonAction: (){
+                        String d;
+                        try {
+                              d = (value.text).toString();
+                            
+                            } on FormatException {
+          
+                              d=' ';
+          
+                              print('Error: Could not parse value as double');
+                            }
+                  //double d=double.parse(value.text);
+                  addBpRecord(reading: d, vitalid: 2);
+                  navigateToNextScreen(context);
+       
+                  // Navigator.pushReplacement(
+                  // bcontext,
+                  // MaterialPageRoute(
+                  // builder: (BuildContext context) => super.widget));
+                
+                  
+                },             
+                ),
+                
+                           
+                         ],
+                       ),
+                     ],
                    ),
                  ),
-                verticalSpace(50),
+                 
+    
+               ),
+                verticalSpace(20),
                 Container(
                     padding:const EdgeInsets.all(20),
                     margin:const EdgeInsets.all(10),
@@ -179,16 +202,11 @@ class _BPScreenState extends State<BPScreen> with API {
                                                 color: Colors.lightBlue[50],
                                                 border: Border.all(color:Colors.black,width: 2),
                                               ),
-                    child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold))),
+                    child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold)
+                    )
                     ),
-                    MeasureButton(buttonText: 'Measure ', buttonAction: (){
-                      Navigator.pushReplacement(
-                       bcontext,
-                       MaterialPageRoute(
-                       builder: (BuildContext context) =>const ConnectedBpBluetoothDevicesPage()));
-                      //Navigator.push(context, MaterialPageRoute(builder:(context)=>MyWidget())); refresh
-                    }) 
-                    
+                    ),
+                     
                 ],
                 ),
                ),
@@ -196,7 +214,139 @@ class _BPScreenState extends State<BPScreen> with API {
           );
         }
         ),
-    );
+    ); 
+     // WillPopScope(
+    //   onWillPop: () async{
+    //     Navigator.pushAndRemoveUntil(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => const MyHome()),
+    //      ModalRoute.withName('/oldScreen'),
+    //     );
+    //     return true;
+    //   },
+    //   child: StatefulBuilder(
+    //     builder: (BuildContext context,StateSetter setState){
+    //       return Scaffold(
+    //         backgroundColor: Colors.white,
+    //         appBar: AppBar(title: const Text('HealthConnect',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
+    //         body: SingleChildScrollView(
+    //           child: SafeArea(
+    //             child:Column(
+    //             children: [
+    //               InkWell(
+    //                 onTap:()async{
+    //                       DateTime?newDate=await showDatePicker(context: context, 
+    //                       initialDate:dataStore.date,
+    //                       firstDate: DateTime(2012),
+    //                       lastDate: DateTime(2025)
+    //                       );
+    //                       Future.microtask(() async {
+    //                       await dateCheck(context, newDate);
+    //                       });
+                           
+    //                       },
+    //                 child: Row(
+    //                   children: [
+    //                     const Padding(
+    //                       padding:EdgeInsets.only(left:20,top: 20,right: 8),
+    //                       child: Icon(
+    //                       size: 40,
+    //                       color: Colors.blue,
+    //                       Icons.edit_calendar_outlined
+    //                       ),
+    //                     ),
+    //                     Padding(
+    //                       padding: const EdgeInsets.only(top:20.0,right: 10),
+    //                       child: Text(
+    //                       '${dataStore.date.day} /${dataStore.date.month} /${dataStore.date.year}',
+    //                       style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
+    //                       ),
+    //                     ),                           
+    //                   ],
+    //                 ),
+    //               ),
+    //              GScreen(
+    //         setStateCallback: () {
+    //           // do
+    //         },
+    //               )  ,
+    //               verticalSpace(20),
+    //              Visibility(
+    //                visible:isvisible,
+    //                child: SizedBox(
+    //                  child: Row(
+    //                    children: [
+    //                     horizontaSpace(50),
+    //                      SizedBox(
+    //                       height: 50,
+    //                       width: 200,
+    //                        child: TextFormField(
+    //                              controller:value,
+    //                             keyboardType: TextInputType.emailAddress,
+    //                             decoration: InputDecoration( 
+    //                                        border: OutlineInputBorder(
+    //                                         borderRadius: BorderRadius.circular(10.0),
+    //                                        ),
+    //                                        //prefixIcon: Icon(Icons.add_circle_outline),
+    //                                        hintText: "Enter Blood Pressure Here",
+    //                                        labelText: 'BP',
+    //                                        hintStyle:const TextStyle(fontSize: 15.0, ),
+    //                                        //errorText: "Error",
+    //                                                  ),
+    //                                       validator: (String? value) {
+    //                                       return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
+    //                                       },
+    //                                            ),
+    //                      ),
+    //                      horizontaSpace(20),
+    //                      MeasureButton(buttonText: 'Add', buttonAction: (){
+    //                   String d;
+    //                   try {
+    //                        d = (value.text).toString();
+                          
+    //                       } on FormatException {
+                     
+    //                         d=' ';
+                     
+    //                         print('Error: Could not parse value as double');
+    //                       }
+    //                                //double d=double.parse(value.text);
+    //                                addBpRecord(reading: d, vitalid: 2);
+    //                                navigateToNextScreen(context);
+                                                          
+    //                              },             
+    //                              ),
+    //                    ],
+    //                  ),
+    //                ),
+    //              ),
+    //             verticalSpace(50),
+    //             Container(
+    //                 padding:const EdgeInsets.all(20),
+    //                 margin:const EdgeInsets.all(10),
+    //                 height: 100,
+    //                 decoration: BoxDecoration(
+    //                                             color: Colors.lightBlue[50],
+    //                                             border: Border.all(color:Colors.black,width: 2),
+    //                                           ),
+    //                 child:  Center(child: Text(dataStore.notification,style: TextStyle(color: Colors.redAccent[700],fontWeight:FontWeight.bold))),
+    //                 ),
+    //                 MeasureButton(buttonText: 'Measure ', buttonAction: (){
+    //                   Navigator.pushReplacement(
+    //                    bcontext,
+    //                    MaterialPageRoute(
+    //                    builder: (BuildContext context) =>const ConnectedBpBluetoothDevicesPage()));
+    //                   //Navigator.push(context, MaterialPageRoute(builder:(context)=>MyWidget())); refresh
+    //                 }) 
+                    
+    //             ],
+    //             ),
+    //            ),
+    //         ),
+    //       );
+    //     }
+    //     ),
+    // );
  }
  
   Future<void> dateCheck(BuildContext context,DateTime?newDate) async{
@@ -253,16 +403,17 @@ class _BPScreenState extends State<BPScreen> with API {
     }
   }
   
-    void navigateToNextScreen() async {
-    await Future.delayed(const Duration(seconds: 3),(){
+    void navigateToNextScreen(context) async {
+   await Future.delayed(const Duration(seconds: 1),(){
       
     });
-  Navigator.pushReplacement(
+ Navigator.pushReplacement(
     context,
     MaterialPageRoute(
       builder: (BuildContext context) => super.widget,
     ),
   );
+  
 }
  
   }
@@ -373,7 +524,7 @@ SplineSeries<ChartData, String> getData(Function setStateCallback) {
   print('bpgetData SplineSeries');
   List<ChartData> spData=[];
   List<double> parsedData = dataStore.bpldta.map((data) => double.parse(data)).toList();
-   print(' 22 ${dataStore.bptme.length}');
+   print(' BP dataLength: ${dataStore.bptme.length}');
     for(int i=0;i<(dataStore.bptme.length);i++){
       //print('for loop:$i');
       String time=dataStore.bptme[i].toString();

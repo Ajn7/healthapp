@@ -8,45 +8,46 @@ import 'package:http/http.dart' as http;
 
 DataStore dataStore = DataStore();
  mixin API {
-//  Future getLastData({required int vitalid}) async {
-//   // MySharedPreferences myPrefs = MySharedPreferences();
-//   // await myPrefs.initPrefs();
-//   String date=DateTime.now().toString();
-//   String today=date.substring(0,10);
-//   print('From lastdatagetReading');
-//   final response = await http.get(
+ Future getLastData() async {
+  String date=DateTime.now().toString();
+  String today=date.substring(0,10);
+  print('From lastdatagetReading');
+  final response = await http.get(
 
-//     Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=${dataStore.id}+&date=$today&vitalid=$vitalid'),
-//     headers: <String, String>{
-//       'Content-Type': 'application/json; charset=UTF-8',
-//     },
+    Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=${dataStore.id}+&date=$today&vitalid=1'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
     
-//   );
-// List<dynamic> data = jsonDecode(response.body);
-//   print('last status:${response.statusCode},$today');
-//   if (response.statusCode == 200) {
-//     MySharedPreferences myPrefs = MySharedPreferences();
-//     await myPrefs.initPrefs();
+  );
+  final response2 = await http.get(
+
+    Uri.parse('${dataStore.baseurl}/vitalrecords/readings/date/list/?user=${dataStore.id}+&date=$today&vitalid=2'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
     
-//     List<dynamic>? lastdata=[];
-//      for (dynamic d in data) {
-//       lastdata.add(d['reading']);
-//       print('last data ${lastdata.last}');
-//       await myPrefs.setString('Last',lastdata.last);
-//       }
-
-
-
-//   } else {
-//     var res="No data for the given date ";
-//     MySharedPreferences myPrefs = MySharedPreferences();
-//     await myPrefs.initPrefs();
-//     String l='0';
-//     await myPrefs.setString('Last',l);
-//     print(res);
-//    }
-
-//  }
+  );
+List<dynamic> spdata = jsonDecode(response.body);
+List<dynamic> bpdata = jsonDecode(response2.body);
+  print('last status:${response.statusCode},$today');
+  if (response.statusCode == 200 ) {
+    dataStore.prev=spdata.last['reading'];
+    print('SpLastDatagetReading ${spdata.last}');
+  }else { 
+    var res="No Sp data for the given date ";
+    dataStore.prev=0;
+    print(res);
+   }
+  if(response2.statusCode == 200){
+    dataStore.bpprev=bpdata.last['reading'];
+     print('BpLastDatagetReading ${bpdata.last}');
+  }else{
+    var res="No BP data for the given date ";
+    dataStore.bpprev=0;
+    print(res);
+  }
+ }
  Future getReading({required String date,required int vitalid}) async {
   MySharedPreferences myPrefs = MySharedPreferences();
   await myPrefs.initPrefs();
@@ -88,7 +89,6 @@ print('from getReading api ::$data');
     // print(myPrefs.getList('time')); 
     print('apicall datstore.dta');
     print(dataStore.dta); 
-    dataStore.prev=dataStore.dta.last;
     // Timer(const Duration(seconds:3),(){
       
     // });
@@ -147,7 +147,7 @@ print(response.statusCode);
      for (dynamic d in data) {
       dataStore.bptme.add(DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(d['created_at']).toString());
   var name = d['reading'];
-  dataStore.bpprev=d['reading'];
+  //dataStore.bpprev=d['reading'];
   var rd = '';
   int i = 0;
   // Extract the first value
@@ -400,7 +400,7 @@ print(response.statusCode);
     
     print('Un Successfull');
   }
-   getReading(date: DateTime.now().toString(), vitalid: 2);
+   getReadingBp(date: DateTime.now().toString(), vitalid: 2);
  
 }
  }

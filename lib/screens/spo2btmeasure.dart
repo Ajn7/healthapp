@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/API/model.dart';
+import 'package:healthapp/core/navigator.dart';
 import 'package:healthapp/screens/spgraph.dart';
 import 'dart:core';
 import 'package:app_settings/app_settings.dart';
@@ -180,7 +181,8 @@ if (connectedDevices.isNotEmpty) {
                       
                       //spo2Characteristic.setNotifyValue(false);
                       counter=0;
-                      spo2List=[];
+                      
+
                       
                       
                     }
@@ -228,7 +230,7 @@ getConnection()  async{
       for (ScanResult r in results) {
        print('${r.device.name} found! rssi: ${r.rssi} Id: ${r.device.id}');
        if(r.device.id.toString() == 'C0:00:00:00:01:DE' ){
-          mydvid=1;
+           mydvid=1;
           flutterBluePlus.stopScan();
            r.device.connect().then((_) async {
           
@@ -237,11 +239,8 @@ getConnection()  async{
   List<BluetoothService> services = await  r.device.discoverServices();
   BluetoothCharacteristic spo2Characteristic;
   try{
-for (BluetoothService service in services) {
-  print('in1');
-  //print(service);
-//   
-for (BluetoothService service in services) {
+    for (BluetoothService service in services) {
+      mydvid=1;
         if (service.uuid.toString() == dataStore.spo2ServiceId) {
           print('SPO2 service found!');
           for (BluetoothCharacteristic characteristic in service.characteristics) {
@@ -276,7 +275,7 @@ for (BluetoothService service in services) {
                       r.device.disconnect();
                       //spo2Characteristic.setNotifyValue(true);
                       counter=0;
-                      spo2List=[];
+                      
                       
                     }
                 
@@ -289,8 +288,6 @@ for (BluetoothService service in services) {
           }
           break;
         }
-      }
-  
 }
   }on PlatformException catch (e) {
                 print('Error: ${e.message}');
@@ -456,7 +453,8 @@ class BlutoothMeasurePage extends StatefulWidget {
 
 class _BlutoothMeasurePagePageState
     extends State<BlutoothMeasurePage> with API {
-  
+  String title='Device Unavailable';
+  String msg='Oops! Device is not available';
   List<BluetoothDevice> connectedDevicesList = <BluetoothDevice>[];
 
   @override
@@ -472,26 +470,32 @@ void didChangeDependencies() {
     super.initState();
      //popupbox();
     showspo2();
-     Future.delayed(const Duration(seconds: 5), () {
-   navigateTo();
-  });
+  //    Future.delayed(const Duration(seconds: 5), () {
+   
+  // });
   }
   var avg=true;
   @override
   Widget build(BuildContext context) {
     
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Connected Bluetooth Devices'),
-      ),
-      body: Center(
-        child: Column(
-          children:  [
-              Text('Your SpO2 Level Is: ${spo2List.last}'),
-          ],
+    return WillPopScope(
+      onWillPop: () async{
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
         ),
-      )
-      
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:  [
+                Text(msg),
+            ],
+          ),
+        )
+        
+      ),
     );
   }
   
@@ -511,27 +515,45 @@ void didChangeDependencies() {
     } catch (e) {
     spo2List.add(0);
 }
-    
-    
+if(spo2List.last != 0){
+  setState(() {
+    title='Oxygen Saturation Level';
+    msg='Your SpO2 Level Is: ${spo2List.last}';
+  });
+  navigateTo();
+}else{
+    navigateToPg();
+}    
   }
   
-  void navigateTo() {
-    if(spo2List.last != 0){
+  void navigateTo() async{
     int d=int.parse(spo2List.last.toString());
     addRecord(reading: d, vitalid: 1);
-    }
-    navigateToNextScreen(context);
+    spo2List=[];
+    await Future.delayed(const Duration(seconds: 3),(){
+      navigatorKey?.currentState?.pushReplacementNamed("spgraph");
+     });
+    
+    //navigateToNextScreen(context);
+  }
+  void navigateToPg() async{
+    spo2List=[];
+    await Future.delayed(const Duration(seconds: 3),(){
+      navigatorKey?.currentState?.pushReplacementNamed("spgraph");
+     });
+    //navigateToNextScreen(context);
   }
   
-  void navigateToNextScreen(BuildContext context) async{
-    await Future.delayed(const Duration(seconds: 1),(){
+//   void navigateToNextScreen(context) async{
+//     await Future.delayed(const Duration(seconds: 1),(){
       
-    });
- Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (BuildContext context) => const SpoGraphscreen(),
-    ),
-  );
-  }
+//     });
+ 
+//  Navigator.pushReplacement(
+//     context,
+//     MaterialPageRoute(
+//       builder: (BuildContext context) => const SpoGraphscreen(),
+//     ),
+//   );
+//   }
 }

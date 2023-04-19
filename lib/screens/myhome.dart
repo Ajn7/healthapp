@@ -362,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
                      children:  [
                         SizedBox(
                          height: 200,
-                         width: 200,
+                         width: 250,
                      child:  SfCartesianChart(
                      // Enables the legend
                       // legend: Legend(isVisible: true),
@@ -416,7 +416,7 @@ class _HomeScreenState extends State<HomeScreen> with API {
                    children:  [
                       SizedBox(
                        height: 200,
-                       width: 200,
+                       width: 250 ,
                    child: SfCartesianChart(
                        // Enables the legend
                         // legend: Legend(isVisible: true),

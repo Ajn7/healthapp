@@ -315,12 +315,13 @@ class _GScreenState extends State<GScreen>
   
   @override
   Widget build(BuildContext context) {
-    print('Gscreen ::${dataStore.dta}');
+    print('Gscreen of sp ::${dataStore.dta}');
+    print('Gscreen of sp ::${dataStore.tme}');
     return StatefulBuilder(
       builder: (BuildContext context,StateSetter setState){
         return Container(
               padding:const EdgeInsets.only(left:40,right:30,top:10),
-              //width: 800,
+              //width: 1000,
               height: 300,
                child: ListView(
                  physics:const BouncingScrollPhysics(),
@@ -378,7 +379,7 @@ class _GScreenState extends State<GScreen>
   }
 }
 
-SplineSeries<ChartData, String> getData(Function setStateCallback) {
+FastLineSeries<ChartData, String> getData(Function setStateCallback) {
   print('getData SplineSeries');
   //MySharedPreferences myPrefs=MySharedPreferences();
   //print('Test 1');
@@ -386,7 +387,7 @@ SplineSeries<ChartData, String> getData(Function setStateCallback) {
   // List<dynamic>?time=myPrefs.getList('time');
   List<ChartData> spData=[];
   List<double> parsedData = dataStore.dta.map((data) => double.parse(data)).toList();
-  
+  //print('Parsed Data: $parsedData');
     for(int i=0;i<dataStore.tme.length;i++){
       String tme=dataStore.tme[i].toString();
       spData.add(ChartData(tme.substring(11,16),parsedData[i]));
@@ -397,7 +398,7 @@ SplineSeries<ChartData, String> getData(Function setStateCallback) {
 //   spData.add(ChartData(time.toString().substring(11, 16), parsedData.removeAt(0)));
 // } 
   
-  return SplineSeries<ChartData, String>(
+  return FastLineSeries<ChartData, String>(
     
     // Create a new LineSeries object
     dataSource:spData,

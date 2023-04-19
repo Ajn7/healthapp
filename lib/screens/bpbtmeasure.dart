@@ -208,7 +208,6 @@ if (connectedDevices.isNotEmpty) {
     BluetoothCharacteristic spo2Characteristic;
     for (BluetoothService service in services) {
             print('Inside service');
-            for (BluetoothService service in services) {
             if (service.uuid.toString() == dataStore.bpServiceId) {
             print('BP service found!');
             for (BluetoothCharacteristic characteristic in service.characteristics) {
@@ -219,9 +218,10 @@ if (connectedDevices.isNotEmpty) {
               await spo2Characteristic.setNotifyValue(true);
               streamSubscription = spo2Characteristic.value.listen((value) {
                 // Assuming that the device sends the data in the format <SPO2><PR><other data>
-                int systolic = value[1] << 8 | value[0];
-                int diastolic = value[3] << 8 | value[2];
-                print("Systolic: $systolic, Diastolic: $diastolic");
+                print('Value: $value');
+                // int systolic = value[1] << 8 | value[0];
+                // int diastolic = value[3] << 8 | value[2];
+                // print("Systolic: $systolic, Diastolic: $diastolic");
                 device.disconnect();
                     //streamSubscription.cancel();
               });
@@ -234,7 +234,7 @@ if (connectedDevices.isNotEmpty) {
           }
           break;
         }
-      }
+      
   
 }
   }

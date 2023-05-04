@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/constants/divider.dart';
@@ -392,6 +393,7 @@ FastLineSeries<ChartData, String> getData(Function setStateCallback) {
       String tme=dataStore.tme[i].toString();
       spData.add(ChartData(tme.substring(11,16),parsedData[i]));
     }
+ print('spdata SplineSeries ${spData.length}');
  setStateCallback();
     
 //    for (var time in dataStore.tme) {

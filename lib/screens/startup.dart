@@ -4,6 +4,7 @@ import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/core/navigator.dart';
 //import 'package:healthapp/main.dart';
 import 'package:healthapp/screens/login.dart';
+import 'package:healthapp/widgets/progressindicator.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/headline.dart';
 DataStore dataStore=DataStore();
@@ -83,13 +84,7 @@ class _StartupState extends State<Startup> {
                    ),
                 ),
               ),
-              const CircularProgressIndicator(
-
-              valueColor: AlwaysStoppedAnimation<Color>(
-
-                  Colors.purple),
-
-                  ),
+             const Progressindicator(),
               
             ],
           ),

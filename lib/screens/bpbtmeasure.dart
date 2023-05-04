@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+
+
+import '../widgets/progressindicator.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/core/navigator.dart';
@@ -11,7 +14,6 @@ import 'package:healthapp/screens/spgraph.dart';
 import 'dart:core';
 import 'package:app_settings/app_settings.dart';
 DataStore dataStore=DataStore();
-int counter=0;
 int mydvid=0;
  List <int> spo2List =[];
  late StreamSubscription<List<int>> streamSubscription;
@@ -25,8 +27,7 @@ class ConnectedBpBluetoothDevicesPage extends StatefulWidget  {
 }
 
 
-class _ConnectedBpBluetoothDevicesPageState
-    extends State<ConnectedBpBluetoothDevicesPage> {
+class _ConnectedBpBluetoothDevicesPageState extends State<ConnectedBpBluetoothDevicesPage> {
   bool allowNavigation = false;
   List<BluetoothDevice> connectedDevicesList = <BluetoothDevice>[];
 
@@ -34,7 +35,7 @@ class _ConnectedBpBluetoothDevicesPageState
   void initState() {
     super.initState();
     mydvid=0;
-     Future.delayed(const Duration(seconds: 3), () {
+   Future.delayed(const Duration(seconds: 3), () {
    checkBluetoothStatus(context);
   });
     
@@ -77,14 +78,11 @@ class _ConnectedBpBluetoothDevicesPageState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.purple),
-                  ),
-                  SizedBox(height: 20,),
-                  Text('Scanning for Bluetooth Devices..',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
-                  SizedBox(height: 5,),
-                  Text('Please wait a moment..!')               
+            Progressindicator(),
+            SizedBox(height: 20,),
+            Text('Scanning for Bluetooth Devices..',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
+            SizedBox(height: 5,),
+            Text('Please wait a moment..!')               
           ],
         ),
       )
@@ -104,6 +102,8 @@ class _ConnectedBpBluetoothDevicesPageState
     });
   }
 }
+
+
 Future<void> checkBluetoothStatus(context) async {
   
   bool isOn = await FlutterBluePlus.instance.isOn;

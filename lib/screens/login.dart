@@ -180,7 +180,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     
                   ],
                 ),
-                TextButton(child: Text("forgot your password?",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color:Colors.red.shade400, decoration: TextDecoration.underline),),
+                TextButton(
+                  child: Text("forgot your password?",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color:Colors.red.shade400, 
+                    decoration: TextDecoration.underline
+                    ),
+                    ),
                 onPressed:(){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgottScreen()));
                 }, ),

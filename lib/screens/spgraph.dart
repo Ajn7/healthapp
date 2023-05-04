@@ -365,6 +365,7 @@ class _GScreenState extends State<GScreen>
                             ),
                             series: <ChartSeries> [
                             
+                             
                                  getData(widget.setStateCallback)
                                 
                             ]
@@ -399,6 +400,10 @@ FastLineSeries<ChartData, String> getData(Function setStateCallback) {
 //    for (var time in dataStore.tme) {
 //   spData.add(ChartData(time.toString().substring(11, 16), parsedData.removeAt(0)));
 // } 
+  
+  if( spData.isEmpty){
+    spData.add(ChartData('',0));
+  }
   
   return FastLineSeries<ChartData, String>(
     

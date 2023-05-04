@@ -322,7 +322,7 @@ class _GScreenState extends State<GScreen>
       builder: (BuildContext context,StateSetter setState){
         return Container(
               padding:const EdgeInsets.only(left:40,right:30,top:10),
-              //width: 1000,
+              width: 500,
               height: 300,
                child: ListView(
                  physics:const BouncingScrollPhysics(),
@@ -330,7 +330,7 @@ class _GScreenState extends State<GScreen>
                  children:[ 
                   SizedBox(   
                                                     
-                        child: SfCartesianChart(
+                        child:SfCartesianChart( // SfCartesianChart
                             // Initialize category axis
                             title:  ChartTitle(
                             text: 'Oxygen Saturation',

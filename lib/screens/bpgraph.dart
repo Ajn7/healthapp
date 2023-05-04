@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/API/apicalls.dart';
 import 'package:healthapp/constants/divider.dart';
 import 'package:healthapp/screens/bpbtmeasure.dart';
 import 'package:healthapp/screens/myhome.dart';
 import 'package:healthapp/widgets/measurebutton.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+
 DataStore dataStore=DataStore();
 bool isvisible=true;
 DateTime today=DateTime.now();
@@ -86,7 +88,7 @@ class _BPScreenState extends State<BPScreen> with API {
                   InkWell(
                     onTap:()async{
                           DateTime?newDate=await showDatePicker(context: context, 
-                          initialDate: dataStore.datesp,
+                          initialDate: dataStore.date,
                           firstDate: DateTime(2012),
                           lastDate: DateTime(2025)
                           );
@@ -108,7 +110,7 @@ class _BPScreenState extends State<BPScreen> with API {
                         Padding(
                           padding: const EdgeInsets.only(top:20.0,right: 10),
                           child: Text(
-                          '${dataStore.datesp.day} /${dataStore.datesp.month} /${dataStore.datesp.year}',
+                          '${dataStore.date.day} /${dataStore.date.month} /${dataStore.date.year}',
                           style: const TextStyle(fontSize: 18,color: Color(0xFF0b5345),fontWeight:FontWeight.bold),
                           ),
                         ),                           
@@ -358,7 +360,7 @@ class _BPScreenState extends State<BPScreen> with API {
         //print('Cu isVisible true: $isvisible');
         //print(newDate.compareTo(DateTime.now())==0);
         
-        dataStore.date=newDate;
+        dataStore.date=newDate; 
                          
                           getReadingBp(date: newDate.toString(), vitalid: 2).then((_) {
       setState(() {

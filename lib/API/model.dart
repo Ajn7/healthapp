@@ -17,6 +17,8 @@
 // String bloodgroup='';
 // String phone='';
 // String notification='No data found please add reading';
+import 'dart:io';
+
 class DataStore {
   static final DataStore _instance = DataStore._internal();
 
@@ -43,6 +45,7 @@ class DataStore {
   double? weight;
   String bloodgroup = '';
   String phone = '';
+  String image='';
   String notification = 'No data found please ';
   DateTime date=DateTime.now();
   DateTime datesp=DateTime.now();

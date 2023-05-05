@@ -68,7 +68,8 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
         );
         return true;
       },
-      child: StatefulBuilder(
+      child: 
+      StatefulBuilder(
         builder: (BuildContext context,StateSetter setState){
           return Scaffold(
             backgroundColor: Colors.white,
@@ -207,7 +208,7 @@ class _SpoGraphscreenState extends State<SpoGraphscreen> with API {
             ),
           );
         }
-        ),
+        ),//;//,
     );
  }
  

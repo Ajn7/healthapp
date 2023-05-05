@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 
@@ -6,12 +8,19 @@ import 'package:healthapp/constants/sharedpref.dart';
 import 'package:healthapp/API/model.dart';
 import 'package:healthapp/screens/editinfo.dart';
 DataStore dataStore = DataStore();
+String image='/data/user/0/com.example.healthapp/cache/e2b46842-bf00-4574-bc92-e700622683df/Screenshot_20230505-151807.png';
+class PersonalInfoList extends StatefulWidget {
+  
 
-class PersonalInfoList extends StatelessWidget {
   const PersonalInfoList({
     super.key,
   });
+  
+  @override
+  State<PersonalInfoList> createState() => _PersonalInfoListState();
+}
 
+class _PersonalInfoListState extends State<PersonalInfoList> {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -28,13 +37,34 @@ class PersonalInfoList extends StatelessWidget {
           icon: const Icon(Icons.edit),
           color:Colors.white,
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EditInfo()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EditInfo()))
+            .then((value) {
+                  // This code will be executed after the navigation is complete
+                setState(() {
+                // Update the state here
+                });
+            });
            },
           ),
         ],
-                currentAccountPicture:const CircleAvatar(
-        backgroundImage: AssetImage('assets/images/profile.png'),
-                ),
+        currentAccountPicture://dataStore.image.length!=1?
+                    ClipOval(
+                      child:(dataStore.image != '')?
+                      //Text(dataStore.image)
+                      Image.file(
+                        File(dataStore.image),
+                        fit: BoxFit.cover, 
+                        width: 160,
+                        height: 160,
+                        )
+                      :const Text('no data'),
+                       
+                      //Text(dataStore.image)
+                  )//:
+                  //const CircleAvatar(
+                  //backgroundImage: AssetImage('assets/images/profile.png'),
+                  //),
+       
         ),
        ListTile(
         leading:const Icon(Icons.person_outline),

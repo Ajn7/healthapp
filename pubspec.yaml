@@ -51,6 +51,7 @@ dependencies:
   connectivity_plus: ^3.0.4
   lottie: ^2.3.2
   url_launcher: ^6.1.10
+  image_picker: ^0.8.7+4
 
 
  

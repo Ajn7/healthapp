@@ -253,6 +253,9 @@ print(response.statusCode);
   if(data1['phone']!=null){
   await myPrefs.setString('phone',data1['phone']);
   }
+  if(data1['image']!=null){
+  await myPrefs.setString('image',data1['image']);
+  }
 
   //String? email = myPrefs.getString('email');
  
@@ -267,7 +270,8 @@ print(response.statusCode);
   dataStore.height=myPrefs.getFloat('height');  
   dataStore.weight=myPrefs.getFloat('weight');  
   dataStore.bloodgroup=myPrefs.getString('bloodgroup').toString();   
-  dataStore.phone=myPrefs.getString('phone').toString();          //data['email'];
+  dataStore.phone=myPrefs.getString('phone').toString();  
+  dataStore.image=myPrefs.getString('image').toString();       //data['email'];
   print('Name at deatils api global variable :${dataStore.name}');
   print('Email at deatils api global variable :${dataStore.email}');
   print('age at deatils api global variable :${dataStore.age}');
@@ -275,6 +279,7 @@ print(response.statusCode);
   print('weight at deatils api global variable :${dataStore.weight}');
   print('bloodgroup at deatils api global variable :${dataStore.bloodgroup}');
   print('phone at deatils api global variable :${dataStore.phone}');
+  print('Image Dat:${dataStore.image}');
  
     
   } else {
@@ -304,7 +309,8 @@ print(response.statusCode);
  required String bg,
  required String phone,
  required double height,
- required double weight}
+ required double weight,
+ required String image}
  ) async {
   
   MySharedPreferences myPrefs = MySharedPreferences();
@@ -326,6 +332,7 @@ print(response.statusCode);
     'bloodgroup': bg,
     'phone': phone,
     'user': dataStore.id,
+    'image':image,
     }),
     
   );

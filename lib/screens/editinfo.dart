@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:healthapp/constants/sharedpref.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../API/model.dart';
@@ -16,6 +17,8 @@ class EditInfo extends StatefulWidget{
   const EditInfo({super.key});
   @override
   State<EditInfo> createState()=>_EditInfo();
+
+  
 
 }
 
@@ -36,7 +39,29 @@ class _EditInfo extends State<EditInfo> with API{
       super.initState(); 
       
     }
-  
+  Widget checkImage() {
+  Widget displayWidget;
+  try {
+    final file = File(dataStore.image);
+    if (!file.existsSync()) {
+      throw 'file exception';
+    }
+    displayWidget = ClipOval(
+      child: Image.file(
+        file,
+        fit: BoxFit.cover,
+        width: 160,
+        height: 160,
+      ),
+    );
+  } catch (e) {
+     // displayWidget = const Text('No Image');
+      displayWidget = const CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/profile.png'),
+                  );
+  }
+  return displayWidget;
+}
   @override
   Widget build(BuildContext context) {
     
@@ -54,16 +79,7 @@ class _EditInfo extends State<EditInfo> with API{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                   //msgLine(message: "Edit Profile"),
-                  
-                  (dataStore.image!='')?
-                    ClipOval(
-                      child: Image.file(
-                        File(dataStore.image),
-                        fit: BoxFit.cover, 
-                        width: 160,
-                        height: 160,
-                        ),
-                  ):const Text('No Image'),
+                  checkImage(),
                 //    Image.asset(
                 //   'assets/images/login.png', //
                 //       height: 150,
@@ -79,8 +95,7 @@ class _EditInfo extends State<EditInfo> with API{
                   try{
                   setState(() {
                   dataStore.image = File(pickedFile!.path).path;
-                  //img=dataStore.image;
-                  print('img: ${dataStore.image}');
+                  setImage();
                   });
                   }catch(e) {
                     print(e);
@@ -278,7 +293,7 @@ class _EditInfo extends State<EditInfo> with API{
                       print("age: ${dataStore.age}");
                       print("bloodgroups "+bg);
                      
-                      editUserData(age:ag,bg:bg,phone:phn,height:hgt,weight:wght,image:dataStore.image);
+                      editUserData(age:ag,bg:bg,phone:phn,height:hgt,weight:wght);
                       Future.delayed(const Duration(seconds: 1), ()
                      {
                       
@@ -301,6 +316,14 @@ class _EditInfo extends State<EditInfo> with API{
       )
     );
   }
+  
+  void setImage() async{
+  MySharedPreferences myPrefs = MySharedPreferences();
+  await myPrefs.initPrefs();
+  myPrefs.setString('image',dataStore.image);
+  }
+  
+  
 }
 
 

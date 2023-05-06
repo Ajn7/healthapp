@@ -253,11 +253,7 @@ print(response.statusCode);
   if(data1['phone']!=null){
   await myPrefs.setString('phone',data1['phone']);
   }
-  if(data1['image']!=null){
-  await myPrefs.setString('image',data1['image']);
-  }
-
-  //String? email = myPrefs.getString('email');
+  
  
     
   String firstname=data['first_name'];
@@ -310,7 +306,7 @@ print(response.statusCode);
  required String phone,
  required double height,
  required double weight,
- required String image}
+ }
  ) async {
   
   MySharedPreferences myPrefs = MySharedPreferences();
@@ -332,7 +328,6 @@ print(response.statusCode);
     'bloodgroup': bg,
     'phone': phone,
     'user': dataStore.id,
-    'image':image,
     }),
     
   );

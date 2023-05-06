@@ -18,9 +18,34 @@ class PersonalInfoList extends StatefulWidget {
   
   @override
   State<PersonalInfoList> createState() => _PersonalInfoListState();
+   
 }
 
 class _PersonalInfoListState extends State<PersonalInfoList> {
+  Widget checkImage() {
+  Widget displayWidget;
+  try {
+    final file = File(dataStore.image);
+    if (!file.existsSync()) {
+      throw 'file exception';
+    }
+    displayWidget = ClipOval(
+      child: Image.file(
+        file,
+        fit: BoxFit.cover,
+        width: 160,
+        height: 160,
+      ),
+    );
+  } catch (e) {
+     // displayWidget = const Text('No Image');
+      displayWidget = const CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/profile.png'),
+                  );
+  }
+  return displayWidget;
+}
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -47,20 +72,20 @@ class _PersonalInfoListState extends State<PersonalInfoList> {
            },
           ),
         ],
-        currentAccountPicture://dataStore.image.length!=1?
-                    ClipOval(
-                      child:(dataStore.image != '')?
-                      //Text(dataStore.image)
-                      Image.file(
-                        File(dataStore.image),
-                        fit: BoxFit.cover, 
-                        width: 160,
-                        height: 160,
-                        )
-                      :const Text('no data'),
+        currentAccountPicture:checkImage()//dataStore.image.length!=1?
+                  //   ClipOval(
+                  //     child:(dataStore.image != '')?
+                  //     //Text(dataStore.image)
+                  //     Image.file(
+                  //       File(dataStore.image),
+                  //       fit: BoxFit.cover, 
+                  //       width: 160,
+                  //       height: 160,
+                  //       )
+                  //     :const Text('no data'),
                        
-                      //Text(dataStore.image)
-                  )//:
+                  //     //Text(dataStore.image)
+                  // )//:
                   //const CircleAvatar(
                   //backgroundImage: AssetImage('assets/images/profile.png'),
                   //),
@@ -112,6 +137,7 @@ class _PersonalInfoListState extends State<PersonalInfoList> {
           await myPrefs.remove('name');
           await myPrefs.remove('email');
           await myPrefs.remove('user_id');
+          
           navigatorKey?.currentState?.pushReplacementNamed("loginscreen");
          },
       ),

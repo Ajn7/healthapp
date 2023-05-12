@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:healthapp/API/model.dart';
-import 'package:healthapp/constants/sharedpref.dart';
-import 'package:healthapp/core/navigator.dart';
-//import 'package:healthapp/main.dart';
-import 'package:healthapp/screens/login.dart';
-import 'package:healthapp/widgets/progressindicator.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:healthapp/constants/divider.dart';
+
+import '../API/model.dart';
+import '../constants/sharedpref.dart';
+import '../core/navigator.dart';
+import '../screens/login.dart';
 import '../constants/headline.dart';
+import '../widgets/wavetext.dart';
+
+//import '../widgets/progressindicator.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+
 DataStore dataStore=DataStore();
 class Startup extends StatefulWidget {
   const Startup({super.key});
@@ -84,7 +88,10 @@ class _StartupState extends State<Startup> {
                    ),
                 ),
               ),
-             const Progressindicator(),
+         const Text('Loading...'),
+         verticalSpace(5),
+         const WaveText(),
+          //const Progressindicator(),
               
             ],
           ),
@@ -93,6 +100,8 @@ class _StartupState extends State<Startup> {
     
   }
 }
+
+
 
 
 

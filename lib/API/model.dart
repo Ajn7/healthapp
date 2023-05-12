@@ -51,7 +51,7 @@ class DataStore {
   DateTime datesp=DateTime.now();
   String spo2ServiceId ='6e400001-b5a3-f393-e0a9-e50e24dcca9e';//'5833ff01-9b8b-5191-6142-22a4536ef123' ;//
   String spo2CharacteristicId ='6e400003-b5a3-f393-e0a9-e50e24dcca9e';//'5833ff02-9b8b-5191-6142-22a4536ef123';//'6e400003-b5a3-f393-e0a9-e50e24dcca9e';
-   String bpServiceId ='14839ac4-7d7e-415c-9a42-167340cf2339';//'5833ff01-9b8b-5191-6142-22a4536ef123' ;//
-  String bpCharacteristicId ='0x2A37';//'0734594a-a8e7-4b1a-a6b1-cd5243059a57';
+  String bpServiceId ='14839ac4-7d7e-415c-9a42-167340cf2339';//'5833ff01-9b8b-5191-6142-22a4536ef123' ;//
+  String bpCharacteristicId ='8b00ace7-ebob-49bo-bbe9-9aee0a26e1a3';//'0734594A-A8E7-4B1A-A6B1-CD5243059A57';//'00002a37-0000-1000-8000-00805f9b34fb';//"0X2A37";
 
 }

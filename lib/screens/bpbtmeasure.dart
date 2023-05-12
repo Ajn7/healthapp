@@ -3,16 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-
+import 'package:app_settings/app_settings.dart';
+import 'dart:core';
 
 import '../widgets/progressindicator.dart';
-import 'package:healthapp/API/apicalls.dart';
-import 'package:healthapp/API/model.dart';
-import 'package:healthapp/core/navigator.dart';
-import 'package:healthapp/screens/bpgraph.dart';
-import 'package:healthapp/screens/spgraph.dart';
-import 'dart:core';
-import 'package:app_settings/app_settings.dart';
+import '../API/apicalls.dart';
+import '../API/model.dart';
+import '../core/navigator.dart';
+import '../screens/bpgraph.dart';
+import '../screens/spgraph.dart';
+
+
 DataStore dataStore=DataStore();
 int mydvid=0;
  List <int> spo2List =[];
@@ -139,36 +140,46 @@ if (connectedDevices.isNotEmpty) {
         mydvid=1;
         print('MyDevice');
         List<BluetoothService> services = await device.discoverServices();
-        BluetoothCharacteristic spo2Characteristic;
+        BluetoothCharacteristic bpoCharacteristic;
         for (BluetoothService service in services) {
             print('Inside service');
+            //Timer.periodic(Duration(minutes: 3), (timer) async {
             for (BluetoothService service in services) {
             if (service.uuid.toString() == dataStore.bpServiceId) {
             print('BP service found!');
             for (BluetoothCharacteristic characteristic in service.characteristics) {
-              if ('0x${characteristic.uuid.toString().toUpperCase().substring(4,8)}' == dataStore.bpCharacteristicId) {
-              print('BP characteristic found!');
-               characteristic.write([0x45],withoutResponse: true);
-              spo2Characteristic = characteristic;
-              await spo2Characteristic.setNotifyValue(true);
+
+              //print(characteristic);
+
+            if (characteristic.uuid.toString()== dataStore.bpCharacteristicId) {
+              print('BP characteristic found[conn]!');
               
-                  
-              streamSubscription = spo2Characteristic.value.listen((value) {
-                // Assuming that the device sends the data in the format <SPO2><PR><other data>
-                print('Values: $value');                 
-                device.disconnect();
-   //streamSubscription.cancel();
-              });
+              bpoCharacteristic = characteristic;
+              bpoCharacteristic.write([0x45],withoutResponse: true);
+              bpoCharacteristic.setNotifyValue(true);
+              
+                  bpoCharacteristic.value.listen((value) {
+                     print('Values[con]: $value');
+        // Handle the received data
+      });
+  //             streamSubscription = bpoCharacteristic.value.listen((value) {
+  //               // Assuming that the device sends the data in the format <SPO2><PR><other data>
+  //               print('Values: $value');                 
+  //               device.disconnect();
+  //  //streamSubscription.cancel();
+  //             });
 
               break;
-            }
+              }
             else{
-               print('BP characteristic Not found!');
+               print('BP characteristic Not found[con]!');
             }
+            
           }
           break;
         }
       }
+      //  });
   
 }
     }else{
@@ -206,20 +217,21 @@ getConnection()  async{
   //Timer.periodic(Duration(minutes: 3), (timer) async {
 
   List<BluetoothService> services = await  r.device.discoverServices();
-  BluetoothCharacteristic spo2Characteristic;
+  BluetoothCharacteristic bpoCharacteristic;
   try{
     for (BluetoothService service in services) {
       mydvid=1;
+        //Timer.periodic(Duration(minutes: 3), (timer) async {
         if (service.uuid.toString() == dataStore.bpServiceId) {
           print('BP service found!');
           for (BluetoothCharacteristic characteristic in service.characteristics) {
-            if ('0x${characteristic.uuid.toString().toUpperCase().substring(4,8)}' == dataStore.bpCharacteristicId) {
+            if (characteristic.uuid.toString() == dataStore.bpCharacteristicId) {
               print('BP characteristic found!');
-              characteristic.write([0x45],withoutResponse: true);
-              spo2Characteristic = characteristic;
-              await spo2Characteristic.setNotifyValue(true);
+              //characteristic.write([0x45],withoutResponse: true);
+              bpoCharacteristic = characteristic;
+              await bpoCharacteristic.setNotifyValue(true);
         
-              streamSubscription = spo2Characteristic.value.listen((value) {
+              streamSubscription = bpoCharacteristic.value.listen((value) {
                 // Assuming that the device sends the data in the format <SPO2><PR><other data>
                 print('Values: $value');
                          
@@ -229,8 +241,9 @@ getConnection()  async{
               break;
             }
           }
-          break;
+          return; //break;
         }
+    //});
 }
   }on PlatformException catch (e) {
                 print('Error: ${e.message}');
@@ -245,9 +258,7 @@ getConnection()  async{
           //navigatorKey?.currentState?.pushReplacementNamed("btmeasure");
         }
     }
- 
-      
-  
+
 });
  flutterBluePlus.stopScan();
 }
@@ -521,8 +532,8 @@ if(spo2List.last != 0){
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-// //import 'package:healthapp/constants/divider.dart';
-// import 'package:healthapp/screens/spgraph.dart';
+// //import '../constants/divider.dart';
+// import '../screens/spgraph.dart';
 // import 'dart:core';
 // late StreamSubscription<List<int>> streamSubscription;
 // class ConnectedBpBluetoothDevicesPage extends StatefulWidget {
@@ -629,7 +640,7 @@ if(spo2List.last != 0){
 //   //Timer.periodic(Duration(minutes: 3), (timer) async {
 
 //   List<BluetoothService> services = await  r.device.discoverServices();
-//   BluetoothCharacteristic spo2Characteristic;
+//   BluetoothCharacteristic bpoCharacteristic;
 //   try{
 // for (BluetoothService service in services) {
 //   print('in1');
@@ -647,10 +658,10 @@ if(spo2List.last != 0){
 //             if ('0x${characteristic.uuid.toString().toUpperCase().substring(4,8)}'== dataStore.bpCharacteristicId) {
 //               print('SPO2 characteristic found!');
 //               characteristic.write([0x45],withoutResponse: true);
-//               spo2Characteristic = characteristic;
-//               await spo2Characteristic.setNotifyValue(true);
+//               bpoCharacteristic = characteristic;
+//               await bpoCharacteristic.setNotifyValue(true);
         
-//               streamSubscription = spo2Characteristic.value.listen((value) {
+//               streamSubscription = bpoCharacteristic.value.listen((value) {
 //                 // Assuming that the device sends the data in the format <SPO2><PR><other data>
 //                 print('Values: $value');
 //                 r.device.disconnect();
@@ -730,7 +741,7 @@ if(spo2List.last != 0){
 //     //mydvid=1;
 //     print('MyDevice is Ready');
 //     List<BluetoothService> services = await device.discoverServices();
-//     BluetoothCharacteristic spo2Characteristic;
+//     BluetoothCharacteristic bpoCharacteristic;
 //     for (BluetoothService service in services) {
 //             print('Inside service');
 //             if (service.uuid.toString() == dataStore.bpServiceId) {
@@ -739,9 +750,9 @@ if(spo2List.last != 0){
               
 //               if (characteristic.uuid.toString().substring(4,8) == dataStore.bpCharacteristicId) {
 //               print('BP characteristic found!');
-//               spo2Characteristic = characteristic;
-//               await spo2Characteristic.setNotifyValue(true);
-//               streamSubscription = spo2Characteristic.value.listen((value) {
+//               bpoCharacteristic = characteristic;
+//               await bpoCharacteristic.setNotifyValue(true);
+//               streamSubscription = bpoCharacteristic.value.listen((value) {
 //                 // Assuming that the device sends the data in the format <SPO2><PR><other data>
 //                 print('Value: $value');
 //                 // int systolic = value[1] << 8 | value[0];
@@ -860,8 +871,8 @@ if(spo2List.last != 0){
 // // import 'dart:async';
 // // import 'package:flutter/material.dart';
 // // import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-// // //import 'package:healthapp/constants/divider.dart';
-// // import 'package:healthapp/screens/spgraph.dart';
+// // //import '../constants/divider.dart';
+// // import '../screens/spgraph.dart';
 // // import 'dart:core';
 
 // // class ConnectedBpBluetoothDevicesPage extends StatefulWidget {
